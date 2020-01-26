@@ -51,6 +51,7 @@ tasks:
         docker build .
         --cache-from ${repo}:builder
         --cache-from ${repo}:latest
+        --file docker/app/Dockerfile
         --tag ci
 
   ci:docker:publish:
