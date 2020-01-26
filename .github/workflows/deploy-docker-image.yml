@@ -29,6 +29,7 @@ jobs:
       - name: Build ci image
         run: >-
           tusk ci:docker:build
+          --appname=app
           --repo=$CI_SETTINGS__APP_DOCKER_REPO
       - name: Publish image
         run: >-
