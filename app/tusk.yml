@@ -1,0 +1,4 @@
+tasks:
+
+  test:
+    run: npm run test

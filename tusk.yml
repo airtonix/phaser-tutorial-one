@@ -40,6 +40,22 @@ tasks:
         -f ./docker-compose--local.yml
         build ${service}
 
+  dev:app:test:
+    run:
+      - task:
+          name: dev:docker:run
+          args:
+            - app
+            - npm run test:watch
+
+  dev:app:shell:
+    run:
+      - task:
+          name: dev:docker:run
+          args:
+            - app
+            - /bin/sh
+
 
 #
 # CI
@@ -93,25 +109,10 @@ tasks:
     run:
       - docker run --rm ci_${appname} ${command}
 
-  ci:app:tusk:
-    options:
-      taskname:
-        usage: Tusk task
-        required: true
-      taskoptions:
-        usage: tusk task options
-      taskargs:
-        usage: tusk task args
+  ci:app:test:
     run:
       - task:
           name: ci:docker:run
           options:
             appname: app
-            command: tusk ${taskname} ${taskoptions} ${taskargs}
-
-  ci:app:test:
-    run:
-      - task:
-          name: ci:app:tusk
-          options:
-            taskname: test
+            command: npm run test
