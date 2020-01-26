@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on: [push]
 env:
-  PATH: "$PATH:~/bin"
+  PATH: $PATH:~/bin
 jobs:
 
   build:
