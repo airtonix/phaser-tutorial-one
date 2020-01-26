@@ -19,6 +19,8 @@ jobs:
       - name: Install tusk
         run: >-
           curl -sL https://git.io/tusk | sh -s --
-            -b ~/bin ${CI_SETTINGS__TUSK_VERSION}
+          -b ~/bin $CI_SETTINGS__TUSK_VERSION
       - name: Build ci image
-        run: tusk ci:docker:build --repo=${CI_SETTINGS__APP_DOCKER_REPO}
+        run: >-
+          tusk ci:docker:build
+          --repo=$CI_SETTINGS__APP_DOCKER_REPO
