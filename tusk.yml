@@ -56,3 +56,26 @@ tasks:
   ci:docker:publish:
     run:
       - echo "foo"
+
+  ci:app:tusk:
+    options:
+      taskname:
+        usage: Tusk task
+        required: true
+      taskoptions:
+        usage: tusk task options
+      taskargs:
+        usage: tusk task args
+    run:
+      - task:
+          name: ci:docker:run
+          options:
+            service: app
+            command: tusk ${taskname} ${taskoptions} ${taskargs}
+
+  ci:app:test:
+    run:
+      - task:
+          name: ci:app:tusk
+          options:
+            taskname: test
