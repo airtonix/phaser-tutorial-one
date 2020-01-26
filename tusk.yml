@@ -72,11 +72,28 @@ tasks:
         --cache-from ${repo}:builder
         --cache-from ${repo}:latest
         --file ./${appname}/Dockerfile
-        --tag ci
+        --tag ci_${appname}
 
   ci:docker:publish:
+    options:
+      appname:
+        usage: the appname
+      tag:
+        usage: New docker tag
+      latest:
+        usage: also as latest
     run:
-      - echo "foo"
+      - docker tag ci -t ${tag}
+
+  ci:docker:run:
+    options:
+      appname:
+        usage: appname name
+      command:
+        usage: Command to run
+        type: string
+    run:
+      - docker run --rm ci_${appname} ${command}
 
   ci:app:tusk:
     options:
@@ -91,7 +108,7 @@ tasks:
       - task:
           name: ci:docker:run
           options:
-            service: app
+            appname: app
             command: tusk ${taskname} ${taskoptions} ${taskargs}
 
   ci:app:test:
