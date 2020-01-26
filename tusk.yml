@@ -80,10 +80,8 @@ tasks:
         usage: the appname
       tag:
         usage: New docker tag
-      latest:
-        usage: also as latest
     run:
-      - docker tag ci -t ${tag}
+      - docker tag ci_${appname} -t ${tag}
 
   ci:docker:run:
     options:

@@ -34,8 +34,11 @@ jobs:
       - name: Publish image
         run: >-
           tusk ci:docker:publish
-          --tag=${CI_SETTINGS__APP_DOCKER_REPO}:builder;
+          --appname=app
+          --tag=$CI_SETTINGS__APP_DOCKER_REPO:builder;
           tusk ci:docker:publish
-          --tag=${CI_SETTINGS__APP_DOCKER_REPO}:latest;
+          --appname=app
+          --tag=$CI_SETTINGS__APP_DOCKER_REPO:latest;
           tusk ci:docker:publish
-          --tag=${CI_SETTINGS__APP_DOCKER_REPO}:latest;
+          --appname=app
+          --tag=$CI_SETTINGS__APP_DOCKER_REPO:$GITHUB_SHA;
