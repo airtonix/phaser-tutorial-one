@@ -1,8 +1,7 @@
 name: Docker Image CI
 
 on: [push]
-env:
-  PATH: $PATH:~/bin
+
 jobs:
 
   build:
@@ -11,6 +10,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - run: echo "::add-path::~/bin"
     - name: Install Tusk
       run: curl -sL https://git.io/tusk | sh -s -- -b ~/bin
     - name: build ci image
