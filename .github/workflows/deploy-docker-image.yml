@@ -4,6 +4,9 @@ on:
   push:
     branches:
       -  master
+  pull_request:
+    branches:
+      -  master
 
 env:
   CI_SETTINGS__TUSK_VERSION: v0.5.1
@@ -27,3 +30,10 @@ jobs:
         run: >-
           tusk ci:docker:build
           --repo=$CI_SETTINGS__APP_DOCKER_REPO
+      - name: Publish image
+        run: >-
+          tusk ci:docker:publish
+          --repo=${CI_SETTINGS__APP_DOCKER_REPO}:builder
+        run: >-
+          tusk ci:docker:publish
+          --repo=${CI_SETTINGS__APP_DOCKER_REPO}:latest
