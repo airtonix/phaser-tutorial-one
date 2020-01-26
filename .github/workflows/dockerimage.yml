@@ -16,6 +16,8 @@ jobs:
     - uses: actions/checkout@v1
     - run: echo "::add-path::~/bin"
     - name: Install Tusk
-      run: curl -sL https://git.io/tusk | sh -s -- -b ~/bin ${CI_SETTINGS__TUSK_VERSION}
+      run: >-
+        curl -sL https://git.io/tusk | sh -s --
+          -b ~/bin ${CI_SETTINGS__TUSK_VERSION}
     - name: build ci image
       run: tusk ci:docker:build --repo=${CI_SETTINGS__APP_DOCKER_REPO}

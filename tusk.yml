@@ -35,6 +35,10 @@ tasks:
             repo: airtonix/phaser-tutorial-one_app
 
   ci:docker:build:
+    options:
+      repo:
+        usage: Docker repository to use
+        type: string
     run:
     - command: docker pull ${repo}:builder || true
     - command: >-
