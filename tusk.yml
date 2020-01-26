@@ -81,7 +81,7 @@ tasks:
       tag:
         usage: New docker tag
     run:
-      - docker tag ci_${appname} -t ${tag}
+      - docker tag ci_${appname} ${tag}
 
   ci:docker:run:
     options:
