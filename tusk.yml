@@ -49,26 +49,29 @@ tasks:
       - task:
           name: ci:docker:build
           options:
+            appname: app
             repo: airtonix/phaser-tutorial-one_app
 
   ci:docker:build:
     options:
+      appname:
+        usage: Directory to use
       repo:
         usage: Docker repository to use
         type: string
     run:
     - command: docker pull ${repo}:builder || true
     - command: >-
-        docker build .
+        docker build ./${appname}
         --cache-from ${repo}:builder
-        --file ./app/Dockerfile
+        --file ./${appname}/Dockerfile
         --tag ${repo}:builder
     - command: docker pull ${repo}:latest || true
     - command: >-
-        docker build .
+        docker build ./${appname}
         --cache-from ${repo}:builder
         --cache-from ${repo}:latest
-        --file ./app/Dockerfile
+        --file ./${appname}/Dockerfile
         --tag ci
 
   ci:docker:publish:
