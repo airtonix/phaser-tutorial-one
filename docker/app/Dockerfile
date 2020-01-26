@@ -38,5 +38,5 @@ FROM install as prod
 COPY ./src \
      ./
 
-# ENTRYPOINT [ "/entrypoint.sh" ]
-RUN ["npm", "run", "prod"]
+ENTRYPOINT [ "/entrypoint.sh" ]
+CMD ["npm", "run", "prod"]
