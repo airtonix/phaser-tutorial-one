@@ -33,7 +33,6 @@ jobs:
       - name: Publish image
         run: >-
           tusk ci:docker:publish
-          --repo=${CI_SETTINGS__APP_DOCKER_REPO}:builder
-        run: >-
+          --repo=${CI_SETTINGS__APP_DOCKER_REPO}:builder;
           tusk ci:docker:publish
-          --repo=${CI_SETTINGS__APP_DOCKER_REPO}:latest
+          --repo=${CI_SETTINGS__APP_DOCKER_REPO}:latest;

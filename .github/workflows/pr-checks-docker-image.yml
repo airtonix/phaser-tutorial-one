@@ -23,4 +23,5 @@ jobs:
         run: >-
           tusk ci:docker:build
           --repo=$CI_SETTINGS__APP_DOCKER_REPO
-      - run: tusk ci:app:test
+      - name: Run tests
+        run: tusk ci:app:test
