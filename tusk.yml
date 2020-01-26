@@ -1,0 +1,54 @@
+tasks:
+
+  dev:
+    run:
+      - parcel
+
+  dev:setup:
+    run:
+      - task:
+          name: dev:docker:build
+          options:
+            service: app
+
+  dev:docker:build:
+    private: true
+    options:
+      service:
+          usage: docker compose service name
+    run:
+      - >-
+        docker-compose
+        -f ./docker-compose.yml
+        -f ./docker-compose--local.yml
+        build ${service}
+
+
+#
+# CI
+#
+  ci:setup:
+    run:
+      - task:
+          name: ci:docker:build
+          options:
+            repo: airtonix/phaser-tutorial-one_app
+
+  ci:docker:build:
+    run:
+    - command: docker pull ${repo}:builder || true
+    - command: >-
+        docker build .
+        --cache-from ${repo}:builder
+        --file docker/app/Dockerfile
+        --tag ${repo}:builder
+    - command: docker pull ${repo}:latest || true
+    - command: >-
+        docker build .
+        --cache-from ${repo}:builder
+        --cache-from ${repo}:latest
+        --tag ci
+
+  ci:docker:publish:
+    run:
+      - echo "foo"

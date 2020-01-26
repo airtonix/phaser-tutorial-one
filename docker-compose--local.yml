@@ -1,0 +1,12 @@
+version: "2.3"
+
+services:
+
+  app:
+    image: airtonix/phaser-game-test
+    build:
+      dockerfile: ./docker/app/Dockerfile
+      context: .
+      target: install
+    volumes:
+      - ./:/home/dev

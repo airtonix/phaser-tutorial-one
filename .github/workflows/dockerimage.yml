@@ -2,6 +2,10 @@ name: Docker Image CI
 
 on: [push]
 
+env:
+  CI_SETTINGS__TUSK_VERSION: v0.5.1
+  CI_SETTINGS__APP_DOCKER_REPO: airtonix/phaser-tutorial-one_app
+
 jobs:
 
   build:
@@ -12,7 +16,6 @@ jobs:
     - uses: actions/checkout@v1
     - run: echo "::add-path::~/bin"
     - name: Install Tusk
-      run: curl -sL https://git.io/tusk | sh -s -- -b ~/bin
+      run: curl -sL https://git.io/tusk | sh -s -- -b ~/bin ${CI_SETTINGS__TUSK_VERSION}
     - name: build ci image
-      run: tusk ci:setup
-        
+      run: tusk ci:docker:build --repo=${CI_SETTINGS__APP_DOCKER_REPO}
