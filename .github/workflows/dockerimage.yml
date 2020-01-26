@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Install Tusk
-      run: curl -sL https://git.io/tusk | sh -s -- -b /usr/local/bin
+      run: curl -sL https://git.io/tusk | sh -s -- -b ~/bin
     - name: build ci image
       run: tusk ci:setup
         
