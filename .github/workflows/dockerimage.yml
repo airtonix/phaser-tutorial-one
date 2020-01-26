@@ -1,0 +1,17 @@
+name: Docker Image CI
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install Tusk
+      run: curl -sL https://git.io/tusk | sh -s -- -b /usr/local/bin
+    - name: build ci image
+      run: tusk ci:setup
+        
