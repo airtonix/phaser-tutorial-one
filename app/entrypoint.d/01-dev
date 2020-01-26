@@ -1,0 +1,4 @@
+#!/bin/sh
+# code: language=sh
+
+[ -d /home/dev ] && ln -sf /home/dev/* /app/

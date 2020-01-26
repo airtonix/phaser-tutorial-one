@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: PR Checks
 
 on: [push, pull_request]
 

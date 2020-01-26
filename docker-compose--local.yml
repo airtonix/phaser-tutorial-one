@@ -5,8 +5,13 @@ services:
   app:
     image: airtonix/phaser-game-test
     build:
-      dockerfile: ./docker/app/Dockerfile
-      context: .
+      dockerfile: ./Dockerfile
+      context: ./app
       target: install
+    ports:
+      - 3000:3000
+    environment:
+      - PORT=3000
+    command: npm run dev
     volumes:
-      - ./:/home/dev
+      - ./app:/home/dev

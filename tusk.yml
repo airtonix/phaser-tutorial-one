@@ -2,7 +2,24 @@ tasks:
 
   dev:
     run:
-      - parcel
+      - >-
+        docker-compose
+        -f docker-compose.yml
+        -f docker-compose--local.yml
+        up app
+
+  dev:docker:run:
+    args:
+      service:
+        usage: docker-compose service name
+      command:
+        usage: command to run
+    run: >-
+      docker-compose
+      -f docker-compose.yml
+      -f docker-compose--local.yml
+      run --rm
+      ${service} ${command}
 
   dev:setup:
     run:
@@ -44,14 +61,14 @@ tasks:
     - command: >-
         docker build .
         --cache-from ${repo}:builder
-        --file docker/app/Dockerfile
+        --file ./app/Dockerfile
         --tag ${repo}:builder
     - command: docker pull ${repo}:latest || true
     - command: >-
         docker build .
         --cache-from ${repo}:builder
         --cache-from ${repo}:latest
-        --file docker/app/Dockerfile
+        --file ./app/Dockerfile
         --tag ci
 
   ci:docker:publish:

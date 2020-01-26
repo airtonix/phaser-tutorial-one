@@ -1,4 +1,0 @@
-# code: language=sh
-#!/bin/sh
-
-ln -s /home/dev/* /app/
