@@ -1,11 +1,15 @@
-import React from 'react-phaser'
+import {Game} from './Game'
 
-class Game extends React.Component {
+class App {
 
-    render () {
-        return <game />
+    constructor (config = {}) {
+        console.log("Launching Game")
+        this.game = new Game(config);
+    }
+
+    static launch = () => {
+        window.App = new App()
     }
 }
 
-
-export default Gamep
+window.onload = App.launch

@@ -10,8 +10,11 @@ services:
       target: install
     ports:
       - 3000:3000
+      - 3030:3030
     environment:
       - PORT=3000
-    command: npm run dev
+      - HMR_PORT=3030
+      - CHOKIDAR_USEPOLLING=1
+    command: tusk dev
     volumes:
       - ./app:/home/dev

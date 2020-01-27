@@ -4,29 +4,23 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.2",
-    "jest": "^25.1.0",
+    "@ava/babel": "^1.0.0",
+    "@babel/cli": "^7.2.3",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/register": "^7.0.0",
+    "ava": "^3.1.0",
+    "images": "^3.0.2",
+    "npm-run-all": "^4.1.5",
+    "onchange": "^6.1.0",
     "parcel-bundler": "^1.12.4",
-    "parceljs": "0.0.1",
-    "phaser": "^3.22.0",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-phaser": "^0.1.6"
+    "phaser": "^3.22.0"
   },
-  "devDependencies": {},
-  "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watchAll",
-    "dev": "npm-run-all --parallel dev:serve dev:serve",
-    "dev:serve": "parcel serve -p $PORT ./src/index.html"
-  },
-  "jest": {
-    "setupFilesAfterEnv": [
-      "./tools/jest-config.js"
-    ]
+  "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-syntax-class-properties": "^7.8.3",
+    "sass": "^1.25.1-test.1",
+    "typescript": "^3.7.5"
   },
   "keywords": [],
   "author": "",

@@ -1,4 +1,22 @@
 tasks:
+  dev:
+    run: >-
+      tusk dev:serve
+
+  dev:serve:
+    run: >-
+      npx parcel serve
+      --host 0.0.0.0
+      --hmr-port $HMR_PORT
+      --port $PORT
+      ./src/index.html
 
   test:
-    run: npm run test
+    run:
+      - >-
+        npx ava
+
+  test:watch:
+    run:
+      - >-
+        npx ava --watch

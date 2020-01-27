@@ -32,9 +32,6 @@ COPY ./entrypoint.d/* /entrypoint.d/
 RUN chmod +x /entrypoint.sh
 RUN chmod +x /entrypoint.d/*
 
-COPY ./tools/* /tools/
-RUN chmod +x /tools/*
-
 ENTRYPOINT [ "/entrypoint.sh" ]
 
 #
@@ -42,7 +39,7 @@ ENTRYPOINT [ "/entrypoint.sh" ]
 #
 FROM install as prod
 
-COPY ./src \
-     ./
+COPY ./src ./src
+COPY ./tools ./tools
 
 CMD ["npm", "run", "prod"]

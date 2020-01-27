@@ -46,7 +46,7 @@ tasks:
           name: dev:docker:run
           args:
             - app
-            - npm run test:watch
+            - tusk test:watch
 
   dev:app:shell:
     run:
