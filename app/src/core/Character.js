@@ -3,12 +3,12 @@ import Phaser from 'phaser'
 export default class Character extends Phaser.Sprite {
 
     constructor({
-        game: undefined,
-        x: 0,
-        y: 0,
-        key: '',
-        frame: ''
-    } = opts) {
+        game = undefined,
+        x = 0,
+        y = 0,
+        key = '',
+        frame = ''
+    }) {
         super(game, x, y, key, frame)
 
         // Enable player physics
