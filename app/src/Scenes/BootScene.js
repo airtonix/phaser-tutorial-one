@@ -1,16 +1,16 @@
-import {BaseScene} from './BaseScene'
+import {BaseScene} from "./BaseScene"
 
 export class BootScene extends BaseScene {
 
-  constructor () {
-    super({ key: 'Boot' })
-  }
+    constructor () {
+        super({ key: "Boot" })
+    }
 
-  preload () {
+    preload () {
 
-  }
+    }
 
-  create () {
-    this.scene.start('Preloader')
-  }
+    create () {
+        this.scene.start("Preloader")
+    }
 }

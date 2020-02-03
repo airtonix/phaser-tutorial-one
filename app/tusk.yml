@@ -6,7 +6,6 @@ tasks:
   dev:serve:
     run: >-
       npx parcel serve
-      --host 0.0.0.0
       --hmr-port $HMR_PORT
       --port $PORT
       ./src/index.html

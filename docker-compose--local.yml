@@ -17,4 +17,5 @@ services:
       - CHOKIDAR_USEPOLLING=1
     command: tusk dev
     volumes:
-      - ./app:/home/dev
+      - ./app:/app
+      - /app/node_modules

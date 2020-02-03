@@ -23,6 +23,14 @@ COPY ./package.json \
      ./package-lock.json \
      ./
 
+# parce@next requirements
+# RUN apk --no-cache --update add \
+#     python2 \
+#     make \
+#     gcc \
+#     g++ \
+#     fts-dev
+
 RUN npm install
 
 ENV ENTRYPOINT_TASKS_DIR=/entrypoint.d/

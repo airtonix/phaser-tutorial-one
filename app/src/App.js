@@ -7,9 +7,8 @@ class App {
         this.game = new Game(config);
     }
 
-    static launch = () => {
-        window.App = new App()
-    }
 }
 
-window.onload = App.launch
+window.onload = () => {
+    window.App = new App()
+}

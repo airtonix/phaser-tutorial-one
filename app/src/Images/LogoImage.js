@@ -1,8 +1,8 @@
-import Phaser from 'phaser'
+import Phaser from "phaser"
 
 export class LogoImage extends Phaser.GameObjects.Image {
-  constructor (scene, x, y) {
-    super(scene, x, y, 'logo')
-    scene.add.existing(this)
-  }
+    constructor (scene, x, y) {
+        super(scene, x, y, "logo")
+        scene.add.existing(this)
+    }
 }
