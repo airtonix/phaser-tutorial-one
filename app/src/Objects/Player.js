@@ -7,6 +7,8 @@
 import Actor from "./Actor"
 
 export default class Player extends Actor {
+    static SPRITE_FRAME_HEIGHT = 50
+    static SPRITE_FRAME_WIDTH = 40
 
     constructor(scene, x, y) {
         super({
@@ -14,6 +16,8 @@ export default class Player extends Actor {
             scene,
             x,
             y,
+            w: 20,
+            h: 10,
             health: 100,
             maxHealth: 100
         })
@@ -26,21 +30,32 @@ export default class Player extends Actor {
         const keys = this.keys
         const prevVelocity = this.preMove()
 
-        // Horizontal movement
-        if (keys.left.isDown) {
-            this.moveLeft()
-        }
-        else if (keys.right.isDown) {
-            this.moveRight()
-        }
 
-        // Vertical movement
-        if (keys.up.isDown) {
-            this.moveUp()
+        if (keys.up.isDown && keys.right.isDown) {
+            this.moveNorthEast()
+        }
+        else if (keys.up.isDown && keys.left.isDown) {
+            this.moveNorthWest()
+        }
+        else if (keys.up.isDown) {
+            this.moveNorth()
+        }
+        else if (keys.down.isDown && keys.left.isDown) {
+            this.moveSouthWest()
+        }
+        else if (keys.down.isDown && keys.right.isDown) {
+            this.moveSouthEast()
         }
         else if (keys.down.isDown) {
-            this.moveDown()
+            this.moveSouth()
         }
+        else if (keys.left.isDown) {
+            this.moveWest()
+        }
+        else if (keys.right.isDown) {
+            this.moveEast()
+        }
+
 
         this.postMove()
 

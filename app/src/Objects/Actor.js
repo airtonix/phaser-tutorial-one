@@ -11,6 +11,8 @@ import HealthBar from "./HealthBar"
 export default class Actor extends Phaser.GameObjects.Container {
 
     static SPRITE_SHEET_NAME = "actors"
+    static SPRITE_FRAME_HEIGHT = 64
+    static SPRITE_FRAME_WIDTH = 64
 
     static WALK_FORWARD_NAME = "actor-walk-forward"
     static WALK_FORWARD_FRAME_START = 46
@@ -30,6 +32,8 @@ export default class Actor extends Phaser.GameObjects.Container {
         name = "actor",
         x = 0,
         y = 0,
+        w = Actor.SPRITE_FRAME_WIDTH,
+        h = Actor.SPRITE_FRAME_HEIGHT,
         scene,
         health = 100,
         maxHealth = 100,
@@ -43,12 +47,14 @@ export default class Actor extends Phaser.GameObjects.Container {
         this.name = name
         this.x = x
         this.y = y
+        this.w = w
+        this.h = h
         this.speed = speed
         this.setX(x)
         this.setY(y)
-        this.setSize(22, 22)
+        this.setSize(w, h)
 
-        this.sprite = this.createSprite()
+        this.character = this.createCharacter()
 
         this.health = Health.AddTo(
             this,
@@ -64,10 +70,10 @@ export default class Actor extends Phaser.GameObjects.Container {
         this.on("healthchange", this.handleCharacterHealthChange)
 
         this.add([
-            this.sprite,
+            this.character,
             this.healthbar
         ])
-        scene.add.existing(this.sprite)
+        scene.add.existing(this.character)
         scene.add.existing(this.healthbar)
         scene.add.existing(this)
 
@@ -75,10 +81,11 @@ export default class Actor extends Phaser.GameObjects.Container {
 
     }
 
-    createSprite () {
+    createCharacter () {
         if (!this.scene) return
 
         const anims = this.scene.anims
+
         anims.create({
             key: this.constructor.WALK_FORWARD_NAME,
             frames: anims.generateFrameNumbers(
@@ -106,17 +113,23 @@ export default class Actor extends Phaser.GameObjects.Container {
         const sprite = this.scene.add
             .sprite(
                 0,
-                -22,
+                this.h - (this.constructor.SPRITE_FRAME_HEIGHT - this.h),
                 this.constructor.SPRITE_SHEET_NAME,
                 0)
-            .setSize(22, 33)
+            .setSize(
+                this.constructor.SPRITE_FRAME_WIDTH,
+                this.constructor.SPRITE_FRAME_HEIGHT)
 
         return sprite
     }
 
+    createCharacterShadow () {
+        return Phaser.Circle()
+    }
+
     handleCharacterDeath () {
         console.log(`[${this.name}] DEATH`)
-        this.sprite
+        this.character
             .setActive(false)
             .setVisible(false)
 
@@ -125,7 +138,7 @@ export default class Actor extends Phaser.GameObjects.Container {
 
     handleCharacterRevive () {
         console.log(`[${this.name}] REVIVE`)
-        this.sprite
+        this.character
             .setActive(true)
             .setVisible(true)
 
@@ -144,58 +157,83 @@ export default class Actor extends Phaser.GameObjects.Container {
     handleCharacterDamage () {
     }
 
-    moveLeft = () => {
-        this.preMove()
-
+    moveWest = () => {
         const animation_name = this.constructor.WALK_FORWARD_NAME
 
         this.body.setVelocityX(-this.speed)
-        this.sprite.setFlipX(true)
-        this.sprite.anims.play(animation_name, true)
+        this.character.setFlipX(true)
+        this.character.anims.play(animation_name, true)
 
     }
 
-    moveRight = () => {
-        this.preMove()
-
+    moveEast = () => {
         const animation_name = this.constructor.WALK_FORWARD_NAME
 
         this.body.setVelocityX(this.speed)
-        this.sprite.setFlipX(false)
-        this.sprite.anims.play(animation_name, true)
+        this.character.setFlipX(false)
+        this.character.anims.play(animation_name, true)
 
     }
 
-    moveDown = () => {
-        this.preMove()
-
+    moveSouth = () => {
         const animation_name = this.constructor.WALK_FORWARD_NAME
 
         this.body.setVelocityY(this.speed)
-        this.sprite.anims.play(animation_name, true)
+        this.character.anims.play(animation_name, true)
 
     }
 
-    moveUp = () => {
-        this.preMove()
+    moveSouthEast = () => {
+        const animation_name = this.constructor.WALK_FORWARD_NAME
 
+        this.body.setVelocityY(this.speed)
+        this.body.setVelocityX(this.speed)
+        this.character.setFlipX(false)
+        this.character.anims.play(animation_name, true)
+
+    }
+
+    moveSouthWest = () => {
+        const animation_name = this.constructor.WALK_FORWARD_NAME
+
+        this.body.setVelocityY(this.speed)
+        this.body.setVelocityX(-this.speed)
+        this.character.setFlipX(true)
+        this.character.anims.play(animation_name, true)
+    }
+
+    moveNorth = () => {
         const animation_name = this.constructor.WALK_BACKWARD_NAME
-
         this.body.setVelocityY(-this.speed)
-        this.sprite.anims.play(animation_name, true)
+        this.character.anims.play(animation_name, true)
+    }
 
+    moveNorthEast = () => {
+        const animation_name = this.constructor.WALK_BACKWARD_NAME
+        this.body.setVelocityY(-this.speed)
+        this.body.setVelocityX(this.speed)
+        this.character.setFlipX(false)
+        this.character.anims.play(animation_name, true)
+    }
+
+    moveNorthWest = () => {
+        const animation_name = this.constructor.WALK_BACKWARD_NAME
+        this.body.setVelocityY(-this.speed)
+        this.body.setVelocityX(-this.speed)
+        this.character.setFlipX(true)
+        this.character.anims.play(animation_name, true)
     }
 
     stop = () => {
-        this.sprite.anims.stop()
-        this.sprite.setTexture(
+        this.character.anims.stop()
+        this.character.setTexture(
             this.constructor.SPRITE_SHEET_NAME,
             this.constructor.NON_IDLE_FRAME)
     }
 
     idle = () => {
-        this.sprite.anims.stop()
-        this.sprite.setTexture(
+        this.character.anims.stop()
+        this.character.setTexture(
             this.constructor.SPRITE_SHEET_NAME,
             this.constructor.IDLE_FRAME)
     }
@@ -217,7 +255,7 @@ export default class Actor extends Phaser.GameObjects.Container {
     }
 
     destroy() {
-        this.sprite.destroy()
+        this.character.destroy()
     }
 
     update () {

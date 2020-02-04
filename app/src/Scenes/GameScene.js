@@ -18,7 +18,6 @@ export class GameScene extends BaseScene {
     }
 
     create() {
-        console.log("GameScene")
 
         this.dungeon = new Dungeon({
             width: 50,
@@ -257,4 +256,5 @@ export class GameScene extends BaseScene {
   update() {
       this.player.update()
   }
+
 }

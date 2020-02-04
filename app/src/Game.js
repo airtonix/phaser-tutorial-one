@@ -22,12 +22,16 @@ export class Game extends Phaser.Game {
             backgroundColor: "#000",
 
             parent: "game_content",
+            zoom: 1,
 
             width: 800,
             height: 600,
+
             physics: {
                 default: "arcade",
                 arcade: {
+                    tileBias: 32,
+                    debug: true,
                     gravity: { y: 0 }
                 }
             },
