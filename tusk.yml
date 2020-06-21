@@ -1,96 +1,140 @@
+options:
+  project_name:
+    environment: PROJECT_NAME
+    default:
+      command: basename $PWD
+
+  docker_registry:
+    environment: DOCKER_REPO
+    default: airtonix
+
 tasks:
 
   dev:
     run:
-      - >-
-        docker-compose
-        -f docker-compose.yml
-        -f docker-compose--local.yml
-        up app
+      - task: dev:setup
+      - task:
+          name: docker:up
+          options:
+            services: app
+            stage: local
 
-  dev:docker:run:
-    args:
+  dev:setup:
+    run:
+      - task:
+          name: docker:build
+          options:
+            source: app
+
+  dev:test:
+    run:
+      - task:
+          name: docker:tusk
+          options:
+            stage: local
+            service: app
+            command: test:watch
+
+  dev:shell:
+    run:
+      - task:
+          name: docker:run
+          options:
+            stage: local
+            service: app
+            command: /bin/sh
+
+  #
+  # CI
+  #
+  ci:setup:
+    run:
+      - task:
+          name: docker:build
+          options:
+            appname: app
+            repo: airtonix/${project_name}
+
+  ci:test:
+    run:
+      - task:
+          name: docker:tusk
+          options:
+            service: app
+            stage: ci
+            command: test
+
+  #
+  # Docker
+  #
+  docker:build:
+    options:
+      source:
+        usage: Directory to use
+      repo:
+        usage: Docker repository to use
+        type: string
+        default: ${docker_registry}/${project_name}
+    run:
+    - command: docker pull ${repo}:builder || true
+    - command: >-
+        docker build ./${source}
+        --cache-from ${repo}:builder
+        --file ./${source}/Dockerfile
+        --tag ${repo}:builder
+    - command: docker pull ${repo}:latest || true
+    - command: >-
+        docker build ./${source}
+        --cache-from ${repo}:builder
+        --cache-from ${repo}:latest
+        --file ./${source}/Dockerfile
+        --tag ${project_name}
+
+  docker:run:
+    options:
       service:
         usage: docker-compose service name
+      stage:
+        default: local
       command:
         usage: command to run
     run: >-
       docker-compose
       -f docker-compose.yml
-      -f docker-compose--local.yml
+      -f docker-compose--${stage}.yml
       run --rm
       ${service} ${command}
 
-  dev:setup:
-    run:
-      - task:
-          name: dev:docker:build
-          options:
-            service: app
-
-  dev:docker:build:
-    private: true
+  docker:up:
     options:
-      service:
-          usage: docker compose service name
+      services:
+        usage: docker-compose service name(s)
+      stage:
+        default: local
     run:
       - >-
         docker-compose
-        -f ./docker-compose.yml
-        -f ./docker-compose--local.yml
-        build ${service}
+        -f docker-compose.yml
+        -f docker-compose--${stage}.yml
+        up ${services}
 
-  dev:app:test:
-    run:
-      - task:
-          name: dev:docker:run
-          args:
-            - app
-            - tusk test:watch
-
-  dev:app:shell:
-    run:
-      - task:
-          name: dev:docker:run
-          args:
-            - app
-            - /bin/sh
-
-
-#
-# CI
-#
-  ci:setup:
-    run:
-      - task:
-          name: ci:docker:build
-          options:
-            appname: app
-            repo: airtonix/phaser-tutorial-one_app
-
-  ci:docker:build:
+  docker:tusk:
     options:
-      appname:
-        usage: Directory to use
-      repo:
-        usage: Docker repository to use
-        type: string
+      service:
+        usage: docker-compose service name
+      command:
+        usage: command to run
+      stage:
+        default: local
     run:
-    - command: docker pull ${repo}:builder || true
-    - command: >-
-        docker build ./${appname}
-        --cache-from ${repo}:builder
-        --file ./${appname}/Dockerfile
-        --tag ${repo}:builder
-    - command: docker pull ${repo}:latest || true
-    - command: >-
-        docker build ./${appname}
-        --cache-from ${repo}:builder
-        --cache-from ${repo}:latest
-        --file ./${appname}/Dockerfile
-        --tag ci_${appname}
+      - task:
+          name: docker:run
+          options:
+            service: ${service}
+            command: ${command}
+            stage: ${stage}
 
-  ci:docker:publish:
+  docker:publish:
     options:
       appname:
         usage: the appname
@@ -98,21 +142,3 @@ tasks:
         usage: New docker tag
     run:
       - docker tag ci_${appname} ${tag}
-
-  ci:docker:run:
-    options:
-      appname:
-        usage: appname name
-      command:
-        usage: Command to run
-        type: string
-    run:
-      - docker run --rm ci_${appname} ${command}
-
-  ci:app:test:
-    run:
-      - task:
-          name: ci:docker:run
-          options:
-            appname: app
-            command: npm run test

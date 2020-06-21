@@ -1,4 +1,7 @@
 import Phaser from 'phaser'
+import { Log } from '@App/core/Logger'
+
+const log = Log(module.id)
 
 export default class Character extends Phaser.Sprite {
 

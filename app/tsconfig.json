@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "module": "es6",
+    "target": "es5",
+    "esModuleInterop": true,
+    "removeComments": true,
+    "allowJs": true,
+
+
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/phaser/types/phaser.d.ts",
+    ],
+
+    "baseUrl": "./src",
+    "paths": {
+      "~*": ["./*"]
+    },
+    "types": [
+        "node",
+        "Phaser"
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    ".git",
+    "node_modules"
+  ]
+}

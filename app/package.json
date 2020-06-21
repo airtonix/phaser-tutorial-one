@@ -1,28 +1,28 @@
 {
-  "name": "Two",
+  "name": "phaser-game",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "@ava/babel": "^1.0.0",
-    "@babel/cli": "^7.2.3",
-    "@babel/preset-env": "^7.3.4",
-    "@babel/register": "^7.0.0",
-    "ava": "^3.1.0",
-    "images": "^3.0.2",
-    "npm-run-all": "^4.1.5",
-    "onchange": "^6.1.0",
-    "parcel-bundler": "^1.12.4",
-    "phaser": "^3.22.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.8.3",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/plugin-syntax-class-properties": "^7.8.3",
-    "sass": "^1.25.1-test.1",
-    "typescript": "^3.7.5"
+    "jss": "^10.3.0",
+    "jss-preset-default": "^10.3.0",
+    "phaser": "^3.23.0"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^26.0.0",
+    "@types/node": "^14.0.13",
+    "@typescript-eslint/eslint-plugin": "^3.3.0",
+    "@typescript-eslint/parser": "^3.3.0",
+    "eslint": "^7.3.0",
+    "jest": "^26.0.1",
+    "parcel-bundler": "^1.4.1",
+    "ts-jest": "^26.1.0",
+    "tslint": "^5.8.0",
+    "tslint-config-standard": "^7.0.0",
+    "tslint-eslint-rules": "^4.1.1",
+    "typescript": "^2.9.2"
+  }
 }

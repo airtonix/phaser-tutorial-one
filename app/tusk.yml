@@ -1,22 +1,37 @@
-tasks:
-  dev:
-    run: >-
-      tusk dev:serve
+options:
+  hmrport:
+    default: 5678
+    environment: HMR_PORT
+  port:
+    default: 1234
+    environment: PORT
+  host:
+    default: localhost
+    environment: HOST
 
-  dev:serve:
-    run: >-
-      npx parcel serve
-      --host 0.0.0.0
-      --hmr-port $HMR_PORT
-      --port $PORT
-      ./src/index.html
+tasks:
+
+  dev:
+    run:
+      - set-environment:
+          PARCEL_AUTOINSTALL: false
+      - >-
+        npx parcel serve
+        --host ${host}
+        --hmr-port ${hmrport}
+        --port ${port}
+        ./src/index.html
+
+  build:
+    run:
+      - npx tsc --project .
+
+  lint:
+    run:
+      - npx eslint src --ext .ts --cache
 
   test:
     run:
-      - >-
-        npx ava
-
-  test:watch:
-    run:
-      - >-
-        npx ava --watch
+      - task: lint
+      - task: build
+      - npx jest
