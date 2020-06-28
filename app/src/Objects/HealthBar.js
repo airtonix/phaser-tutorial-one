@@ -1,5 +1,4 @@
-import Phaser from "phaser"
+import Phaser from 'phaser'
 
-
-export default class HealthBar extends Phaser.GameObjects.Graphics {
+export class HealthBar extends Phaser.GameObjects.Graphics {
 }

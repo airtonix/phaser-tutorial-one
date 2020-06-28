@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./app/src"
+    },
+    "files": {
+        "~": "./app/src"
+    }
+}

@@ -1,13 +1,12 @@
-import Phaser from "phaser"
+import Phaser from 'phaser'
 
-import {BaseScene} from "./BaseScene"
-import { LogoImage } from "../Images/LogoImage"
-
-import {TextButton} from "../Objects/TextButton"
+import { LogoImage } from '~/Images/LogoImage'
+import { TextButton } from '~/Objects/TextButton'
+import { BaseScene } from './BaseScene'
 
 export class MenuScene extends BaseScene {
     constructor () {
-        super({ key: "Menu" })
+        super({ key: 'Menu' })
     }
 
     create () {
@@ -17,20 +16,22 @@ export class MenuScene extends BaseScene {
             this.logo,
             this.add.zone(400, 300, 800, 600)
         )
-        this.startButton = new TextButton(
-            this, 100, 100, "Start", { fill: "#fff"}
-        )
-        this.startButton
-            .on("pointerup", this.onStartButtonClick)
+
+        this.startButton = new TextButton({
+            scene: this,
+            x: 100,
+            y: 100,
+            text: 'Start',
+            style: { fill: '#fff'},
+            onClick: this.handleStartButtonClick
+        })
 
         this.add.existing(this.startButton)
 
     }
 
-    update () {
+    handleStartButtonClick = () => {
+        this.scene.launch('LevelOne')
+        this.scene.launch('Interface')
     }
-
-  onStartButtonClick = () => {
-      this.scene.start("Game")
-  }
 }

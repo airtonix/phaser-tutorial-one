@@ -4,21 +4,19 @@
  * method when you're done with the player.
  */
 
-import Actor from "./Actor"
+import { Actor } from './Actor'
 
-export default class Player extends Actor {
+export class Player extends Actor {
 
-    constructor(scene, x, y) {
+    constructor(props) {
         super({
-            name: "Player",
-            scene,
-            x,
-            y,
+            name: 'Player',
             health: 100,
-            maxHealth: 100
+            maxHealth: 100,
+            ...props
         })
 
-        this.keys = scene.input.keyboard.createCursorKeys()
+        this.keys = this.scene.input.keyboard.createCursorKeys()
 
     }
 

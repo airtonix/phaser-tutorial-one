@@ -69,8 +69,8 @@ export default class Character extends Phaser.Sprite {
         // match the defined speed.
         let targetSpeed =
             (this.body.velocity.x != 0 && this.body.velocity.y != 0) ?
-            this.speed * this.pythInverse :
-            this.speed
+                this.speed * this.pythInverse :
+                this.speed
 
         this.body.velocity.x *= targetSpeed
         this.body.velocity.y *= targetSpeed

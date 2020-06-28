@@ -3,93 +3,50 @@
  * response to WASD keys. Call its update method from the scene's update and call its destroy
  * method when you're done with the player.
  */
-import Phaser from "phaser"
-import Health from "phaser-component-health"
-import HealthBar from "./HealthBar"
+import { HealthBar } from './HealthBar'
 
+import { Thing } from './Thing'
 
-export default class Actor extends Phaser.GameObjects.Container {
+export class Actor extends Thing {
 
-    static SPRITE_SHEET_NAME = "actors"
+    static SPRITE_SHEET_NAME = 'actors'
 
-    static WALK_FORWARD_NAME = "actor-walk-forward"
+    static WALK_FORWARD_NAME = 'actor-walk-forward'
     static WALK_FORWARD_FRAME_START = 46
     static WALK_FORWARD_FRAME_END = 49
     static WALK_FORWARD_FRAME_RATE = 8
     static WALK_FORWARD_FRAME_REPEAT = -1
 
-    static WALK_BACKWARD_NAME = "actor-walk-backward"
+    static WALK_BACKWARD_NAME = 'actor-walk-backward'
     static WALK_BACKWARD_FRAME_START = 65
     static WALK_BACKWARD_FRAME_END = 68
     static WALK_BACKWARD_FRAME_RATE = 8
     static WALK_BACKWARD_FRAME_REPEAT = -1
-    static IDLE_FRAME = 65
-    static NON_IDLE_FRAME = 46
 
-    constructor({
-        name = "actor",
-        x = 0,
-        y = 0,
-        scene,
-        health = 100,
-        maxHealth = 100,
-        speed = 300
-    }) {
-        super(scene, x, y)
+    static IDLE_ANIMATION_NAME = 'actor-idle'
+    static IDLE_ANIMATION_FRAME_START = 65
+    static IDLE_ANIMATION_FRAME_END = 65
+    static IDLE_ANIMATION_FRAME_RATE = 30
 
-        if (!scene) throw Error(`Actor[${name}] requires a scene`)
+    static STOPPING_ANIMATION_NAME = 'actor-stopping'
+    static STOPPING_ANIMATION_FRAME_START = 46
+    static STOPPING_ANIMATION_FRAME_END = 46
+    static STOPPING_ANIMATION_FRAME_RATE = 30
 
-        this.scene = scene
-        this.name = name
-        this.x = x
-        this.y = y
-        this.speed = speed
-        this.setX(x)
-        this.setY(y)
-        this.setSize(22, 22)
-
-        this.sprite = this.createSprite()
-
-        this.health = Health.AddTo(
-            this,
-            health,
-            maxHealth)
-
+    constructor (props) {
+        super(props)
+        this.props = props
         this.healthbar = new HealthBar(this.scene, this)
-
-        this.on("die", this.handleCharacterDeath)
-        this.on("damage", this.handleCharacterDamage)
-        this.on("heal", this.handleCharacterHeal)
-        this.on("revive", this.handleCharacterRevive)
-        this.on("healthchange", this.handleCharacterHealthChange)
-
         this.add([
-            this.sprite,
             this.healthbar
         ])
-        scene.add.existing(this.sprite)
-        scene.add.existing(this.healthbar)
-        scene.add.existing(this)
-
-        scene.physics.world.enable(this)
-
+        this.scene.add.existing(this.healthbar)
     }
 
-    createSprite () {
-        if (!this.scene) return
+    createSprite = () => {
+        super.createSprite()
 
         const anims = this.scene.anims
-        anims.create({
-            key: this.constructor.WALK_FORWARD_NAME,
-            frames: anims.generateFrameNumbers(
-                this.constructor.SPRITE_SHEET_NAME,
-                {
-                    start: this.constructor.WALK_FORWARD_FRAME_START,
-                    end: this.constructor.WALK_FORWARD_FRAME_END
-                }),
-            frameRate: this.constructor.WALK_FORWARD_FRAME_RATE,
-            repeat: this.constructor.WALK_FORWARD_FRAME_REPEAT
-        })
 
         anims.create({
             key: this.constructor.WALK_BACKWARD_NAME,
@@ -103,6 +60,18 @@ export default class Actor extends Phaser.GameObjects.Container {
             repeat: this.constructor.WALK_BACKWARD_FRAME_REPEAT
         })
 
+        anims.create({
+            key: this.constructor.WALK_FORWARD_NAME,
+            frames: anims.generateFrameNumbers(
+                this.constructor.SPRITE_SHEET_NAME,
+                {
+                    start: this.constructor.WALK_FORWARD_FRAME_START,
+                    end: this.constructor.WALK_FORWARD_FRAME_END
+                }),
+            frameRate: this.constructor.WALK_FORWARD_FRAME_RATE,
+            repeat: this.constructor.WALK_FORWARD_FRAME_REPEAT
+        })
+
         const sprite = this.scene.add
             .sprite(
                 0,
@@ -114,34 +83,27 @@ export default class Actor extends Phaser.GameObjects.Container {
         return sprite
     }
 
-    handleCharacterDeath () {
-        console.log(`[${this.name}] DEATH`)
-        this.sprite
-            .setActive(false)
-            .setVisible(false)
-
+    handleDeath = () => {
+        super.handleDeath()
         this.healthbar.set(0)
     }
 
-    handleCharacterRevive () {
-        console.log(`[${this.name}] REVIVE`)
-        this.sprite
-            .setActive(true)
-            .setVisible(true)
-
+    handleRevive = () => {
+        super.handleRevived()
         this.healthbar.set(this.health.max)
-
     }
 
-    handleCharacterHealthChange (obj, amount, health, maxHealth) {
-        console.log(`[${this.name}] HEALTHCHANGE: ${amount} > now ${health}/${maxHealth}`)
+    handleHealthChanged = (obj, amount, health, maxHealth) => {
+        super.handleHealthChanged(obj, amount, health, maxHealth)
         this.healthbar.set(amount)
     }
 
-    handleCharacterHeal () {
+    handleRecieveHealing = () => {
+        super.handleRecieveHealing()
     }
 
-    handleCharacterDamage () {
+    handleRecieveDamage = () => {
+        super.handleRecieveDamage()
     }
 
     moveLeft = () => {
@@ -190,37 +152,36 @@ export default class Actor extends Phaser.GameObjects.Container {
         this.sprite.anims.stop()
         this.sprite.setTexture(
             this.constructor.SPRITE_SHEET_NAME,
-            this.constructor.NON_IDLE_FRAME)
+            this.constructor.STOPPING_ANIMATION_FRAME_START)
     }
 
     idle = () => {
         this.sprite.anims.stop()
         this.sprite.setTexture(
             this.constructor.SPRITE_SHEET_NAME,
-            this.constructor.IDLE_FRAME)
+            this.constructor.IDLE_ANIMATION_FRAME_START)
     }
 
-    freeze() {
+    freeze = () => {
         this.body.moves = false
     }
 
-    preMove () {
+    preMove = () => {
         const prevVelocity = this.body.velocity.clone()
         // Stop any previous movement from the last frame
         this.body.setVelocity(0)
         return prevVelocity
     }
 
-    postMove () {
+    postMove = () => {
         // Normalize and scale the velocity so that sprite can't move faster along a diagonal
         this.body.velocity.normalize().scale(this.speed)
     }
 
-    destroy() {
+    destroy = () => {
         this.sprite.destroy()
     }
 
-    update () {
+    update = () => {
     }
-
 }
