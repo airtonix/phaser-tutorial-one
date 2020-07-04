@@ -1,40 +1,28 @@
 import Phaser from 'phaser'
 import Health from 'phaser-component-health'
-
+import { Orientation } from '~/Assets'
 
 export class Thing extends Phaser.GameObjects.Container {
-
-    static SPRITE_SHEET_NAME = null
-
-    static SPRITE_WIDTH = null
-    static SPRITE_HEIGHT = null
-    static SPRITE_FOOTPRINT_WIDTH = null
-    static SPRITE_FOOTPRINT_HEIGHT = null
-
-    static IDLE_ANIMATION_NAME = null
-    static IDLE_ANIMATION_FRAME_START = null
-    static IDLE_ANIMATION_FRAME_END = null
-    static IDLE_ANIMATION_FRAME_RATE = null
-    static IDLE_ANIMATION_FRAME_REPEAT = null
+    orientation = Orientation.Down
 
     constructor(props) {
+        super(props.scene, props.x, props.y)
         const {
-            name = 'Unknown',
+            key = 'Unknown',
             x = 0,
             y = 0,
             scene,
             health = 100,
             maxHealth = 100,
-            speed = 0
+            speed = 0,
+            footprintHeight = 16,
+            footprintWidth = 32,
         } = props
-        super(scene, x, y)
+        if (!scene) throw Error(`[${key}] requires a scene`)
+
         this.props = props
-        this.class = this.constructor.name
-
-        if (!scene) throw Error(`${this.class}[${name}] requires a scene`)
-
         this.scene = scene
-        this.name = name
+        this.key = key
         this.x = x
         this.y = y
         this.speed = speed
@@ -42,9 +30,7 @@ export class Thing extends Phaser.GameObjects.Container {
         this.setX(x)
         this.setY(y)
 
-        this.setSize(
-            this.constructor.SPRITE_FOOTPRINT_WIDTH,
-            this.constructor.SPRITE_FOOTPRINT_HEIGHT)
+        this.setSize(footprintWidth, footprintHeight)
 
         this.sprite = this.createSprite()
 
@@ -64,35 +50,22 @@ export class Thing extends Phaser.GameObjects.Container {
         ])
         scene.add.existing(this.sprite)
         scene.add.existing(this)
-
-        scene.physics.world.enable(this)
-
     }
 
     createSprite () {
-        const anims = this.scene.anims
-
-        anims.create({
-            key: this.constructor.IDLE_ANIMATION_NAME,
-            frames: anims.generateFrameNumbers(
-                this.constructor.SPRITE_SHEET_NAME,
-                {
-                    start: this.constructor.IDLE_ANIMATION_START,
-                    end: this.constructor.IDLE_ANIMATION_END
-                }),
-            frameRate: this.constructor.IDLE_ANIMATION_RATE,
-            repeat: this.constructor.IDLE_ANIMATION_REPEAT
-        })
+        const {
+            width, height,
+            idleAnimation
+        } = this.props
+        const animation = idleAnimation[this.orientation] || idleAnimation.all
+        this.log('animation', animation)
+        const { key, frame } = animation.anim.frames[0]
+        this.log('IdleFrame', { key, frame })
 
         const sprite = this.scene.add
-            .sprite(
-                0,
-                - (this.constructor.SPRITE_FOOTPRINT_HEIGHT),
-                this.constructor.SPRITE_SHEET_NAME,
-                0)
-            .setSize(
-                this.constructor.SPRITE_WIDTH,
-                this.constructor.SPRITE_HEIGHT)
+            .sprite(0, 0, key, frame)
+            .setSize(width, height)
+            .setOrigin(0.5, 1)
 
         return sprite
     }
@@ -125,4 +98,28 @@ export class Thing extends Phaser.GameObjects.Container {
         console.log(`${this.class}[${this.name}] WASDAMAGED`)
     }
 
+    animate (animations) {
+        const orientation = this.orientation
+        const { flip, anim } = animations[orientation] || animations.all || {}
+        this.log({ orientation, anim })
+        if (typeof flip !== 'undefined') {
+            this.log('flipping sprite', flip)
+            this.sprite.setFlip(flip)
+        }
+        if (anim) {
+            const { key } = anim
+            this.sprite.play(key, true, 0)
+        }
+    }
+
+    destroy = () => {
+        this.sprite.destroy()
+    }
+
+    log (...msgs) {
+        const {
+            key
+        } = this.props
+        console.log(`[Thing: ${key}]`, ...msgs)
+    }
 }

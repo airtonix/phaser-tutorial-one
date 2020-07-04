@@ -1,8 +1,12 @@
 {
     "compilerOptions": {
-        "baseUrl": "./app/src"
-    },
-    "files": {
-        "~": "./app/src"
+        "allowSyntheticDefaultImports": true,
+        "module": "es6",
+        "checkJs": true,
+        "baseUrl": "app",
+        "moduleResolution": "node",
+        "paths": {
+            "~/*": ["src/*"]
+        }
     }
 }

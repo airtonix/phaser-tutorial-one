@@ -14,16 +14,16 @@ export class Game extends Phaser.Game {
             title: 'Maintainable Game',
 
             type: Phaser.AUTO,
-            pixelArt: true,
             backgroundColor: '#000',
 
             parent: 'game_content',
 
-            width: 800,
-            height: 600,
+            width: window.innerWidth,
+            height: window.innerHeight,
             physics: {
                 default: 'arcade',
                 arcade: {
+                    // debug: true,
                     gravity: { y: 0 }
                 }
             },

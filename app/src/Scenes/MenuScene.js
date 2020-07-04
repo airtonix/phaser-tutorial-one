@@ -1,8 +1,6 @@
-import Phaser from 'phaser'
-
-import { LogoImage } from '~/Images/LogoImage'
-import { TextButton } from '~/Objects/TextButton'
 import { BaseScene } from './BaseScene'
+import { TextButton } from '~/Objects/TextButton'
+import { PlayerWarrior } from '~/Objects/PlayerWarrior'
 
 export class MenuScene extends BaseScene {
     constructor () {
@@ -10,24 +8,37 @@ export class MenuScene extends BaseScene {
     }
 
     create () {
-        this.logo = new LogoImage(this, 400, 150)
+        const { width, height } = this.cameras.main
 
-        Phaser.Display.Align.In.Center(
-            this.logo,
-            this.add.zone(400, 300, 800, 600)
+        this.logo = new PlayerWarrior({
+            scene: this,
+            width: 16,
+            height: 32,
+            x: (width / 2) - 16,
+            y: (height / 2) - 32
+        })
+        this.logo.sprite.setDisplaySize(
+            this.logo.sprite.width * 8,
+            this.logo.sprite.height * 4
         )
 
         this.startButton = new TextButton({
             scene: this,
-            x: 100,
-            y: 100,
+            x: width / 2,
+            y: height / 2,
             text: 'Start',
-            style: { fill: '#fff'},
+            style: { fill: '#ffffff' },
             onClick: this.handleStartButtonClick
         })
-
         this.add.existing(this.startButton)
 
+        this.cursors = this.input.keyboard.createCursorKeys()
+
+    }
+
+    update () {
+        // this.logo.update(this.cursors)
+        this.logo.meander()
     }
 
     handleStartButtonClick = () => {

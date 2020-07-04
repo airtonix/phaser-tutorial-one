@@ -7,7 +7,6 @@ export class InterfaceScene extends BaseScene {
     }
 
     create () {
-        super.create()
         // Help text that has a "fixed" position on the screen
     }
 

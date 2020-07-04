@@ -3,185 +3,181 @@
  * response to WASD keys. Call its update method from the scene's update and call its destroy
  * method when you're done with the player.
  */
-import { HealthBar } from './HealthBar'
-
+// import { HealthBar } from './HealthBar'
+import { Orientation } from '~/Assets'
 import { Thing } from './Thing'
 
 export class Actor extends Thing {
-
-    static SPRITE_SHEET_NAME = 'actors'
-
-    static WALK_FORWARD_NAME = 'actor-walk-forward'
-    static WALK_FORWARD_FRAME_START = 46
-    static WALK_FORWARD_FRAME_END = 49
-    static WALK_FORWARD_FRAME_RATE = 8
-    static WALK_FORWARD_FRAME_REPEAT = -1
-
-    static WALK_BACKWARD_NAME = 'actor-walk-backward'
-    static WALK_BACKWARD_FRAME_START = 65
-    static WALK_BACKWARD_FRAME_END = 68
-    static WALK_BACKWARD_FRAME_RATE = 8
-    static WALK_BACKWARD_FRAME_REPEAT = -1
-
-    static IDLE_ANIMATION_NAME = 'actor-idle'
-    static IDLE_ANIMATION_FRAME_START = 65
-    static IDLE_ANIMATION_FRAME_END = 65
-    static IDLE_ANIMATION_FRAME_RATE = 30
-
-    static STOPPING_ANIMATION_NAME = 'actor-stopping'
-    static STOPPING_ANIMATION_FRAME_START = 46
-    static STOPPING_ANIMATION_FRAME_END = 46
-    static STOPPING_ANIMATION_FRAME_RATE = 30
-
-    constructor (props) {
-        super(props)
-        this.props = props
-        this.healthbar = new HealthBar(this.scene, this)
-        this.add([
-            this.healthbar
-        ])
-        this.scene.add.existing(this.healthbar)
-    }
-
-    createSprite = () => {
-        super.createSprite()
-
-        const anims = this.scene.anims
-
-        anims.create({
-            key: this.constructor.WALK_BACKWARD_NAME,
-            frames: anims.generateFrameNumbers(
-                this.constructor.SPRITE_SHEET_NAME,
-                {
-                    start: this.constructor.WALK_BACKWARD_FRAME_START,
-                    end: this.constructor.WALK_BACKWARD_FRAME_END
-                }),
-            frameRate: this.constructor.WALK_BACKWARD_FRAME_RATE,
-            repeat: this.constructor.WALK_BACKWARD_FRAME_REPEAT
+    constructor ({ scene, ...props }) {
+        super({
+            scene,
+            speed: 10,
+            ...props
         })
-
-        anims.create({
-            key: this.constructor.WALK_FORWARD_NAME,
-            frames: anims.generateFrameNumbers(
-                this.constructor.SPRITE_SHEET_NAME,
-                {
-                    start: this.constructor.WALK_FORWARD_FRAME_START,
-                    end: this.constructor.WALK_FORWARD_FRAME_END
-                }),
-            frameRate: this.constructor.WALK_FORWARD_FRAME_RATE,
-            repeat: this.constructor.WALK_FORWARD_FRAME_REPEAT
-        })
-
-        const sprite = this.scene.add
-            .sprite(
-                0,
-                -22,
-                this.constructor.SPRITE_SHEET_NAME,
-                0)
-            .setSize(22, 33)
-
-        return sprite
-    }
-
-    handleDeath = () => {
-        super.handleDeath()
-        this.healthbar.set(0)
-    }
-
-    handleRevive = () => {
-        super.handleRevived()
-        this.healthbar.set(this.health.max)
+        scene.physics.world.enable(this)
     }
 
     handleHealthChanged = (obj, amount, health, maxHealth) => {
         super.handleHealthChanged(obj, amount, health, maxHealth)
-        this.healthbar.set(amount)
+        // this.healthbar.set(amount)
     }
 
-    handleRecieveHealing = () => {
-        super.handleRecieveHealing()
+    moveAndAnimateTo(orientation) {
+        switch (orientation) {
+        case Orientation.Left:
+            this.moveToLeft()
+            this.animateLeft()
+            break
+        case Orientation.Right:
+            this.moveToRight()
+            this.animateRight()
+            break
+        case Orientation.Up:
+            this.moveToUp()
+            this.animateUp()
+            break
+        case Orientation.Down:
+            this.moveToDown()
+            this.animateDown()
+            break
+        }
     }
 
-    handleRecieveDamage = () => {
-        super.handleRecieveDamage()
+    moveToLeft = () => {
+        const {
+            speed
+        } = this.props
+        this.body.setVelocityX(-speed)
     }
 
-    moveLeft = () => {
-        this.preMove()
-
-        const animation_name = this.constructor.WALK_FORWARD_NAME
-
-        this.body.setVelocityX(-this.speed)
-        this.sprite.setFlipX(true)
-        this.sprite.anims.play(animation_name, true)
-
+    animateLeft = () => {
+        this.preMotion()
+        const {
+            movingAnimation
+        } = this.props
+        this.orientation = Orientation.Left
+        this.animate(movingAnimation)
     }
 
-    moveRight = () => {
-        this.preMove()
-
-        const animation_name = this.constructor.WALK_FORWARD_NAME
-
-        this.body.setVelocityX(this.speed)
-        this.sprite.setFlipX(false)
-        this.sprite.anims.play(animation_name, true)
-
+    moveToRight = () => {
+        const {
+            speed
+        } = this.props
+        this.body.setVelocityX(speed)
     }
 
-    moveDown = () => {
-        this.preMove()
-
-        const animation_name = this.constructor.WALK_FORWARD_NAME
-
-        this.body.setVelocityY(this.speed)
-        this.sprite.anims.play(animation_name, true)
-
+    animateRight = () => {
+        this.preMotion()
+        const {
+            movingAnimation
+        } = this.props
+        this.orientation = Orientation.Right
+        this.animate(movingAnimation)
     }
 
-    moveUp = () => {
-        this.preMove()
-
-        const animation_name = this.constructor.WALK_BACKWARD_NAME
-
-        this.body.setVelocityY(-this.speed)
-        this.sprite.anims.play(animation_name, true)
-
+    moveToDown = () => {
+        const {
+            speed
+        } = this.props
+        this.body.setVelocityY(speed)
     }
 
-    stop = () => {
-        this.sprite.anims.stop()
-        this.sprite.setTexture(
-            this.constructor.SPRITE_SHEET_NAME,
-            this.constructor.STOPPING_ANIMATION_FRAME_START)
+    animateDown = () => {
+        this.preMotion()
+        const {
+            movingAnimation
+        } = this.props
+        this.orientation = Orientation.Down
+        this.animate(movingAnimation)
     }
 
-    idle = () => {
-        this.sprite.anims.stop()
-        this.sprite.setTexture(
-            this.constructor.SPRITE_SHEET_NAME,
-            this.constructor.IDLE_ANIMATION_FRAME_START)
+    moveToUp = () => {
+        const {
+            speed
+        } = this.props
+        this.body.setVelocityY(-speed)
     }
 
-    freeze = () => {
-        this.body.moves = false
+    animateUp = () => {
+        this.preMotion()
+        const {
+            movingAnimation
+        } = this.props
+        this.orientation = Orientation.Up
+        this.animate(movingAnimation)
     }
 
-    preMove = () => {
+    preMotion () {
         const prevVelocity = this.body.velocity.clone()
         // Stop any previous movement from the last frame
         this.body.setVelocity(0)
         return prevVelocity
     }
 
-    postMove = () => {
+    postMotion () {
+        if (this.prevVelocity == 0) return
         // Normalize and scale the velocity so that sprite can't move faster along a diagonal
         this.body.velocity.normalize().scale(this.speed)
     }
 
-    destroy = () => {
-        this.sprite.destroy()
+    stop = () => {
+        this.idle()
     }
 
-    update = () => {
+    idle = () => {
+        const {
+            idleAnimation
+        } = this.props
+        this.animate(idleAnimation)
+    }
+
+    chooseRandomOrientation = () => {
+        const directions = Object.values(Orientation)
+        const direction = Math.floor(Math.random() * directions.length)
+        return directions[direction]
+    }
+
+    // @ts-ignore
+    get attentionSpan () {
+        return 2000 * Math.random()
+    }
+    // @ts-ignore
+    get boredomTimeout () {
+        return 15000 * Math.random()
+    }
+
+    isMeandering = false
+    meander = () => {
+        if (this.isMeandering) return
+
+        this.isMeandering = true
+        const orientation = this.chooseRandomOrientation()
+        this.log('Meandering', orientation)
+
+        this.moveAndAnimateTo(orientation)
+
+        this.scene.time.addEvent({
+            delay: this.attentionSpan,
+            callbackScope: this,
+            callback: this.stopMeandering
+        })
+    }
+
+    stopMeandering = () => {
+        if (!this.active) return
+
+        this.scene.time.addEvent({
+            delay: this.boredomTimeout,
+            callbackScope: this,
+            callback: () => {
+                this.stop()
+                this.log('stopMeandering')
+                this.isMeandering = false
+            }
+        })
+    }
+
+    freeze = () => {
+        this.body.moves = false
     }
 }

@@ -29,7 +29,8 @@
     "phaser-ui-tools": "^2.0.0-beta",
     "phaser-web-workers": "0.0.4",
     "phaser3-phorge": "^1.0.1",
-    "phaser3-plugin-easyprogressbar": "^1.0.4"
+    "phaser3-plugin-easyprogressbar": "^1.0.4",
+    "tile-extruder": "^2.0.6"
   },
   "keywords": [],
   "author": "",

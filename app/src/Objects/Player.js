@@ -10,53 +10,50 @@ export class Player extends Actor {
 
     constructor(props) {
         super({
-            name: 'Player',
+            ...props,
+            key: `${props.key}.Player`,
             health: 100,
             maxHealth: 100,
-            ...props
         })
-
-        this.keys = this.scene.input.keyboard.createCursorKeys()
-
     }
 
-    update() {
-        const keys = this.keys
-        const prevVelocity = this.preMove()
+    update (keys) {
+        this.isMoving = keys.left.isDown
+            || keys.right.isDown
+            || keys.down.isDown
+            || keys.up.isDown
+
+        this.prevVelocity = this.preMotion()
 
         // Horizontal movement
         if (keys.left.isDown) {
-            this.moveLeft()
+            this.animateLeft()
+            this.moveToLeft()
         }
         else if (keys.right.isDown) {
-            this.moveRight()
+            this.moveToRight()
+            this.animateRight()
         }
 
         // Vertical movement
         if (keys.up.isDown) {
-            this.moveUp()
+            this.moveToUp()
+            this.animateUp()
         }
         else if (keys.down.isDown) {
-            this.moveDown()
+            this.moveToDown()
+            this.animateDown()
         }
-
-        this.postMove()
 
         // Update the animation last and give left/right/down animations precedence over up animations
-        if (
-            !keys.left.isDown
-            && !keys.right.isDown
-            && !keys.down.isDown
-            && !keys.up.isDown) {
+        if (this.isMoving) {
             // If we were moving & now we're not,
             // then pick a single idle frame to use
-            if (prevVelocity.y < 0) {
+            if (this.prevVelocity.y < 0) {
                 this.idle()
-            } else {
-                this.stop()
             }
         }
-
-        super.update()
+        this.postMotion()
     }
+
 }

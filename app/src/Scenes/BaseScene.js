@@ -14,8 +14,4 @@ export class BaseScene extends Phaser.Scene {
         } = this.props
         console.log(`[Scene: ${key}]`, ...msgs)
     }
-
-    create () {
-        this.log('created')
-    }
 }
