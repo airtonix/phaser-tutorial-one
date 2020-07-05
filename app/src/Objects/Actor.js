@@ -10,8 +10,8 @@ export class Actor extends Thing {
             ...props
         })
         scene.physics.world.enable(this)
-        this.prevVelocity = undefined
-        this.isIdle = true
+        this.prevVelocity = { x: 0, y: 0 }
+        this.isIdle = false
         this.isMoving = false
     }
 
@@ -47,8 +47,6 @@ export class Actor extends Thing {
 
     moveToLeft = () => {
         if (!this.active) return
-        this.preMotion()
-
         const {
             speed
         } = this.props
@@ -69,7 +67,6 @@ export class Actor extends Thing {
 
     moveToRight = () => {
         if (!this.active) return
-        this.preMotion()
 
         const {
             speed
@@ -91,7 +88,6 @@ export class Actor extends Thing {
 
     moveToDown = () => {
         if (!this.active) return
-        this.preMotion()
 
         const {
             speed
@@ -113,7 +109,6 @@ export class Actor extends Thing {
 
     moveToUp = () => {
         if (!this.active) return
-        this.preMotion()
 
         const {
             speed
@@ -144,7 +139,11 @@ export class Actor extends Thing {
 
     postMotion() {
         if (!this.active) return
-        if (this.prevVelocity && this.prevVelocity.y == 0) return
+        const { x, y } = this.prevVelocity
+        this.isIdle = (y === 0 && x === 0)
+
+        if (this.isIdle) return
+
         // Normalize and scale the velocity so that sprite can't move faster along a diagonal
         // @ts-ignore
         this.body.velocity.normalize().scale(this.speed)
@@ -164,9 +163,9 @@ export class Actor extends Thing {
             idleAnimation
         } = this.props
 
-        this.isIdle = true
         this.log('idle')
         this.animate(idleAnimation)
+        this.isIdle = true
     }
 
     chooseRandomOrientation = () => {

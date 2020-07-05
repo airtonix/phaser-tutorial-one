@@ -9,6 +9,7 @@ export class Player extends Actor {
             health: 100,
             maxHealth: 100,
         })
+        this.idle()
     }
 
     update (keys) {
@@ -39,11 +40,11 @@ export class Player extends Actor {
             this.animateDown()
         }
 
+        this.postMotion()
+
         if (!this.isMoving && !this.isIdle) {
             this.idle()
         }
-
-        this.postMotion()
     }
 
 }

@@ -13,8 +13,8 @@ export class PlayerWarrior extends Player {
                 all: { anim: Animations.PlayerWarriorIdle },
             },
             movingAnimation: {
-                down: {flip: true, anim: Animations.PlayerWarriorMove },
-                up: {flip: true, anim: Animations.PlayerWarriorMove },
+                down: {anim: Animations.PlayerWarriorMove },
+                up: {anim: Animations.PlayerWarriorMove },
                 left: {flip: true, anim: Animations.PlayerWarriorMove },
                 right: {flip: false, anim: Animations.PlayerWarriorMove },
             },
