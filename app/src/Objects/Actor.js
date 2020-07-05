@@ -1,28 +1,30 @@
-/**
- * A class that wraps up our top down player logic. It creates, animates and moves a sprite in
- * response to WASD keys. Call its update method from the scene's update and call its destroy
- * method when you're done with the player.
- */
 // import { HealthBar } from './HealthBar'
-import { Orientation } from '~/Assets'
+import { Orientation } from '~/constants'
 import { Thing } from './Thing'
 
 export class Actor extends Thing {
-    constructor ({ scene, ...props }) {
+    constructor({ scene, ...props }) {
         super({
             scene,
             speed: 10,
             ...props
         })
         scene.physics.world.enable(this)
+        this.prevVelocity = undefined
+        this.isIdle = true
+        this.isMoving = false
     }
 
     handleHealthChanged = (obj, amount, health, maxHealth) => {
+        if (!this.active) return
+
         super.handleHealthChanged(obj, amount, health, maxHealth)
         // this.healthbar.set(amount)
     }
 
-    moveAndAnimateTo(orientation) {
+    moveAndAnimateToOrientation(orientation) {
+        if (!this.active) return
+
         switch (orientation) {
         case Orientation.Left:
             this.moveToLeft()
@@ -44,14 +46,20 @@ export class Actor extends Thing {
     }
 
     moveToLeft = () => {
+        if (!this.active) return
+        this.preMotion()
+
         const {
             speed
         } = this.props
+        // @ts-ignore
+        this.log('moveToLeft', -speed, this.prevVelocity)
         this.body.setVelocityX(-speed)
     }
 
     animateLeft = () => {
-        this.preMotion()
+        if (!this.active) return
+
         const {
             movingAnimation
         } = this.props
@@ -60,14 +68,20 @@ export class Actor extends Thing {
     }
 
     moveToRight = () => {
+        if (!this.active) return
+        this.preMotion()
+
         const {
             speed
         } = this.props
+        // @ts-ignore
+        this.log('moveToRight', speed, this.prevVelocity)
         this.body.setVelocityX(speed)
     }
 
     animateRight = () => {
-        this.preMotion()
+        if (!this.active) return
+
         const {
             movingAnimation
         } = this.props
@@ -76,14 +90,20 @@ export class Actor extends Thing {
     }
 
     moveToDown = () => {
+        if (!this.active) return
+        this.preMotion()
+
         const {
             speed
         } = this.props
+        // @ts-ignore
+        this.log('moveToDown', speed, this.prevVelocity)
         this.body.setVelocityY(speed)
     }
 
     animateDown = () => {
-        this.preMotion()
+        if (!this.active) return
+
         const {
             movingAnimation
         } = this.props
@@ -92,14 +112,19 @@ export class Actor extends Thing {
     }
 
     moveToUp = () => {
+        if (!this.active) return
+        this.preMotion()
+
         const {
             speed
         } = this.props
+        // @ts-ignore
+        this.log('moveToUp', speed, this.prevVelocity)
         this.body.setVelocityY(-speed)
     }
 
     animateUp = () => {
-        this.preMotion()
+        if (!this.active) return
         const {
             movingAnimation
         } = this.props
@@ -107,27 +132,40 @@ export class Actor extends Thing {
         this.animate(movingAnimation)
     }
 
-    preMotion () {
-        const prevVelocity = this.body.velocity.clone()
+    preMotion() {
+        if (!this.active) return
+
+        // @ts-ignore
+        this.prevVelocity = this.body.velocity.clone()
         // Stop any previous movement from the last frame
+        // @ts-ignore
         this.body.setVelocity(0)
-        return prevVelocity
     }
 
-    postMotion () {
-        if (this.prevVelocity == 0) return
+    postMotion() {
+        if (!this.active) return
+        if (this.prevVelocity && this.prevVelocity.y == 0) return
         // Normalize and scale the velocity so that sprite can't move faster along a diagonal
+        // @ts-ignore
         this.body.velocity.normalize().scale(this.speed)
     }
 
     stop = () => {
+        if (!this.active) return
+
+        this.log('stop')
         this.idle()
     }
 
     idle = () => {
+        if (!this.active) return
+
         const {
             idleAnimation
         } = this.props
+
+        this.isIdle = true
+        this.log('idle')
         this.animate(idleAnimation)
     }
 
@@ -138,23 +176,23 @@ export class Actor extends Thing {
     }
 
     // @ts-ignore
-    get attentionSpan () {
+    get attentionSpan() {
         return 2000 * Math.random()
     }
     // @ts-ignore
-    get boredomTimeout () {
+    get boredomTimeout() {
         return 15000 * Math.random()
     }
 
     isMeandering = false
     meander = () => {
-        if (this.isMeandering) return
+        if (!this.active || this.isMeandering) return
 
         this.isMeandering = true
-        const orientation = this.chooseRandomOrientation()
-        this.log('Meandering', orientation)
+        this.orientation = this.chooseRandomOrientation()
+        this.log('Meandering', this.orientation)
 
-        this.moveAndAnimateTo(orientation)
+        this.moveAndAnimateToOrientation(this.orientation)
 
         this.scene.time.addEvent({
             delay: this.attentionSpan,
@@ -166,18 +204,19 @@ export class Actor extends Thing {
     stopMeandering = () => {
         if (!this.active) return
 
+        this.stop()
+
         this.scene.time.addEvent({
             delay: this.boredomTimeout,
             callbackScope: this,
             callback: () => {
-                this.stop()
-                this.log('stopMeandering')
                 this.isMeandering = false
             }
         })
     }
 
     freeze = () => {
+        // @ts-ignore
         this.body.moves = false
     }
 }

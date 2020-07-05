@@ -1,6 +1,7 @@
-import TilesetOneExtruded from '~/Assets/0x72_DungeonTilesetII_v1.3--extruded.png'
-import TilesetOne from '~/Assets/0x72_DungeonTilesetII_v1.3.png'
-import TilesetTwo from '~/Assets/16x16 dungeon ii wall reconfig v04 spritesheet.png'
+const TilesetOneExtruded = '/0x72_DungeonTilesetII_v1.3--extruded.png'
+const TilesetOne = '/0x72_DungeonTilesetII_v1.3.png'
+const TilesetTwo = '/16x16 dungeon ii wall reconfig v04 spritesheet.png'
+const LevelOneTiledTileMap = '/LevelOne.json'
 
 export const FrameConfig16x16 = {
     frameWidth: 16,
@@ -16,7 +17,7 @@ export const Orientation = {
 
 export const SpriteSheets = {
     Dungeon: {
-        key: 'Dungeon',
+        key: 'DungeonSpriteSheet',
         url: TilesetOne,
         frameConfig: {
             frameWidth: 16,
@@ -42,10 +43,26 @@ export const SpriteSheets = {
     }
 }
 
+export const Images = {
+    DungeonTiles: {
+        key: 'DungeonTiles',
+        url: TilesetOne
+    },
+}
+
+export const TiledTileMaps = {
+    LevelOne: {
+        key: 'LevelOneTiledMap',
+        url: LevelOneTiledTileMap,
+        tileset: Images.DungeonTiles.key,
+        tileimage: Images.DungeonTiles.key,
+    }
+}
+
 export const Animations = {
     PlayerWarriorMove: {
         key: 'PlayerWarriorMove',
-        frameRate: 4,
+        frameRate: 8,
         repeat: -1,
         padding: 1,
         frames: [ 76, 77, 78, 79, ],
@@ -57,7 +74,7 @@ export const Animations = {
         sheet: SpriteSheets.Characters.key,
         frames: [ 72, 73, 74, 75 ],
         margin: 1,
-        frameRate: 2,
+        frameRate: 4,
         repeat: -1
     },
 }

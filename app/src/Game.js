@@ -5,10 +5,9 @@ import { MenuScene } from './Scenes/MenuScene'
 import { InterfaceScene } from './Scenes/InterfaceScene'
 import { LevelOneScene } from './Scenes/LevelOneScene'
 
-
 export class Game extends Phaser.Game {
 
-    constructor() {
+    constructor(config) {
         // init game
         super({
             title: 'Maintainable Game',
@@ -23,7 +22,7 @@ export class Game extends Phaser.Game {
             physics: {
                 default: 'arcade',
                 arcade: {
-                    // debug: true,
+                    debug: true,
                     gravity: { y: 0 }
                 }
             },
@@ -31,8 +30,8 @@ export class Game extends Phaser.Game {
             scene: [
                 PreloaderScene,
                 MenuScene,
-                InterfaceScene,
                 LevelOneScene,
+                InterfaceScene,
             ]
         })
     }

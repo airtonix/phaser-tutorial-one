@@ -1,17 +1,21 @@
 import { MapScene } from './MapScene'
+import { TiledTileMaps } from '~/constants'
 
 export class LevelOneScene extends MapScene {
-    static Db = {
-        tilesets: [ 'tiles' ],
-        layers: [
-            { name: 'ground', tilset: 'tiles',
-            },
-            { name: 'items', tilset: 'tiles',
-            },
-        ]
-    }
+    static key = 'LevelOneScene'
 
-    constructor() {
-        super({ key: 'LevelOne', db: LevelOneScene.Db })
+    constructor () {
+        super({
+            key: LevelOneScene.key,
+            data: {
+                ...TiledTileMaps.LevelOne,
+                layers: [
+                    { key: 'Ground' },
+                    { key: 'Walls' },
+                    { key: 'Obstacles' },
+                ]
+            },
+        })
+        this.log('constructed')
     }
 }

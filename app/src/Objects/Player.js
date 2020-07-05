@@ -1,9 +1,3 @@
-/**
- * A class that wraps up our top down player logic. It creates, animates and moves a sprite in
- * response to WASD keys. Call its update method from the scene's update and call its destroy
- * method when you're done with the player.
- */
-
 import { Actor } from './Actor'
 
 export class Player extends Actor {
@@ -23,7 +17,7 @@ export class Player extends Actor {
             || keys.down.isDown
             || keys.up.isDown
 
-        this.prevVelocity = this.preMotion()
+        this.preMotion()
 
         // Horizontal movement
         if (keys.left.isDown) {
@@ -45,14 +39,10 @@ export class Player extends Actor {
             this.animateDown()
         }
 
-        // Update the animation last and give left/right/down animations precedence over up animations
-        if (this.isMoving) {
-            // If we were moving & now we're not,
-            // then pick a single idle frame to use
-            if (this.prevVelocity.y < 0) {
-                this.idle()
-            }
+        if (!this.isMoving && !this.isIdle) {
+            this.idle()
         }
+
         this.postMotion()
     }
 

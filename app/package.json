@@ -34,5 +34,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "parcel-plugin-asset-copier": "^1.1.0"
+  },
+  "assetsPath": "src/Assets"
 }

@@ -1,6 +1,6 @@
-import Phaser from 'phaser'
 import Health from 'phaser-component-health'
-import { Orientation } from '~/Assets'
+import Phaser from 'phaser'
+import { Orientation } from '~/constants'
 
 export class Thing extends Phaser.GameObjects.Container {
     orientation = Orientation.Down
@@ -48,8 +48,9 @@ export class Thing extends Phaser.GameObjects.Container {
         this.add([
             this.sprite,
         ])
-        scene.add.existing(this.sprite)
+        // scene.add.existing(this.sprite)
         scene.add.existing(this)
+        this.log('constructed')
     }
 
     createSprite () {
@@ -57,21 +58,23 @@ export class Thing extends Phaser.GameObjects.Container {
             width, height,
             idleAnimation
         } = this.props
+        this.log('createSprite', { width, height, idleAnimation })
+
         const animation = idleAnimation[this.orientation] || idleAnimation.all
-        this.log('animation', animation)
         const { key, frame } = animation.anim.frames[0]
-        this.log('IdleFrame', { key, frame })
 
         const sprite = this.scene.add
             .sprite(0, 0, key, frame)
             .setSize(width, height)
-            .setOrigin(0.5, 1)
+            .setOrigin(0.1, 0.1)
 
         return sprite
     }
 
     handleDeath () {
-        console.log(`${this.class}[${this.name}] DEATH`)
+        if(!this.active) return
+
+        this.log('handleDeath')
         this.sprite
             .setActive(false)
             .setVisible(false)
@@ -80,32 +83,44 @@ export class Thing extends Phaser.GameObjects.Container {
     }
 
     handleRevived () {
-        console.log(`${this.class}[${this.name}] REVIVED`)
+        if(!this.active) return
+
+        this.log('handleRevived')
         this.sprite
             .setActive(true)
             .setVisible(true)
     }
 
     handleHealthChanged (obj, amount, health, maxHealth) {
-        console.log(`[${this.name}] HEALTHCHANGE: ${amount} > now ${health}/${maxHealth}`)
+        if(!this.active) return
+
+        this.log('handleHealthChange', { amount, health, maxHealth })
     }
 
     handleRecieveHealing () {
-        console.log(`${this.class}[${this.name}] WASHEALED`)
+        if(!this.active) return
+
+        this.log('handleRecieveHealing')
     }
 
     handleRecieveDamage () {
-        console.log(`${this.class}[${this.name}] WASDAMAGED`)
+        if(!this.active) return
+
+        this.log('handleRecieveDamage')
     }
 
     animate (animations) {
+        if(!this.active) return
+
         const orientation = this.orientation
         const { flip, anim } = animations[orientation] || animations.all || {}
-        this.log({ orientation, anim })
-        if (typeof flip !== 'undefined') {
+        this.log('animate', { orientation, anim })
+
+        if (typeof flip !== 'undefined') {
             this.log('flipping sprite', flip)
             this.sprite.setFlip(flip)
         }
+
         if (anim) {
             const { key } = anim
             this.sprite.play(key, true, 0)
@@ -113,7 +128,11 @@ export class Thing extends Phaser.GameObjects.Container {
     }
 
     destroy = () => {
+        this.log('destroy')
+        this.setActive(false)
+        this.sprite.anims.currentAnim.pause()
         this.sprite.destroy()
+        // this.scene.remove(this)
     }
 
     log (...msgs) {

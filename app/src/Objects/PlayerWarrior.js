@@ -1,5 +1,5 @@
 import { Player } from './Player'
-import { Animations } from '~/Assets'
+import { Animations } from '~/constants'
 
 export class PlayerWarrior extends Player {
     constructor (props) {
@@ -10,7 +10,7 @@ export class PlayerWarrior extends Player {
             width: 16,
             height: 32,
             idleAnimation: {
-                all: { flip: true, anim: Animations.PlayerWarriorIdle },
+                all: { anim: Animations.PlayerWarriorIdle },
             },
             movingAnimation: {
                 down: {flip: true, anim: Animations.PlayerWarriorMove },

@@ -11,6 +11,6 @@ export class InterfaceScene extends BaseScene {
     }
 
     createActorUi () {
-        this.player = new ActorUi()
+        this.player = new ActorUi(this, 0, 0)
     }
 }

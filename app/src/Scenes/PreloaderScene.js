@@ -1,10 +1,21 @@
 import { BaseScene } from './BaseScene'
-import * as Assets from '~/Assets'
+import {
+    SpriteSheets,
+    Images,
+    TiledTileMaps,
+    Animations,
+
+} from '~/constants'
+import { LevelOneScene } from './LevelOneScene'
 
 export class PreloaderScene extends BaseScene {
     WHITE = 0xffffff
     GREY = 0x666666
     DARKGREY = 0x222222
+
+    static data = {
+        next: LevelOneScene.key
+    }
 
     constructor () {
         super({ key: 'Preloader' })
@@ -19,12 +30,14 @@ export class PreloaderScene extends BaseScene {
             (this.config.boxWidth - (this.config.boxPadding)) * value,
             this.config.boxHeight - (this.config.boxPadding)
         )
+        // @ts-ignore
         const percentage = parseInt(value * 100)
         this.percent.setText(`${percentage}%`)
         this.log('progress', value)
     }
 
     handleFileProgress = (file, value) => {
+        // @ts-ignore
         const percentage = parseInt(value * 100)
         this.log('fileProgress', file.key, percentage)
         this.asset.setText(`> ${file.key}`)
@@ -115,13 +128,18 @@ export class PreloaderScene extends BaseScene {
 
         this.process(
             'sprites',
-            Assets.SpriteSheets,
+            SpriteSheets,
             (spritesheet) => this.load.spritesheet(spritesheet)
         )
         this.process(
             'images',
-            Assets.Images,
+            Images,
             (image) => this.load.image(image)
+        )
+        this.process(
+            'tiledtilemaps',
+            TiledTileMaps,
+            ({ key, url }) => this.load.tilemapTiledJSON(key, url)
         )
     }
 
@@ -135,10 +153,11 @@ export class PreloaderScene extends BaseScene {
                 loaderFn(definition)
             })
     }
+
     prepare () {
         this.process(
             'animations',
-            Assets.Animations,
+            Animations,
             ({ frames, sheet, ...animation }) => this.anims.create({
                 ...animation,
                 frames: this.anims.generateFrameNumbers(sheet, { frames })
@@ -148,6 +167,6 @@ export class PreloaderScene extends BaseScene {
 
     create () {
         this.prepare()
-        this.scene.start('Menu')
+        this.scene.start(PreloaderScene.data.next)
     }
 }

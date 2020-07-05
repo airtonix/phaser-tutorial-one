@@ -1,13 +1,22 @@
 import { BaseScene } from './BaseScene'
 import { TextButton } from '~/Objects/TextButton'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
+import { LevelOneScene } from '~/Scenes/LevelOneScene'
 
 export class MenuScene extends BaseScene {
+    static key = 'Menu'
+
     constructor () {
-        super({ key: 'Menu' })
+        super({
+            key: MenuScene.key
+        })
+        this.log('constructed')
     }
 
     create () {
+        super.create()
+        this.log('create')
+
         const { width, height } = this.cameras.main
 
         this.logo = new PlayerWarrior({
@@ -31,18 +40,19 @@ export class MenuScene extends BaseScene {
             onClick: this.handleStartButtonClick
         })
         this.add.existing(this.startButton)
-
-        this.cursors = this.input.keyboard.createCursorKeys()
-
     }
 
     update () {
-        // this.logo.update(this.cursors)
         this.logo.meander()
     }
 
     handleStartButtonClick = () => {
-        this.scene.launch('LevelOne')
-        this.scene.launch('Interface')
+        // this.logo.destroy()
+        const scenes = [
+            LevelOneScene.key,
+        ]
+        this.log('handleStartButtonClick', { scenes })
+        scenes.forEach(key => this.scene.start(key))
+        // this.scene.launch('Interface')
     }
 }
