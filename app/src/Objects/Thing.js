@@ -29,7 +29,6 @@ export class Thing extends Phaser.GameObjects.Container {
 
         this.setX(x)
         this.setY(y)
-
         this.setSize(footprintWidth, footprintHeight)
 
         this.sprite = this.createSprite()
@@ -48,7 +47,6 @@ export class Thing extends Phaser.GameObjects.Container {
         this.add([
             this.sprite,
         ])
-        // scene.add.existing(this.sprite)
         scene.add.existing(this)
         this.log('constructed')
     }
@@ -63,32 +61,42 @@ export class Thing extends Phaser.GameObjects.Container {
         const animation = idleAnimation[this.orientation] || idleAnimation.all
         const { key, frame } = animation.anim.frames[0]
 
-        const sprite = this.scene.add
-            .sprite(0, 0, key, frame)
-            .setSize(width, height)
-            .setOrigin(0.1, 0.1)
+        const sprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, key, frame)
+        sprite.setTexture(key)
+        sprite.setFrame(frame)
+        sprite.setSize(width, height)
+        sprite.setOrigin(0.5, 0.9)
 
         return sprite
     }
 
     handleDeath () {
         if(!this.active) return
-
+        const {
+            deathAnimation
+        } = this.props
         this.log('handleDeath')
-        this.sprite
+        const sprite = this.sprite
+
+        sprite
             .setActive(false)
             .setVisible(false)
 
-        // TODO: set death animation
+        this.animate(deathAnimation)
     }
 
     handleRevived () {
         if(!this.active) return
-
+        const {
+            reviveAnimation
+        } = this.props
         this.log('handleRevived')
-        this.sprite
-            .setActive(true)
-            .setVisible(true)
+        const sprite = this.sprite
+
+        sprite.setActive(true)
+        sprite.setVisible(true)
+
+        this.animate(reviveAnimation)
     }
 
     handleHealthChanged (obj, amount, health, maxHealth) {
@@ -105,8 +113,11 @@ export class Thing extends Phaser.GameObjects.Container {
 
     handleRecieveDamage () {
         if(!this.active) return
-
+        const {
+            damageAnimation
+        } = this.props
         this.log('handleRecieveDamage')
+        this.animate(damageAnimation)
     }
 
     animate (animations) {
@@ -114,25 +125,27 @@ export class Thing extends Phaser.GameObjects.Container {
 
         const orientation = this.orientation
         const { flip, anim } = animations[orientation] || animations.all || {}
-        this.log('animate', { orientation, anim })
+        const sprite = this.sprite
 
         if (typeof flip !== 'undefined') {
             this.log('flipping sprite', flip)
-            this.sprite.setFlip(flip)
+            sprite.setFlip(flip, false)
         }
 
         if (anim) {
+            this.log('animate', anim )
             const { key } = anim
-            this.sprite.play(key, true, 0)
+            sprite.play(key, true, 0)
         }
     }
 
     destroy = () => {
         this.log('destroy')
         this.setActive(false)
-        this.sprite.anims.currentAnim.pause()
-        this.sprite.destroy()
-        // this.scene.remove(this)
+        const sprite = this.sprite
+
+        sprite.anims.currentAnim.pause()
+        sprite.destroy()
     }
 
     log (...msgs) {

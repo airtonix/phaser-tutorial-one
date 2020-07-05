@@ -22,7 +22,6 @@ export class MapScene extends BaseScene {
             x: this.map.widthInPixels / 2,
             y: this.map.heightInPixels / 2
         })
-        this.player.sprite.setDisplaySize(48, 64)
         this.npcs = []
 
         this.initCamera()
