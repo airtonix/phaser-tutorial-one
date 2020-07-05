@@ -61,7 +61,7 @@ export class Thing extends Phaser.GameObjects.Container {
         const animation = idleAnimation[this.orientation] || idleAnimation.all
         const { key, frame } = animation.anim.frames[0]
 
-        const sprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, key, frame)
+        const sprite = this.scene.make.sprite(0, 0, key, frame)//new Phaser.GameObjects.Sprite(this.scene, 0, 0, key, frame)
         sprite.setTexture(key)
         sprite.setFrame(frame)
         sprite.setSize(width, height)
