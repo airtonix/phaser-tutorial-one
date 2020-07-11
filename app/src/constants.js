@@ -2,6 +2,7 @@ const TilesetOneExtruded = '/0x72_DungeonTilesetII_v1.3--extruded.png'
 const TilesetOne = '/0x72_DungeonTilesetII_v1.3.png'
 const TilesetTwo = '/16x16 dungeon ii wall reconfig v04 spritesheet.png'
 const LevelOneTiledTileMap = '/LevelOne.json'
+const EmotesStyleOne = '/emotes_pixel_style1.png'
 
 export const FrameConfig16x16 = {
     frameWidth: 16,
@@ -22,6 +23,15 @@ export const SpriteSheets = {
         frameConfig: {
             frameWidth: 16,
             frameHeight: 16,
+        }
+    },
+
+    EmotesStyleOne: {
+        key: 'EmotesStyleOne',
+        url: EmotesStyleOne,
+        frameConfig: {
+            frameWidth: 32,
+            frameHeight: 32
         }
     },
 
@@ -77,4 +87,29 @@ export const Animations = {
         frameRate: 4,
         repeat: -1
     },
+
+    LootChestIdle: {
+        key: 'LootChestIdle',
+        sheet: SpriteSheets.Dungeon.key,
+        frames: [ 595 ],
+        margin: 0,
+        spacing: 0
+    },
+
+    LootChestFull: {
+        key: 'LootChestIdle',
+        sheet: SpriteSheets.Dungeon.key,
+        frames: [ 627, 628, 629 ],
+        margin: 0,
+        spacing: 0
+    },
+
+    LootChestEmpty: {
+        key: 'LootChestIdle',
+        sheet: SpriteSheets.Dungeon.key,
+        frames: [ 595, 596, 597 ],
+        margin: 0,
+        spacing: 0
+    },
+
 }

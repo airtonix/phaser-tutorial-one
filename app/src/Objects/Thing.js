@@ -6,6 +6,7 @@ import { Orientation } from '~/constants'
 
 export class Thing extends Phaser.GameObjects.Container {
     orientation = Orientation.Down
+    behaviour = null
 
     constructor(props) {
         super(props.scene, props.x, props.y)
@@ -14,8 +15,6 @@ export class Thing extends Phaser.GameObjects.Container {
             x = 0,
             y = 0,
             scene,
-            health = 100,
-            maxHealth = 100,
             speed = 0,
             footprintHeight = 16,
             footprintWidth = 24,
@@ -35,9 +34,23 @@ export class Thing extends Phaser.GameObjects.Container {
         this.setY(y)
         this.setSize(footprintWidth, footprintHeight)
 
-        this.sprite = this.createSprite()
+        this.sprite = this.addSprite()
+        this.health = this.createHealthManager()
 
-        this.health = Health.AddTo(
+        this.scene.add.existing(this)
+        this.scene.physics.add.existing(this)
+        this.scene.physics.world.enable(this)
+
+        this.log('constructed')
+    }
+
+    createHealthManager () {
+        const {
+            health = 100,
+            maxHealth = 100,
+        } = this.props
+
+        const healthManager = Health.AddTo(
             this,
             health,
             maxHealth)
@@ -48,14 +61,17 @@ export class Thing extends Phaser.GameObjects.Container {
         this.on('heal', this.handleRecieveHealing)
         this.on('damage', this.handleRecieveDamage)
 
-        this.add([
-            this.sprite,
-        ])
-        this.scene.add.existing(this)
-        this.scene.physics.add.existing(this)
-        this.scene.physics.world.enable(this)
+        return healthManager
+    }
 
-        this.log('constructed')
+    setBehaviour (behaviour) {
+        this.behaviour - behaviour
+    }
+
+    addSprite() {
+        const sprite = this.createSprite()
+        this.add(sprite)
+        return sprite
     }
 
     createSprite () {
@@ -75,6 +91,24 @@ export class Thing extends Phaser.GameObjects.Container {
         sprite.setOrigin(0.5, 0.9)
 
         return sprite
+    }
+
+    addShadowSprite() {
+        const sprite = this.createShadowSprite()
+        this.add(sprite)
+        this.moveDown(sprite)
+        return sprite
+    }
+
+    createShadowSprite() {
+        const {
+            width,
+        } = this.props
+        const shadow = this.scene.add.graphics()
+        const ellipse = new Phaser.Geom.Ellipse(0, 3, width / 1.5, 4)
+        shadow.fillStyle(0x000000, 0.4)
+        shadow.fillEllipseShape(ellipse)
+        return shadow
     }
 
     handleDeath () {

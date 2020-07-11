@@ -3,6 +3,7 @@ import { Orientation } from '~/constants'
 import { Thing } from './Thing'
 
 export class Actor extends Thing {
+
     constructor({ scene, key, ...props }) {
         super({
             key: `${key}.Actor`,
@@ -10,10 +11,12 @@ export class Actor extends Thing {
             speed: 10,
             ...props
         })
+        this.addShadowSprite()
 
         this.prevVelocity = { x: 0, y: 0 }
         this.isIdle = false
         this.isMoving = false
+
     }
 
     handleHealthChanged = (obj, amount, health, maxHealth) => {
