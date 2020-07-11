@@ -55,8 +55,8 @@ export class MapScene extends BaseScene {
             .find(obj => obj.name === 'Stuff')
         const start = StuffLayer.objects
             .find(obj => obj.name === 'PlayerStart')
-        this.player.x = start.x
-        this.player.y = start.y
+        this.player.x = start.x + start.width / 2
+        this.player.y = start.y + start.height / 2
     }
 
     createNpcs () {
@@ -164,15 +164,19 @@ export class MapScene extends BaseScene {
         ]
             .forEach(layerId => {
                 const layer = this.layers[layerId]
-                layer.setCollisionByExclusion([-1])
-                // layer.setCollisionByProperty({ collision: true })
+                // layer.setCollisionByExclusion([-1])
+                layer.setCollisionByProperty({ collides: true })
+                layer.setCollisionFromCollisionGroup(true, layer)
                 actors.forEach(actor => {
                     this.physics.add.collider(actor, layer)
                 })
             })
     }
 
-    onPlayerCollide () {
+    /**
+     * https://medium.com/@ionejunhong/sprite-outline-with-phaser-3-9c17190b04bc
+     */
+    outlinePlayer () {
         const player = this.player
 
         player.sprite.setPipeline(OutlinePipeline.KEY)
@@ -182,6 +186,7 @@ export class MapScene extends BaseScene {
             player.sprite.texture.getSourceImage().height
         )
     }
+
     // addColliders() { }
     initCamera () {
         const {

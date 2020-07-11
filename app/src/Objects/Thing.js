@@ -16,7 +16,7 @@ export class Thing extends Phaser.GameObjects.Container {
             maxHealth = 100,
             speed = 0,
             footprintHeight = 16,
-            footprintWidth = 32,
+            footprintWidth = 24,
         } = props
         if (!scene) throw Error(`[${key}] requires a scene`)
 
