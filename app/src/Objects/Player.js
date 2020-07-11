@@ -39,12 +39,6 @@ export class Player extends Actor {
             this.moveToDown()
             this.animateDown()
         }
-        else if (keys.left.isDown) {
-            this.moveWest()
-        }
-        else if (keys.right.isDown) {
-            this.moveEast()
-        }
 
 
         this.postMotion()

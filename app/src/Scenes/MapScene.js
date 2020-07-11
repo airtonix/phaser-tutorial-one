@@ -158,15 +158,11 @@ export class MapScene extends BaseScene {
     }
 
     createColliders (...actors) {
-        [
-            'Walls',
-            'Obstacles',
-        ]
+        Object.keys(this.layers)
             .forEach(layerId => {
                 const layer = this.layers[layerId]
-                // layer.setCollisionByExclusion([-1])
                 layer.setCollisionByProperty({ collides: true })
-                layer.setCollisionFromCollisionGroup(true, layer)
+                layer.setCollisionFromCollisionGroup(true)
                 actors.forEach(actor => {
                     this.physics.add.collider(actor, layer)
                 })
