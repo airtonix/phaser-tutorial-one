@@ -10,6 +10,14 @@ tasks:
       --port $PORT
       ./src/index.html
 
+  dev:extrude:tilemap:
+    run: >-
+      npx tile-extruder
+      --tileWidth 16
+      --tileHeight 32
+      --input ./src/Assets/0x72_DungeonTilesetII_v1.3.png
+      --output ./src/Assets/0x72_DungeonTilesetII_v1.3--extruded.png
+
   test:
     run:
       - >-

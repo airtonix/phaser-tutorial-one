@@ -1,36 +1,58 @@
-import Phaser from "phaser"
-
-import {BaseScene} from "./BaseScene"
-import { LogoImage } from "../Images/LogoImage"
-
-import {TextButton} from "../Objects/TextButton"
+import { BaseScene } from './BaseScene'
+import { TextButton } from '~/Objects/TextButton'
+import { PlayerWarrior } from '~/Objects/PlayerWarrior'
+import { LevelOneScene } from '~/Scenes/LevelOneScene'
 
 export class MenuScene extends BaseScene {
+    static key = 'Menu'
+
     constructor () {
-        super({ key: "Menu" })
+        super({
+            key: MenuScene.key
+        })
+        this.log('constructed')
     }
 
     create () {
-        this.logo = new LogoImage(this, 400, 150)
+        super.create()
+        this.log('create')
 
-        Phaser.Display.Align.In.Center(
-            this.logo,
-            this.add.zone(400, 300, 800, 600)
-        )
-        this.startButton = new TextButton(
-            this, 100, 100, "Start", { fill: "#fff"}
-        )
-        this.startButton
-            .on("pointerup", this.onStartButtonClick)
+        const { width, height } = this.cameras.main
 
+        this.logo = new PlayerWarrior({
+            scene: this,
+            width: 16,
+            height: 32,
+            x: (width / 2) - 16,
+            y: (height / 2) - 32
+        })
+        this.logo.sprite.setDisplaySize(
+            this.logo.sprite.width * 8,
+            this.logo.sprite.height * 4
+        )
+
+        this.startButton = new TextButton({
+            scene: this,
+            x: width / 2,
+            y: height / 2,
+            text: 'Start',
+            style: { fill: '#ffffff' },
+            onClick: this.handleStartButtonClick
+        })
         this.add.existing(this.startButton)
-
     }
 
     update () {
+        this.logo.meander()
     }
 
-  onStartButtonClick = () => {
-      this.scene.start("Game")
-  }
+    handleStartButtonClick = () => {
+        // this.logo.destroy()
+        const scenes = [
+            LevelOneScene.key,
+        ]
+        this.log('handleStartButtonClick', { scenes })
+        scenes.forEach(key => this.scene.start(key))
+        // this.scene.launch('Interface')
+    }
 }

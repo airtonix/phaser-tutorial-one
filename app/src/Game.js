@@ -1,48 +1,57 @@
-import Phaser from "phaser"
+import Phaser from 'phaser'
+import AnimatedTiles from 'phaser-animated-tiles/dist/AnimatedTiles'
 
-import { BootScene } from "./Scenes/BootScene"
-import { PreloaderScene } from "./Scenes/PreloaderScene"
-import { MenuScene } from "./Scenes/MenuScene"
-import { GameScene } from "./Scenes/GameScene"
-
+import { PreloaderScene } from './Scenes/PreloaderScene'
+import { MenuScene } from './Scenes/MenuScene'
+import { InterfaceScene } from './Scenes/InterfaceScene'
+import { LevelOneScene } from './Scenes/LevelOneScene'
 
 export class Game extends Phaser.Game {
 
     constructor() {
-
-        // default renderer
-        let renderer = Phaser.AUTO
-
         // init game
         super({
-            title: "Maintainable Game",
+            title: 'Maintainable Game',
 
-            type: renderer,
-            pixelArt: true,
-            backgroundColor: "#000",
+            type: Phaser.AUTO,
+            backgroundColor: '#000',
 
-            parent: "game_content",
-            zoom: 1,
+            parent: 'game_content',
 
-            width: 800,
-            height: 600,
+            width: window.innerWidth,
+            height: window.innerHeight,
+
+            render: {
+                // prevent tile bleeding
+                antialiasGL: false,
+                // prevent pixel art from becoming blurry when scaled
+                pixelArt: true
+            },
 
             physics: {
-                default: "arcade",
+                default: 'arcade',
                 arcade: {
-                    tileBias: 32,
                     debug: true,
                     gravity: { y: 0 }
                 }
             },
 
+            plugins: {
+                scene: [
+                    {
+                        key: 'AnimatedTiles',
+                        plugin: AnimatedTiles,
+                        mapping: 'animatedTiles'
+                    }
+                ]
+            },
+
             scene: [
-                BootScene,
                 PreloaderScene,
                 MenuScene,
-                GameScene,
+                LevelOneScene,
+                InterfaceScene,
             ]
         })
-
     }
 }

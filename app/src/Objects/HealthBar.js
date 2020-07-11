@@ -1,5 +1,6 @@
-import Phaser from "phaser"
+import Phaser from 'phaser'
 
+export class HealthBar extends Phaser.GameObjects.Container {
+    WHITE = 0xffffff
 
-export default class HealthBar extends Phaser.GameObjects.Graphics {
 }
