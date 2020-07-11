@@ -6,7 +6,7 @@ export class PlayerWarrior extends Player {
         super({
             key: 'Warrior',
             footprintHeight: 8,
-            footprintWidth: 8,
+            footprintWidth: 12,
             width: 16,
             height: 32,
             speed: 55,

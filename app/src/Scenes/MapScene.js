@@ -57,8 +57,12 @@ export class MapScene extends BaseScene {
     placePlayer () {
         const StuffLayer = this.map.objects
             .find(obj => obj.name === 'Stuff')
+        const depth = StuffLayer.properties
+            .find(({ name }) => name === 'depth')
         const start = StuffLayer.objects
             .find(obj => obj.name === 'PlayerStart')
+
+        this.player.setDepth(depth.value + 1)
         this.player.x = start.x + start.width / 2
         this.player.y = start.y + start.height / 2
     }
@@ -97,23 +101,15 @@ export class MapScene extends BaseScene {
     }
 
     createLayers (map) {
-        this.log('createLayers')
-
-        const {
-            data
-        } = this.props
-
-        const layers = data.layers
-            .reduce((result, definition) => {
-                const {
-                    key,
-                } = definition
-
-                const layer = map.createDynamicLayer(key, data.tileset, 0 , 0)
-
+        this.log('createLayers', map.layers.map(layer => layer.name).join())
+        const layers = map.layers
+            .reduce((result, { name, properties }) => {
+                const layer = map.createDynamicLayer(name, this.tileset.name, 0 , 0)
+                const depth = properties.find(({ name }) => name === 'depth')
+                layer.setDepth(depth.value)
                 return {
                     ...result,
-                    [key]: layer
+                    [name]: layer
                 }
             }, {})
 

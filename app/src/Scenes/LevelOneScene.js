@@ -11,6 +11,7 @@ export class LevelOneScene extends MapScene {
                 ...TiledTileMaps.LevelOne,
                 layers: [
                     { key: 'Ground' },
+                    { key: 'Objects' },
                     { key: 'Walls' },
                     { key: 'Overhead' },
                     { key: 'Obstacles' },
