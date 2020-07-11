@@ -47,7 +47,11 @@ export class Thing extends Phaser.GameObjects.Container {
         this.add([
             this.sprite,
         ])
-        scene.add.existing(this)
+        this.scene.add.existing(this)
+        // this.body.setCollideWorldBounds(true)
+        this.scene.physics.add.existing(this)
+        this.scene.physics.world.enable(this)
+
         this.log('constructed')
     }
 

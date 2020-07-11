@@ -9,7 +9,7 @@ export class PlayerWarrior extends Player {
             footprintWidth: 16,
             width: 16,
             height: 32,
-            speed: 100,
+            speed: 55,
             idleAnimation: {
                 all: { anim: Animations.PlayerWarriorIdle },
             },

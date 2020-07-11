@@ -9,7 +9,7 @@ export class Actor extends Thing {
             speed: 10,
             ...props
         })
-        scene.physics.world.enable(this)
+
         this.prevVelocity = { x: 0, y: 0 }
         this.isIdle = false
         this.isMoving = false

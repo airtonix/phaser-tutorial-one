@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import AnimatedTiles from 'phaser-animated-tiles/dist/AnimatedTiles'
 
 import { PreloaderScene } from './Scenes/PreloaderScene'
 import { MenuScene } from './Scenes/MenuScene'
@@ -7,7 +8,7 @@ import { LevelOneScene } from './Scenes/LevelOneScene'
 
 export class Game extends Phaser.Game {
 
-    constructor(config) {
+    constructor() {
         // init game
         super({
             title: 'Maintainable Game',
@@ -19,12 +20,30 @@ export class Game extends Phaser.Game {
 
             width: window.innerWidth,
             height: window.innerHeight,
+
+            render: {
+                // prevent tile bleeding
+                antialiasGL: false,
+                // prevent pixel art from becoming blurry when scaled
+                pixelArt: true
+            },
+
             physics: {
                 default: 'arcade',
                 arcade: {
                     // debug: true,
                     gravity: { y: 0 }
                 }
+            },
+
+            plugins: {
+                scene: [
+                    {
+                        key: 'AnimatedTiles',
+                        plugin: AnimatedTiles,
+                        mapping: 'animatedTiles'
+                    }
+                ]
             },
 
             scene: [

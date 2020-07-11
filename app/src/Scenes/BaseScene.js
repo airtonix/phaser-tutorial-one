@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
 
 export class BaseScene extends Phaser.Scene {
 
@@ -7,6 +8,15 @@ export class BaseScene extends Phaser.Scene {
         this.key = key
         this.props = props
         this.log('[BaseScene] constructed')
+    }
+
+    init () {
+        if (this.game.renderer instanceof Phaser.Renderer.WebGL.WebGLRenderer) {
+            this.game.renderer.addPipeline(
+                OutlinePipeline.KEY,
+                new OutlinePipeline(this.game)
+            )
+        }
     }
 
     create () {

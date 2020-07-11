@@ -1,5 +1,7 @@
 import { BaseScene } from './BaseScene'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
+import { AnimatedTile } from '~/Objects/AnimatedTile'
+import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
 
 export class MapScene extends BaseScene {
 
@@ -15,27 +17,46 @@ export class MapScene extends BaseScene {
         super.create()
         this.log('[MapScene] create')
 
-        this.createMap()
-        this.createPlayer()
+        const { map, tileset } = this.createMap()
+        this.map = map
+        this.tileset = tileset
+        this.layers = this.createLayers(this.map)
+        this.animatedTiles = this.animateTiles(this.map, this.tileset)
+        this.player = this.createPlayer()
+
+        this.placePlayer()
         this.createNpcs()
         this.createColliders(
             this.player,
             this.npcGroup
         )
-        this.initCamera()
+        // this.initCamera()
+
+        this.countdown = 450
     }
 
-    update () {
+    update (time, delta) {
+        this.animatedTiles.forEach(tile => tile.update(delta))
         this.player && this.player.update(this.keys)
         this.npcs.forEach( npc => npc.update() )
     }
 
     createPlayer () {
-        this.player = new PlayerWarrior({
+        const player = new PlayerWarrior({
             scene: this,
-            x: this.map.widthInPixels / 2,
-            y: this.map.heightInPixels / 2
+            x: 0,
+            y: 0
         })
+        return player
+    }
+
+    placePlayer () {
+        const StuffLayer = this.map.objects
+            .find(obj => obj.name === 'Stuff')
+        const start = StuffLayer.objects
+            .find(obj => obj.name === 'PlayerStart')
+        this.player.x = start.x
+        this.player.y = start.y
     }
 
     createNpcs () {
@@ -51,23 +72,42 @@ export class MapScene extends BaseScene {
             data
         } = this.props
 
-        this.map = this.make.tilemap({
+        const map = this.make.tilemap({
             key: data.key
         })
 
-        this.map.addTilesetImage(
+        const tileset = map.addTilesetImage(
             data.tileset,
             data.tileimage
         )
 
-        this.layers = data.layers
+        const {
+            widthInPixels,
+            heightInPixels
+        } = map
+
+        this.physics.world.setBounds(0, 0, widthInPixels, heightInPixels)
+        this.log('createMap.done')
+
+        return { map, tileset }
+    }
+
+    createLayers (map) {
+        this.log('createLayers')
+
+        const {
+            data
+        } = this.props
+
+        return data.layers
             .reduce((result, definition) => {
                 const {
                     key,
                 } = definition
 
-                const layer = this.map
-                    .createStaticLayer(key, data.tileset, 0 , 0)
+                const layer = map
+                    .createDynamicLayer(key, data.tileset, 0 , 0)
+
                 layer.setCollisionByProperty({ collides: true })
 
                 return {
@@ -75,29 +115,73 @@ export class MapScene extends BaseScene {
                     [key]: layer
                 }
             }, {})
+    }
 
-        const {
-            widthInPixels,
-            heightInPixels
-        } = this.map
+    animateTiles (map, tileset) {
+        const tileData = tileset.tileData
+        // create a list of tileIds that have animation data
+        const tileIds = Object.keys(tileData)
+            .filter(tileId => tileData[tileId].animation)
+            .map(tileId => parseInt(tileId, 10))
 
-        this.physics.world.setBounds(0, 0, widthInPixels, heightInPixels)
-        this.log('createMap.done')
+        // get a flat list of tiles that are:
+        // - from DynamicTilemapLayers only
+        // - are in the above list of tileids
+        const tilesNeedingAnimation = map.layers
+            .filter(layer => layer.tilemapLayer.type === 'DynamicTilemapLayer')
+            .reduce((result, layer) => {
+                return [
+                    ...result,
+                    ...layer.data
+                ]
+            }, [])
+            .reduce((result, tileRow) => {
+                return [
+                    ...result,
+                    ...tileRow
+                ]
+            }, [])
+            .filter(tile => tileIds.includes(tile.index - tileset.firstgid))
+
+        // create a animted
+        const animatedTiles = tilesNeedingAnimation
+            .map(tile => {
+                const tileId = tile.index - tileset.firstgid
+                return new AnimatedTile(
+                    tile,
+                    tileData[tileId].animation,
+                    tileset.firstgid,
+                )
+            })
+
+        return animatedTiles
     }
 
     createColliders (...actors) {
-        const collidables = [
-            this.layers.Walls,
-            this.layers.Obstacles,
+        [
+            'Walls',
+            'Obstacles',
         ]
-
-        actors.forEach(actor => {
-            collidables.forEach(collidable =>
-                this.physics.add.collider(actor, collidable)
-            )
-        })
+            .forEach(layerId => {
+                const layer = this.layers[layerId]
+                layer.setCollisionByExclusion([-1])
+                // layer.setCollisionByProperty({ collision: true })
+                actors.forEach(actor => {
+                    this.physics.add.collider(actor, layer)
+                })
+            })
     }
 
+    onPlayerCollide () {
+        const player = this.player
+
+        player.sprite.setPipeline(OutlinePipeline.KEY)
+        player.sprite.pipeline.setFloat2(
+            'uTextureSize',
+            player.sprite.texture.getSourceImage().width,
+            player.sprite.texture.getSourceImage().height
+        )
+    }
     // addColliders() { }
     initCamera () {
         const {
