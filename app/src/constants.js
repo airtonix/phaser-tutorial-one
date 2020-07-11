@@ -30,8 +30,10 @@ export const SpriteSheets = {
         key: 'EmotesStyleOne',
         url: EmotesStyleOne,
         frameConfig: {
-            frameWidth: 32,
-            frameHeight: 32
+            frameWidth: 16,
+            frameHeight: 16,
+            spacing: 0,
+            margin: 0
         }
     },
 
@@ -92,6 +94,7 @@ export const Animations = {
         key: 'LootChestIdle',
         sheet: SpriteSheets.Dungeon.key,
         frames: [ 595 ],
+        repeat: -1,
         margin: 0,
         spacing: 0
     },
@@ -100,6 +103,7 @@ export const Animations = {
         key: 'LootChestIdle',
         sheet: SpriteSheets.Dungeon.key,
         frames: [ 627, 628, 629 ],
+        repeat: 1,
         margin: 0,
         spacing: 0
     },
@@ -108,6 +112,7 @@ export const Animations = {
         key: 'LootChestIdle',
         sheet: SpriteSheets.Dungeon.key,
         frames: [ 595, 596, 597 ],
+        repeat: 1,
         margin: 0,
         spacing: 0
     },

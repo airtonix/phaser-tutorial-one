@@ -618,6 +618,9 @@
  <tileset firstgid="1025" name="16x16 dungeon ii wall reconfig v04 spritesheet" tilewidth="16" tileheight="16" tilecount="192" columns="16">
   <image source="16x16 dungeon ii wall reconfig v04 spritesheet.png" width="256" height="192"/>
  </tileset>
+ <tileset firstgid="1217" name="emotes_pixel_style1" tilewidth="16" tileheight="16" tilecount="30" columns="5">
+  <image source="emotes_pixel_style1.png" width="80" height="96"/>
+ </tileset>
  <layer id="1" name="Ground" width="32" height="32">
   <properties>
    <property name="depth" type="int" value="100"/>

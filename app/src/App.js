@@ -1,12 +1,22 @@
 import {Game} from './Game'
 
-class App {
-    constructor (config = {}) {
-        console.log('Launching Game')
-        this.game = new Game(config)
-    }
+let game
+
+function newGame () {
+    if (game) return
+    game = new Game()
 }
 
-window.onload = () => {
-    window.App = new App()
+function destroyGame () {
+    if (!game) return
+    game.destroy(true)
+    game.runDestroy()
+    game = null
 }
+
+if (module.hot) {
+    module.hot.dispose(destroyGame)
+    module.hot.accept(newGame)
+}
+
+if (!game) newGame()

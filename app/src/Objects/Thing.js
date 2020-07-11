@@ -4,7 +4,7 @@ import Phaser from 'phaser'
 import debug from 'debug'
 
 import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
-import { Orientation } from '~/constants'
+import { Orientation, SpriteSheets } from '~/constants'
 
 export class Thing extends Phaser.GameObjects.Container {
     orientation = Orientation.Down
@@ -41,6 +41,7 @@ export class Thing extends Phaser.GameObjects.Container {
         this.setSize(footprintWidth, footprintHeight)
 
         this.sprite = this.addSprite()
+        this.emote = this.addEmoteSprite()
         this.health = this.createHealthManager()
 
         this.scene.add.existing(this)
@@ -52,14 +53,20 @@ export class Thing extends Phaser.GameObjects.Container {
 
     createHealthManager () {
         const {
-            health = 100,
-            maxHealth = 100,
+            health: {
+                min = 0,
+                max = 100,
+                regen = 5,
+                invincible = false
+            } = {}
         } = this.props
+
+        if (invincible) return
 
         const healthManager = Health.AddTo(
             this,
-            health,
-            maxHealth)
+            min,
+            max)
 
         this.on('die', this.handleDeath)
         this.on('revive', this.handleRevived)
@@ -69,6 +76,7 @@ export class Thing extends Phaser.GameObjects.Container {
 
         return healthManager
     }
+
     behaviourStep () {
         if (!this.behaviour) {
             this.log('no behaviour')
@@ -78,12 +86,14 @@ export class Thing extends Phaser.GameObjects.Container {
             this.log('behaviour is not a BehaviourTree')
             return
         }
+        this.log('behaviour.step')
         this.behaviour.step()
     }
 
     setBehaviour (behaviour) {
         this.log('setBehaviour', behaviour)
         this.behaviour = new BehaviourTree(behaviour, this)
+        this.behaviour.step()
     }
 
     addSprite() {
@@ -111,10 +121,11 @@ export class Thing extends Phaser.GameObjects.Container {
         this.log('createSprite', { width, height, idleAnimation })
 
         const animation = idleAnimation[this.orientation] || idleAnimation.all
-        const { key, frame } = animation.anim.frames[0]
+        const { sheet } = animation.anim
+        const frame = animation.anim.frames[0]
 
-        const sprite = this.scene.make.sprite(0, 0, key, frame)//new Phaser.GameObjects.Sprite(this.scene, 0, 0, key, frame)
-        sprite.setTexture(key)
+        const sprite = this.scene.make.sprite(0, 0, sheet, frame)//new Phaser.GameObjects.Sprite(this.scene, 0, 0, key, frame)
+        sprite.setTexture(sheet)
         sprite.setFrame(frame)
         sprite.setSize(width, height)
         sprite.setOrigin(0.5, 0.9)
@@ -125,7 +136,7 @@ export class Thing extends Phaser.GameObjects.Container {
     addShadowSprite(color = 0x000000) {
         const sprite = this.createShadowSprite(color)
         this.add(sprite)
-        this.moveDown(sprite)
+        this.moveUp(sprite)
         return sprite
     }
 
@@ -138,6 +149,38 @@ export class Thing extends Phaser.GameObjects.Container {
         shadow.fillStyle(color, 0.4)
         shadow.fillEllipseShape(ellipse)
         return shadow
+    }
+    addEmoteSprite () {
+        const { emotes } = this.props
+        if (!emotes) return
+
+        const sprite = this.createEmoteSprite()
+        sprite.setVisible(false)
+        this.add(sprite)
+        return sprite
+    }
+
+    createEmoteSprite () {
+        const {
+            emotes: {
+                width = 16,
+                height = 16,
+                sheet = SpriteSheets.EmotesStyleOne.key,
+            } = {}
+        } = this.props
+        this.log('createEmoteSprite')
+
+        const sprite = this.scene.make.sprite(0, 0, sheet)//new Phaser.GameObjects.Sprite(this.scene, 0, 0, key, frame)
+        sprite.setTexture(sheet)
+        sprite.setSize(width, height)
+        sprite.setOrigin(0.5, 2)
+        return sprite
+    }
+
+    showEmoteFrame (frame) {
+        this.log('showEmoteFrame', frame)
+        this.emote.setFrame(frame)
+        this.emote.setVisible(true)
     }
 
     handleDeath () {
@@ -213,8 +256,6 @@ export class Thing extends Phaser.GameObjects.Container {
         this.log('destroy')
         this.setActive(false)
         const sprite = this.sprite
-
-        sprite.anims.currentAnim.pause()
         sprite.destroy()
     }
 

@@ -6,8 +6,11 @@ export class Player extends Actor {
         super({
             ...props,
             key: `${props.key}.Player`,
-            health: 100,
-            maxHealth: 100,
+            health: {
+                min: 100,
+                max: 100,
+                regen: 4
+            }
         })
         this.idle()
     }
