@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import debug from 'debug'
 import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
 
 export class BaseScene extends Phaser.Scene {
@@ -7,7 +8,8 @@ export class BaseScene extends Phaser.Scene {
         super({ key, ...props })
         this.key = key
         this.props = props
-        this.log('[BaseScene] constructed')
+        this.log = debug(`${key}.Scene`)
+        this.log('constructed')
     }
 
     init () {
@@ -29,9 +31,5 @@ export class BaseScene extends Phaser.Scene {
             this.log('create.isInteractive')
             this.keys = this.input.keyboard.createCursorKeys()
         }
-    }
-
-    log (...msgs) {
-        console.log(`[Scene: ${this.key}]`, ...msgs)
     }
 }

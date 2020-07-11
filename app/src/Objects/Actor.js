@@ -3,8 +3,9 @@ import { Orientation } from '~/constants'
 import { Thing } from './Thing'
 
 export class Actor extends Thing {
-    constructor({ scene, ...props }) {
+    constructor({ scene, key, ...props }) {
         super({
+            key: `${key}.Actor`,
             scene,
             speed: 10,
             ...props

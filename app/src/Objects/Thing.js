@@ -1,5 +1,7 @@
 import Health from 'phaser-component-health'
 import Phaser from 'phaser'
+import debug from 'debug'
+
 import { Orientation } from '~/constants'
 
 export class Thing extends Phaser.GameObjects.Container {
@@ -27,6 +29,8 @@ export class Thing extends Phaser.GameObjects.Container {
         this.y = y
         this.speed = speed
 
+        this.log = debug(key)
+
         this.setX(x)
         this.setY(y)
         this.setSize(footprintWidth, footprintHeight)
@@ -48,7 +52,6 @@ export class Thing extends Phaser.GameObjects.Container {
             this.sprite,
         ])
         this.scene.add.existing(this)
-        // this.body.setCollideWorldBounds(true)
         this.scene.physics.add.existing(this)
         this.scene.physics.world.enable(this)
 
@@ -152,10 +155,4 @@ export class Thing extends Phaser.GameObjects.Container {
         sprite.destroy()
     }
 
-    log (...msgs) {
-        const {
-            key
-        } = this.props
-        console.log(`[Thing: ${key}]`, ...msgs)
-    }
 }

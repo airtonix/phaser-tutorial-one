@@ -10,12 +10,12 @@ export class MapScene extends BaseScene {
             isInteractive: true,
             ...props
         })
-        this.log('[MapScene] constructed')
+        this.log('constructed')
     }
 
     create () {
         super.create()
-        this.log('[MapScene] create')
+        this.log('create')
 
         const { map, tileset } = this.createMap()
         this.map = map
@@ -47,6 +47,7 @@ export class MapScene extends BaseScene {
             x: 0,
             y: 0
         })
+
         return player
     }
 
@@ -157,14 +158,18 @@ export class MapScene extends BaseScene {
         return animatedTiles
     }
 
+    onActorCollide = (...args) => {
+        this.log('onActorCollide', args)
+    }
+
     createColliders (...actors) {
         Object.keys(this.layers)
             .forEach(layerId => {
                 const layer = this.layers[layerId]
                 layer.setCollisionByProperty({ collides: true })
-                layer.setCollisionFromCollisionGroup(true)
+                layer.setCollisionFromCollisionGroup(true, layer)
                 actors.forEach(actor => {
-                    this.physics.add.collider(actor, layer)
+                    this.physics.add.collider(actor, layer, this.onActorCollide, null, this)
                 })
             })
     }

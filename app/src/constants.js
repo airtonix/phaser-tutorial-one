@@ -45,7 +45,7 @@ export const SpriteSheets = {
 
 export const Images = {
     DungeonTiles: {
-        key: 'DungeonTiles',
+        key: 'Dungeonc',
         url: TilesetOne
     },
 }
