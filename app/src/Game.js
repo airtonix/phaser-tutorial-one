@@ -28,6 +28,10 @@ export class Game extends Phaser.Game {
                 pixelArt: true
             },
 
+            scale: {
+                zoom: 2
+            },
+
             physics: {
                 default: 'arcade',
                 arcade: {

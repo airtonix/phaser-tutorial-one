@@ -1,3 +1,4 @@
+import Phaser from 'phaser'
 import { BaseScene } from './BaseScene'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
@@ -23,6 +24,7 @@ export class MapScene extends BaseScene {
         this.layers = this.createLayers(this.map)
         this.animatedTiles = this.animateTiles(this.map, this.tileset)
         this.player = this.createPlayer()
+        if (this.layers.Walls) this.renderLayerDebug(this.layers.Walls)
 
         this.placePlayer()
         this.createNpcs()
@@ -30,9 +32,10 @@ export class MapScene extends BaseScene {
             this.player,
             this.npcGroup
         )
-        // this.initCamera()
+        this.initCamera()
 
         this.countdown = 450
+
     }
 
     update (time, delta) {
@@ -100,22 +103,31 @@ export class MapScene extends BaseScene {
             data
         } = this.props
 
-        return data.layers
+        const layers = data.layers
             .reduce((result, definition) => {
                 const {
                     key,
                 } = definition
 
-                const layer = map
-                    .createDynamicLayer(key, data.tileset, 0 , 0)
-
-                layer.setCollisionByProperty({ collides: true })
+                const layer = map.createDynamicLayer(key, data.tileset, 0 , 0)
 
                 return {
                     ...result,
                     [key]: layer
                 }
             }, {})
+
+        return layers
+    }
+
+    renderLayerDebug = (layer) => {
+        this.log('adding debug layer to', layer)
+        const debugGraphics = this.add.graphics().setAlpha(0.75)
+        layer.renderDebug(debugGraphics, {
+            tileColor: null, // Color of non-colliding tiles
+            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
+            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
+        })
     }
 
     animateTiles (map, tileset) {
@@ -129,7 +141,9 @@ export class MapScene extends BaseScene {
         // - from DynamicTilemapLayers only
         // - are in the above list of tileids
         const tilesNeedingAnimation = map.layers
-            .filter(layer => layer.tilemapLayer.type === 'DynamicTilemapLayer')
+            .filter(layer => layer &&
+                             layer.tilemapLayer &&
+                             layer.tilemapLayer.type === 'DynamicTilemapLayer')
             .reduce((result, layer) => {
                 return [
                     ...result,
@@ -158,16 +172,17 @@ export class MapScene extends BaseScene {
         return animatedTiles
     }
 
-    onActorCollide = (...args) => {
-        this.log('onActorCollide', args)
+    onActorCollide = (actor, tile) => {
+        this.log('onActorCollide', actor, tile)
+        actor.idle()
     }
 
     createColliders (...actors) {
         Object.keys(this.layers)
             .forEach(layerId => {
+                this.log(`${layerId}.creatColliders`)
                 const layer = this.layers[layerId]
                 layer.setCollisionByProperty({ collides: true })
-                layer.setCollisionFromCollisionGroup(true, layer)
                 actors.forEach(actor => {
                     this.physics.add.collider(actor, layer, this.onActorCollide, null, this)
                 })

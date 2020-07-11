@@ -12,6 +12,7 @@ export class LevelOneScene extends MapScene {
                 layers: [
                     { key: 'Ground' },
                     { key: 'Walls' },
+                    { key: 'Overhead' },
                     { key: 'Obstacles' },
                 ]
             },
