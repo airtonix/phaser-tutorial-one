@@ -1,7 +1,9 @@
+import { BehaviourTree } from 'mistreevous'
 import Health from 'phaser-component-health'
 import Phaser from 'phaser'
 import debug from 'debug'
 
+import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
 import { Orientation } from '~/constants'
 
 export class Thing extends Phaser.GameObjects.Container {
@@ -18,6 +20,8 @@ export class Thing extends Phaser.GameObjects.Container {
             speed = 0,
             footprintHeight = 16,
             footprintWidth = 24,
+            behaviours = {},
+            behaviourIntervalMs = 100
         } = props
         if (!scene) throw Error(`[${key}] requires a scene`)
 
@@ -27,6 +31,8 @@ export class Thing extends Phaser.GameObjects.Container {
         this.x = x
         this.y = y
         this.speed = speed
+        this.behaviours = behaviours
+        this.behaviourIntervalMs = behaviourIntervalMs
 
         this.log = debug(key)
 
@@ -63,9 +69,21 @@ export class Thing extends Phaser.GameObjects.Container {
 
         return healthManager
     }
+    behaviourStep () {
+        if (!this.behaviour) {
+            this.log('no behaviour')
+            return
+        }
+        if (!(this.behaviour instanceof BehaviourTree)) {
+            this.log('behaviour is not a BehaviourTree')
+            return
+        }
+        this.behaviour.step()
+    }
 
     setBehaviour (behaviour) {
-        this.behaviour - behaviour
+        this.log('setBehaviour', behaviour)
+        this.behaviour = new BehaviourTree(behaviour, this)
     }
 
     addSprite() {
@@ -74,6 +92,17 @@ export class Thing extends Phaser.GameObjects.Container {
         return sprite
     }
 
+    /**
+     * https://medium.com/@ionejunhong/sprite-outline-with-phaser-3-9c17190b04bc
+     */
+    outlineSprite (sprite) {
+        sprite.setPipeline(OutlinePipeline.KEY)
+        sprite.pipeline.setFloat2(
+            'uTextureSize',
+            sprite.texture.getSourceImage().width,
+            sprite.texture.getSourceImage().height
+        )
+    }
     createSprite () {
         const {
             width, height,
@@ -93,20 +122,20 @@ export class Thing extends Phaser.GameObjects.Container {
         return sprite
     }
 
-    addShadowSprite() {
-        const sprite = this.createShadowSprite()
+    addShadowSprite(color = 0x000000) {
+        const sprite = this.createShadowSprite(color)
         this.add(sprite)
         this.moveDown(sprite)
         return sprite
     }
 
-    createShadowSprite() {
+    createShadowSprite(color = 0x000000) {
         const {
             width,
         } = this.props
         const shadow = this.scene.add.graphics()
         const ellipse = new Phaser.Geom.Ellipse(0, 3, width / 1.5, 4)
-        shadow.fillStyle(0x000000, 0.4)
+        shadow.fillStyle(color, 0.4)
         shadow.fillEllipseShape(ellipse)
         return shadow
     }
@@ -189,4 +218,10 @@ export class Thing extends Phaser.GameObjects.Container {
         sprite.destroy()
     }
 
+    update (time, delta) {
+        const tick = Math.floor(time % (this.props.behaviourIntervalMs || 1000)) <= 10
+        if (tick) {
+            this.behaviourStep()
+        }
+    }
 }

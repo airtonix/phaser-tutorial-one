@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 import { BaseScene } from './BaseScene'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
-import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
+import * as StuffObjectMap from '~/Objects/StuffObjectMap'
 
 export class MapScene extends BaseScene {
 
@@ -21,16 +21,15 @@ export class MapScene extends BaseScene {
         const { map, tileset } = this.createMap()
         this.map = map
         this.tileset = tileset
-        this.layers = this.createLayers(this.map)
+        this.mapLayers = this.createMapLayers(this.map)
+        this.objectLayers = this.parseObjectLayers(this.map)
         this.animatedTiles = this.animateTiles(this.map, this.tileset)
-        this.player = this.createPlayer()
-        if (this.layers.Walls) this.renderLayerDebug(this.layers.Walls)
 
-        this.placePlayer()
-        this.createNpcs()
+        this.player = this.createPlayer()
+        this.stuff = this.createStuff()
         this.createColliders(
             this.player,
-            this.npcGroup
+            this.stuff
         )
         this.initCamera()
 
@@ -40,8 +39,8 @@ export class MapScene extends BaseScene {
 
     update (time, delta) {
         this.animatedTiles.forEach(tile => tile.update(delta))
-        this.player && this.player.update(this.keys)
-        this.npcs.forEach( npc => npc.update() )
+        this.player && this.player.update(time, delta, this.keys)
+        this.stuff.children.each( thing => thing.update(time, delta) )
     }
 
     createPlayer () {
@@ -50,28 +49,50 @@ export class MapScene extends BaseScene {
             x: 0,
             y: 0
         })
+        this.placePlayer(player)
 
         return player
     }
 
-    placePlayer () {
-        const StuffLayer = this.map.objects
-            .find(obj => obj.name === 'Stuff')
-        const depth = StuffLayer.properties
-            .find(({ name }) => name === 'depth')
-        const start = StuffLayer.objects
-            .find(obj => obj.name === 'PlayerStart')
+    placePlayer (player) {
+        const {
+            Spawn: {
+                props: {
+                    depth
+                },
+                objects
+            }
+        } = this.objectLayers
 
-        this.player.setDepth(depth.value + 1)
-        this.player.x = start.x + start.width / 2
-        this.player.y = start.y + start.height / 2
+        const start = objects.find(obj => obj.name === 'PlayerStart')
+
+        player.setDepth(depth + 1)
+        player.x = start.x + start.width / 2
+        player.y = start.y + start.height / 2
     }
 
-    createNpcs () {
-        this.npcs = []
-        this.npcGroup = this.physics.add
-            .group(this.npcs)
+    createStuff () {
+        const {
+            Stuff: {
+                props: { depth },
+                objects
+            }
+        } = this.objectLayers
 
+        const stuff = objects
+            .filter(definition => !!definition.type)
+            .map(({ type, x, y, width, height }) => {
+                const ThingClass = StuffObjectMap[type]
+                const thing = new ThingClass({
+                    scene: this,
+                    x: x + width / 2,
+                    y: y + height / 2
+                })
+                thing.setDepth(depth)
+                return thing
+            })
+
+        return this.physics.add.group(stuff)
     }
 
     createMap () {
@@ -100,8 +121,8 @@ export class MapScene extends BaseScene {
         return { map, tileset }
     }
 
-    createLayers (map) {
-        this.log('createLayers', map.layers.map(layer => layer.name).join())
+    createMapLayers (map) {
+        this.log('createMapLayers', map.layers.map(layer => layer.name).join())
         const layers = map.layers
             .reduce((result, { name, properties }) => {
                 const layer = map.createDynamicLayer(name, this.tileset.name, 0 , 0)
@@ -114,6 +135,25 @@ export class MapScene extends BaseScene {
             }, {})
 
         return layers
+    }
+
+    parseObjectLayers (map) {
+        const definitions = map.objects
+            .reduce((result, layer) => {
+                return {
+                    ...result,
+                    [layer.name]: {
+                        props: layer.properties.reduce((result, prop) => {
+                            return {
+                                ...result,
+                                [prop.name]: prop.value
+                            }
+                        }, {}),
+                        objects: layer.objects || []
+                    }
+                }
+            }, {})
+        return definitions
     }
 
     renderLayerDebug = (layer) => {
@@ -174,29 +214,15 @@ export class MapScene extends BaseScene {
     }
 
     createColliders (...actors) {
-        Object.keys(this.layers)
+        Object.keys(this.mapLayers)
             .forEach(layerId => {
                 this.log(`${layerId}.creatColliders`)
-                const layer = this.layers[layerId]
+                const layer = this.mapLayers[layerId]
                 layer.setCollisionByProperty({ collides: true })
                 actors.forEach(actor => {
                     this.physics.add.collider(actor, layer, this.onActorCollide, null, this)
                 })
             })
-    }
-
-    /**
-     * https://medium.com/@ionejunhong/sprite-outline-with-phaser-3-9c17190b04bc
-     */
-    outlinePlayer () {
-        const player = this.player
-
-        player.sprite.setPipeline(OutlinePipeline.KEY)
-        player.sprite.pipeline.setFloat2(
-            'uTextureSize',
-            player.sprite.texture.getSourceImage().width,
-            player.sprite.texture.getSourceImage().height
-        )
     }
 
     // addColliders() { }

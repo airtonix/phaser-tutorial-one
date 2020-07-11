@@ -22,5 +22,29 @@ export class LootChestThing extends Thing {
             },
             ...props
         })
+
+        this.setBehaviour(this.behaviours.default)
+        this.addShadowSprite(0xffffff)
+
+    }
+
+    isPlayerTouchingMe () {
+        if (!this.scene?.player) return
+    }
+
+    showEmote (emote) {
+        this.log('showEmote', emote)
+    }
+    showHelpfulEmote () {
+        this.showEmote('helpful')
+    }
+    showExclamationEmote () {
+        this.showEmote('exlamation')
+    }
+    showClosedEmote () {
+        this.showEmote('closed')
+    }
+    showStarEmote () {
+        this.showEmote('star')
     }
 }

@@ -12,7 +12,9 @@ export class Player extends Actor {
         this.idle()
     }
 
-    update (keys) {
+    update (time, delta, keys) {
+        super.update(time, delta)
+
         this.isMoving = keys.left.isDown
             || keys.right.isDown
             || keys.down.isDown
