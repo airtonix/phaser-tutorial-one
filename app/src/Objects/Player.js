@@ -10,7 +10,8 @@ export class Player extends Actor {
                 min: 100,
                 max: 100,
                 regen: 4
-            }
+            },
+
         })
         this.idle()
     }

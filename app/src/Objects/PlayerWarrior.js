@@ -10,14 +10,16 @@ export class PlayerWarrior extends Player {
             width: 16,
             height: 32,
             speed: 55,
-            idleAnimation: {
-                all: { anim: Animations.PlayerWarriorIdle },
-            },
-            movingAnimation: {
-                down: {anim: Animations.PlayerWarriorMove },
-                up: {anim: Animations.PlayerWarriorMove },
-                left: {flip: true, anim: Animations.PlayerWarriorMove },
-                right: {flip: false, anim: Animations.PlayerWarriorMove },
+            animations: {
+                idle: {
+                    default: { anim: Animations.PlayerWarriorIdle }
+                },
+                moving: {
+                    down: {anim: Animations.PlayerWarriorMove },
+                    up: {anim: Animations.PlayerWarriorMove },
+                    left: {flip: true, anim: Animations.PlayerWarriorMove },
+                    right: {flip: false, anim: Animations.PlayerWarriorMove },
+                },
             },
             ...props
         })

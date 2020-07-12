@@ -3,6 +3,7 @@ import Health from 'phaser-component-health'
 import Phaser from 'phaser'
 import debug from 'debug'
 import { throttle } from 'lodash'
+import { get } from 'lodash'
 
 import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
 import { Orientation, SpriteSheets } from '~/constants'
@@ -117,11 +118,13 @@ export class Thing extends Phaser.GameObjects.Container {
     createSprite () {
         const {
             width, height,
-            idleAnimation
+            animations: {
+                idle = {}
+            } = {}
         } = this.props
-        this.log('createSprite', { width, height, idleAnimation })
+        this.log('createSprite', { width, height, idle })
 
-        const animation = idleAnimation[this.orientation] || idleAnimation.all
+        const animation = idle[this.orientation] || idle.default
         const { sheet } = animation.anim
         const frame = animation.anim.frames[0]
 
@@ -238,7 +241,10 @@ export class Thing extends Phaser.GameObjects.Container {
         if(!this.active) return
 
         const orientation = this.orientation
-        const { flip, anim } = animations[orientation] || animations.all || {}
+        const { flip, anim } = animations &&
+            animations[orientation] ||
+            animations.default ||
+            {}
         const sprite = this.sprite
 
         if (typeof flip !== 'undefined') {

@@ -1,6 +1,7 @@
 // import { HealthBar } from './HealthBar'
 import { Orientation } from '~/constants'
 import { Thing } from './Thing'
+import { SpriteSheets } from '~/constants'
 
 export class Actor extends Thing {
 
@@ -9,6 +10,18 @@ export class Actor extends Thing {
             key: `${key}.Actor`,
             scene,
             speed: 10,
+            emotes: {
+                width: 16,
+                height: 16,
+                sheet: SpriteSheets.EmotesStyleOne.key,
+                frames: {
+                    Helpful: 7,
+                    Close: 23,
+                    Exclamation: 22,
+                    Star: 10,
+                    Cash: 9
+                }
+            },
             ...props
         })
         this.addShadowSprite()
@@ -63,10 +76,11 @@ export class Actor extends Thing {
         if (!this.active) return
 
         const {
-            movingAnimation
+            animations: { moving }
         } = this.props
+
         this.orientation = Orientation.Left
-        this.animate(movingAnimation)
+        this.animate(moving)
     }
 
     moveToRight = () => {
@@ -84,10 +98,11 @@ export class Actor extends Thing {
         if (!this.active) return
 
         const {
-            movingAnimation
+            animations: { moving }
         } = this.props
+
         this.orientation = Orientation.Right
-        this.animate(movingAnimation)
+        this.animate(moving)
     }
 
     moveToDown = () => {
@@ -105,10 +120,10 @@ export class Actor extends Thing {
         if (!this.active) return
 
         const {
-            movingAnimation
+            animations: { moving }
         } = this.props
         this.orientation = Orientation.Down
-        this.animate(movingAnimation)
+        this.animate(moving)
     }
 
     moveToUp = () => {
@@ -125,10 +140,10 @@ export class Actor extends Thing {
     animateUp = () => {
         if (!this.active) return
         const {
-            movingAnimation
+            animations: { moving }
         } = this.props
         this.orientation = Orientation.Up
-        this.animate(movingAnimation)
+        this.animate(moving)
     }
 
     preMotion() {
@@ -164,11 +179,11 @@ export class Actor extends Thing {
         if (!this.active) return
 
         const {
-            idleAnimation
+            animations: { idle }
         } = this.props
 
         this.log('idle')
-        this.animate(idleAnimation)
+        this.animate(idle)
         this.isIdle = true
     }
 

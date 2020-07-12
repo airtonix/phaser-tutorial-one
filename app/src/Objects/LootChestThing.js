@@ -1,6 +1,6 @@
 import { State } from 'mistreevous'
 import { Thing } from './Thing'
-import { Animations, SpriteSheets } from '~/constants'
+import { Animations } from '~/constants'
 import { LootChestBehaviour } from '~/Behaviours/LootChestBehaviour'
 
 const diff = (num1, num2) => {
@@ -36,22 +36,22 @@ export class LootChestThing extends Thing {
             behaviours: {
                 default: LootChestBehaviour
             },
-            emotes: {
-                width: 16,
-                height: 16,
-                sheet: SpriteSheets.EmotesStyleOne.key,
-                frames: {
-                    Helpful: 7,
-                    Close: 23,
-                    Exclamation: 22,
-                    Star: 10,
-                    Cash: 9
+            animations: {
+                idle: {
+                    default: {
+                        anim: Animations.LootChestIdle
+                    }
+                },
+                full: {
+                    default: {
+                        anim: Animations.LootChestFull
+                    }
+                },
+                empty: {
+                    default: {
+                        anim: Animations.LootChestEmpty
+                    }
                 }
-            },
-            idleAnimation: {
-                all: { anim: Animations.LootChestIdle },
-                full: { anim: Animations.LootChestFull },
-                empty: { anim: Animations.LootChestEmpty }
             },
             ...props
         })
@@ -73,7 +73,7 @@ export class LootChestThing extends Thing {
         return yesno
     }
 
-    hasNotYetGreetedPlayer () {
+    hasNotYetSeenPlayer () {
         const player = this.scene?.player
         return !player || !this.lastGreetedPlayer
     }
@@ -83,34 +83,11 @@ export class LootChestThing extends Thing {
         this.lastGreetedPlayer = null
     }
 
-    showEmote (emote) {
-        this.log('showEmote', emote)
-        this.showEmoteFrame(emote)
-        this.lastGreetedPlayer = Date.now()
+    open () {
+        this.log('open')
     }
-    hideEmote () {
-        this.log('hideEmote')
-        this.emote.setVisible(false)
-        return State.SUCCEEDED
-    }
-    showHelpfulEmote () {
-        this.showEmote(this.props.emotes.frames.Helpful)
-        return State.SUCCEEDED
-    }
-    showExclamationEmote () {
-        this.showEmote(this.props.emotes.frames.Exclamation)
-        return State.SUCCEEDED
-    }
-    showClosedEmote () {
-        this.showEmote(this.props.emotes.frames.Closed)
-        return State.SUCCEEDED
-    }
-    showStarEmote () {
-        this.showEmote(this.props.emotes.frames.Star)
-        return State.SUCCEEDED
-    }
-    showCashEmote () {
-        this.showEmote(this.props.emotes.frames.Cash)
-        return State.SUCCEEDED
+
+    close () {
+        this.log('open')
     }
 }

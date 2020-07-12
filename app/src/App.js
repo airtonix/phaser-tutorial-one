@@ -1,3 +1,4 @@
+/* global module */
 import {Game} from './Game'
 
 let game
