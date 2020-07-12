@@ -63,7 +63,7 @@ export class LootChestThing extends Thing {
 
     isPlayerTouchingMe () {
         const player = this.scene?.player
-        if (!player) return State.FAILED
+        if (!player) return false
 
         const yesno = getDistance(
             player.x, player.y,

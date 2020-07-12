@@ -1,4 +1,5 @@
-export const LootChestBehaviour = `root {
+export const LootChestBehaviour = `
+root {
     selector {
 
         repeat until(isPlayerTouchingMe) {

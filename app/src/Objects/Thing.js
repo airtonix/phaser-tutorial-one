@@ -2,6 +2,7 @@ import { BehaviourTree } from 'mistreevous'
 import Health from 'phaser-component-health'
 import Phaser from 'phaser'
 import debug from 'debug'
+import { throttle } from 'lodash'
 
 import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
 import { Orientation, SpriteSheets } from '~/constants'
@@ -77,7 +78,7 @@ export class Thing extends Phaser.GameObjects.Container {
         return healthManager
     }
 
-    behaviourStep () {
+    behaviourStep = throttle(() => {
         if (!this.behaviour) {
             this.log('no behaviour')
             return
@@ -88,7 +89,7 @@ export class Thing extends Phaser.GameObjects.Container {
         }
         this.log('behaviour.step')
         this.behaviour.step()
-    }
+    }, 200)
 
     setBehaviour (behaviour) {
         this.log('setBehaviour', behaviour)
@@ -260,9 +261,6 @@ export class Thing extends Phaser.GameObjects.Container {
     }
 
     update (time, delta) {
-        const tick = Math.floor(time % (this.props.behaviourIntervalMs || 1000)) <= 10
-        if (tick) {
-            this.behaviourStep()
-        }
+        this.behaviourStep()
     }
 }
