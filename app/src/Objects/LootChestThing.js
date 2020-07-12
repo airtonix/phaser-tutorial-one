@@ -42,13 +42,11 @@ export class LootChestThing extends Thing {
                         anim: Animations.LootChestIdle
                     }
                 },
-                full: {
-                    default: {
+                open: {
+                    full: {
                         anim: Animations.LootChestFull
-                    }
-                },
-                empty: {
-                    default: {
+                    },
+                    empty: {
                         anim: Animations.LootChestEmpty
                     }
                 }
@@ -56,9 +54,7 @@ export class LootChestThing extends Thing {
             ...props
         })
 
-        this.setBehaviour(this.behaviours.default)
         this.addShadowSprite()
-
     }
 
     isPlayerTouchingMe () {
@@ -85,9 +81,17 @@ export class LootChestThing extends Thing {
 
     open () {
         this.log('open')
+        const {
+            animations: { open }
+        } = this.props
+        this.animate(open)
     }
 
     close () {
-        this.log('open')
+        this.log('close')
+        const {
+            animations: { open }
+        } = this.props
+        this.animate(open)
     }
 }

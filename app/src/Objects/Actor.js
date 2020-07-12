@@ -39,29 +39,6 @@ export class Actor extends Thing {
         // this.healthbar.set(amount)
     }
 
-    moveAndAnimateToOrientation(orientation) {
-        if (!this.active) return
-
-        switch (orientation) {
-        case Orientation.Left:
-            this.moveToLeft()
-            this.animateLeft()
-            break
-        case Orientation.Right:
-            this.moveToRight()
-            this.animateRight()
-            break
-        case Orientation.Up:
-            this.moveToUp()
-            this.animateUp()
-            break
-        case Orientation.Down:
-            this.moveToDown()
-            this.animateDown()
-            break
-        }
-    }
-
     moveToLeft = () => {
         if (!this.active) return
         const {
@@ -74,13 +51,9 @@ export class Actor extends Thing {
 
     animateLeft = () => {
         if (!this.active) return
-
-        const {
-            animations: { moving }
-        } = this.props
-
         this.orientation = Orientation.Left
-        this.animate(moving)
+        const animation = this.getAnimation('moving', this.orientation)
+        this.animate(animation)
     }
 
     moveToRight = () => {
@@ -96,13 +69,9 @@ export class Actor extends Thing {
 
     animateRight = () => {
         if (!this.active) return
-
-        const {
-            animations: { moving }
-        } = this.props
-
         this.orientation = Orientation.Right
-        this.animate(moving)
+        const animation = this.getAnimation('moving', this.orientation)
+        this.animate(animation)
     }
 
     moveToDown = () => {
@@ -118,12 +87,9 @@ export class Actor extends Thing {
 
     animateDown = () => {
         if (!this.active) return
-
-        const {
-            animations: { moving }
-        } = this.props
         this.orientation = Orientation.Down
-        this.animate(moving)
+        const animation = this.getAnimation('moving', this.orientation)
+        this.animate(animation)
     }
 
     moveToUp = () => {
@@ -139,11 +105,9 @@ export class Actor extends Thing {
 
     animateUp = () => {
         if (!this.active) return
-        const {
-            animations: { moving }
-        } = this.props
         this.orientation = Orientation.Up
-        this.animate(moving)
+        const animation = this.getAnimation('moving', this.orientation)
+        this.animate(animation)
     }
 
     preMotion() {
@@ -170,71 +134,16 @@ export class Actor extends Thing {
 
     stop = () => {
         if (!this.active) return
-
         this.log('stop')
         this.idle()
     }
 
     idle = () => {
         if (!this.active) return
-
-        const {
-            animations: { idle }
-        } = this.props
-
         this.log('idle')
-        this.animate(idle)
+        const animation = this.getAnimation('idle', this.orientation)
+        this.animate(animation)
         this.isIdle = true
     }
 
-    chooseRandomOrientation = () => {
-        const directions = Object.values(Orientation)
-        const direction = Math.floor(Math.random() * directions.length)
-        return directions[direction]
-    }
-
-    // @ts-ignore
-    get attentionSpan() {
-        return 2000 * Math.random()
-    }
-    // @ts-ignore
-    get boredomTimeout() {
-        return 15000 * Math.random()
-    }
-
-    isMeandering = false
-    meander = () => {
-        if (!this.active || this.isMeandering) return
-
-        this.isMeandering = true
-        this.orientation = this.chooseRandomOrientation()
-        this.log('Meandering', this.orientation)
-
-        this.moveAndAnimateToOrientation(this.orientation)
-
-        this.scene.time.addEvent({
-            delay: this.attentionSpan,
-            callbackScope: this,
-            callback: this.stopMeandering
-        })
-    }
-
-    stopMeandering = () => {
-        if (!this.active) return
-
-        this.stop()
-
-        this.scene.time.addEvent({
-            delay: this.boredomTimeout,
-            callbackScope: this,
-            callback: () => {
-                this.isMeandering = false
-            }
-        })
-    }
-
-    freeze = () => {
-        // @ts-ignore
-        this.body.moves = false
-    }
 }
