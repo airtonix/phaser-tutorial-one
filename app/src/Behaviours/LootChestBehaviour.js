@@ -2,16 +2,26 @@ export const LootChestBehaviour = `
 root {
     selector {
 
-        repeat until(isPlayerTouchingMe) {
-            sequence {
-                action [forgetAboutPlayer]
-                wait [1000, 2500]
+        repeat while(isPlayerTouchingMe) {
+            selector {
+                sequence {
+                    condition [playerHasOpenedMe]
+                    action [open]
+                }
+
+                sequence {
+                    condition [playerHasClosedMe]
+                    action [close]
+                }
             }
         }
 
-        sequence while(isPlayerTouchingMe)  {
-            wait [2500]
-            action [openChest]
+        repeat until(isPlayerTouchingMe) {
+            sequence {
+                wait [1000, 2500]
+            }
         }
     }
 }`
+
+

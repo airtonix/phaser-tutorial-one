@@ -20,7 +20,10 @@ const getDistance = (x1, y1, x2, y2) => {
 
 
 export class LootChestThing extends Thing {
-    lastGreetedPlayer = null
+    static STATE_CLOSED = 'closed'
+    static STATE_OPENED = 'opened'
+
+    requestedState = LootChestThing.STATE_CLOSED
 
     constructor(props) {
         super({
@@ -55,6 +58,7 @@ export class LootChestThing extends Thing {
         })
 
         this.addShadowSprite()
+        this.setBehaviour('default')
     }
 
     isPlayerTouchingMe () {
@@ -65,18 +69,19 @@ export class LootChestThing extends Thing {
             player.x, player.y,
             this.x, this.y
         ) < 10
-        this.log('isPlayerTouchingMe', yesno)
         return yesno
     }
 
-    hasNotYetSeenPlayer () {
-        const player = this.scene?.player
-        return !player || !this.lastGreetedPlayer
+    playerHasOpenedMe () {
+        return this.requestedState === LootChestThing.STATE_OPENED
+            ? State.SUCCEEDED
+            : State.FAILED
     }
 
-    forgetAboutPlayer () {
-        this.log('forgetting player')
-        this.lastGreetedPlayer = null
+    playerHasClosedMe () {
+        return this.requestedState === LootChestThing.STATE_CLOSED
+            ? State.SUCCEEDED
+            : State.FAILED
     }
 
     open () {

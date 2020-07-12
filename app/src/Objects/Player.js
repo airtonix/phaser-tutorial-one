@@ -46,6 +46,9 @@ export class Player extends Actor {
             this.animateDown()
         }
 
+        if (keys.use.isDown) {
+            this.use()
+        }
 
         this.postMotion()
 

@@ -76,11 +76,9 @@ export class Thing extends Phaser.GameObjects.Container {
         return healthManager
     }
 
-    behaviourStep = throttle(() => {
-        if (!this.behaviour) {
-            this.log('no behaviour')
-            return
-        }
+    stepBehaviour = throttle(() => {
+        if (!this.behaviour) return
+
         if (!(this.behaviour instanceof BehaviourTree)) {
             this.log('behaviour is not a BehaviourTree')
             return
@@ -89,8 +87,12 @@ export class Thing extends Phaser.GameObjects.Container {
         this.behaviour.step()
     }, 200)
 
-    setBehaviour (behaviour) {
-        this.log('setBehaviour', behaviour)
+    setBehaviour (behaviourName) {
+        this.log('setBehaviour', behaviourName)
+        const {
+            behaviours = {}
+        } = this.props
+        const behaviour = get(behaviours, behaviourName, {})
         this.behaviour = new BehaviourTree(behaviour, this)
         this.behaviour.step()
     }
@@ -274,6 +276,6 @@ export class Thing extends Phaser.GameObjects.Container {
     }
 
     update (time, delta) {
-        this.behaviourStep()
+        this.stepBehaviour()
     }
 }

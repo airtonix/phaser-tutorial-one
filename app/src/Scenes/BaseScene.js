@@ -29,7 +29,15 @@ export class BaseScene extends Phaser.Scene {
 
         if (isInteractive) {
             this.log('create.isInteractive')
-            this.keys = this.input.keyboard.createCursorKeys()
+            this.keys = this.input.keyboard.addKeys({
+                'up': Phaser.Input.Keyboard.KeyCodes.W,
+                'left': Phaser.Input.Keyboard.KeyCodes.A,
+                'down': Phaser.Input.Keyboard.KeyCodes.S,
+                'right': Phaser.Input.Keyboard.KeyCodes.D,
+                'jump': Phaser.Input.Keyboard.KeyCodes.SPACE,
+                'use': Phaser.Input.Keyboard.KeyCodes.E,
+                'inventory': Phaser.Input.Keyboard.KeyCodes.I,
+            })
         }
     }
 }

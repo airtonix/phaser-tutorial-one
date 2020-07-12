@@ -1,4 +1,5 @@
 // import { HealthBar } from './HealthBar'
+import { debounce } from 'lodash'
 import { Orientation } from '~/constants'
 import { Thing } from './Thing'
 import { SpriteSheets } from '~/constants'
@@ -145,5 +146,9 @@ export class Actor extends Thing {
         this.animate(animation)
         this.isIdle = true
     }
+
+    use = debounce(() => {
+        console.log('use')
+    }, 50)
 
 }
