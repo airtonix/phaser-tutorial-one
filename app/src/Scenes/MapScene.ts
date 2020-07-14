@@ -1,18 +1,10 @@
 import Phaser from 'phaser'
 import { BaseScene } from './BaseScene'
-import { PlayerWarrior } from '~/Objects/PlayerWarrior'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
-import * as StuffObjectMap from '~/Objects/StuffObjectMap'
+import { PlayerWarrior } from '~/Objects/PlayerWarrior'
 
 export class MapScene extends BaseScene {
-
-    constructor (props) {
-        super({
-            isInteractive: true,
-            ...props
-        })
-        this.log('constructed')
-    }
+    isInteractive = true
 
     create () {
         super.create()
@@ -25,12 +17,12 @@ export class MapScene extends BaseScene {
         this.objectLayers = this.parseObjectLayers(this.map)
         this.animatedTiles = this.animateTiles(this.map, this.tileset)
 
-        this.player = this.createPlayer()
-        this.stuff = this.createStuff()
-        this.createColliders(
-            this.player,
-            this.stuff
-        )
+        this.player = new PlayerWarrior(this)
+        // this.stuff = this.createStuff()
+        // this.createColliders(
+        //     this.player,
+        //     this.stuff
+        // )
         this.initCamera()
 
         this.countdown = 450
@@ -40,7 +32,7 @@ export class MapScene extends BaseScene {
     update (time, delta) {
         this.animatedTiles.forEach(tile => tile.update(delta))
         this.player && this.player.update(time, delta, this.keys)
-        this.stuff.children.each( thing => thing.update(time, delta) )
+        // this.stuff.children.each( thing => thing.update(time, delta) )
     }
 
     createPlayer () {
@@ -235,6 +227,6 @@ export class MapScene extends BaseScene {
         const mainCamera = this.cameras.main
         mainCamera.setRoundPixels(true)
         mainCamera.setBounds(0, 0, widthInPixels, heightInPixels)
-        mainCamera.startFollow(this.player, true, 1, 1)
+        // mainCamera.startFollow(this.player, true, 1, 1)
     }
 }

@@ -22,12 +22,7 @@ export class BaseScene extends Phaser.Scene {
     }
 
     create () {
-        const {
-            isInteractive
-        } = this.props
-        this.log('[BaseScene] create')
-
-        if (isInteractive) {
+        if (this.isInteractive) {
             this.log('create.isInteractive')
             this.keys = this.input.keyboard.addKeys({
                 'up': Phaser.Input.Keyboard.KeyCodes.W,

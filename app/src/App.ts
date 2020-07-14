@@ -1,5 +1,8 @@
 /* global module */
 import {Game} from './Game'
+import { settings } from 'ts-mixer'
+
+settings.initFunction = 'init'
 
 let game
 
