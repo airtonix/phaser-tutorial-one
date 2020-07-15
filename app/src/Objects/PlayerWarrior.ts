@@ -1,6 +1,8 @@
 import { Mixin } from "ts-mixer";
 import { Player } from './Player'
 import { Animations } from '~/constants'
+import { WritesLogs } from "~/Interfaces/WritesLogs";
+import { CanAnimate } from "~/Interfaces/CanAnimate";
 
 export class PlayerWarrior extends Mixin(Player) {
 

@@ -1,13 +1,19 @@
 import debug from 'debug'
+import { Constructor } from '~/Base'
 
-export class WritesLogs {
-    logger: Function
 
-    constructor () {
-        this.logger = debug(this.key || 'Game')
-    }
+export function WritesLogs<TBase extends Constructor>(Base: TBase) {
+    return class extends Base {
+        key: string
+        logger: Function
 
-    log (...messages) {
-        this.logger(...messages)
+        constructor (...args: any[]) {
+            super(...args)
+            this.logger = debug(this.key)
+        }
+
+        log (...messages) {
+            this.logger(...messages)
+        }
     }
 }

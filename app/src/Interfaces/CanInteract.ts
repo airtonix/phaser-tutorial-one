@@ -1,9 +1,12 @@
-export class CanInteract {
+import { Constructor } from "~/Base";
 
-    constructor () {
-        console.log('CanInteract')
+export function CanInteract<TBase extends Constructor>(Base: TBase) {
+    return class CanInteract extends Base {
+
+        constructor (...args: any[]) {
+            super(...args)
+        }
+
+        use () {}
     }
-
-    use () {}
-
 }
