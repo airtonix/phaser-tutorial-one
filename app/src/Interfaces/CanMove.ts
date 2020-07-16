@@ -1,7 +1,6 @@
-import { throttle } from 'lodash'
-import { Mixin } from "ts-mixer"
-import { WritesLogs } from "./WritesLogs"
 import { Constructor } from '~/Base'
+import { throttle } from 'lodash'
+import { WritesLogs } from "./WritesLogs"
 
 export function CanMove<TBase extends Constructor>(Base: TBase) {
 
@@ -17,7 +16,7 @@ export function CanMove<TBase extends Constructor>(Base: TBase) {
 
         constructor (...args: any[]) {
             super(args[0], args[1], args[2])
-            console.log('CanMove')
+            this.log('CanMove')
             this.scene.physics.add.existing(this)
             this.scene.physics.world.enable(this)
         }
@@ -55,7 +54,7 @@ export function CanMove<TBase extends Constructor>(Base: TBase) {
         jump = () => {}
         idle = () => {}
 
-        preMotion() {
+        beforeMove() {
             if (!this.active) return
 
             // @ts-ignore
@@ -65,7 +64,7 @@ export function CanMove<TBase extends Constructor>(Base: TBase) {
             this.body.setVelocity(0)
         }
 
-        postMotion() {
+        afterMove() {
             if (!this.active) return
             const { x, y } = this.prevVelocity
             this.isIdle = (y === 0 && x === 0)

@@ -1,10 +1,10 @@
-import { get } from 'get'
+import { get } from 'lodash'
 import { Constructor } from '~/Base'
 import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
+import { WritesLogs } from './WritesLogs'
 
 export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
-
-    return class ShouldDisplay extends Base {
+    return class ShouldDisplay extends WritesLogs(Base) {
         scene: Phaser.Scene
         sprite: Phaser.GameObjects.Sprite
         emote: Phaser.GameObjects.Sprite
@@ -17,7 +17,8 @@ export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
 
         constructor(...args: any[]) {
             super(...args)
-            console.log('ShouldDisplay.init')
+            this.scene = args[0]
+            this.log('ShouldDisplay')
             this.sprite = this.createSprite()
             this.emote = this.createEmoteSprite()
             this.shadow = this.createShadowSprite()

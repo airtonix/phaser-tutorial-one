@@ -1,6 +1,5 @@
-import { get } from 'lodash'
+import { get, throttle } from 'lodash'
 import { BehaviourTree } from 'mistreevous'
-import { throttle } from 'lodash'
 import { Constructor } from "~/Base";
 import { WritesLogs } from './WritesLogs';
 

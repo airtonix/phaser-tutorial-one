@@ -2,9 +2,11 @@ import Phaser from 'phaser'
 import { BaseScene } from './BaseScene'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
+import { Player } from '~/Objects/Player'
 
 export class MapScene extends BaseScene {
     isInteractive = true
+    player: Player
 
     create () {
         super.create()

@@ -1,21 +1,45 @@
+import { Constructor } from "~/Base";
 import { Orientation } from '~/constants'
 import { get } from 'lodash'
 import { WritesLogs } from './WritesLogs'
-import { Constructor } from "~/Base";
+
+export interface IAnimationSheetConfig {
+    key: string,
+    frameRate: integer,
+    repeat: integer,
+    padding: integer,
+    frames: integer[],
+    sheet: string,
+}
+
+export interface IAnimationConfig {
+    flip: boolean,
+    anim: IAnimationSheetConfig
+}
+
+export interface IAnimationGroup {
+    default?: IAnimationConfig
+    [animationVariant: string]: IAnimationConfig
+}
+
+export interface IAnimations {
+    [animationGroup: string]: IAnimationGroup
+}
 
 export function CanAnimate<TBase extends Constructor>(Base: TBase) {
     return class CanAnimate extends WritesLogs(Base) {
         sprite: Phaser.GameObjects.Sprite
         active: boolean = true
+        animations: IAnimations
         orientation: string
         isIdle: boolean
 
         constructor(...props: any[]) {
             super(...props)
-            console.log('CanAnimate')
+            this.log('CanAnimate')
         }
 
-        animate (animation) {
+        animate (animation: IAnimationConfig) {
             if(!this.active) return
             if(!animation) return
 
@@ -31,7 +55,7 @@ export function CanAnimate<TBase extends Constructor>(Base: TBase) {
             }
         }
 
-        getAnimation (action, variant) {
+        getAnimation (action: string, variant: string) {
             if (!this.animations) return
 
             return get(
@@ -40,7 +64,7 @@ export function CanAnimate<TBase extends Constructor>(Base: TBase) {
             )
         }
 
-        animateMovement = (time, delta) => {
+        animateMovement = (time: integer, delta: integer) => {
             const animation = this.getAnimation('moving', this.orientation)
             this.animate(animation)
         }

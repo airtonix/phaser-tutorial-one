@@ -1,6 +1,4 @@
 import Phaser from 'phaser'
-import AnimatedTiles from 'phaser-animated-tiles/dist/AnimatedTiles'
-
 import { PreloaderScene } from './Scenes/PreloaderScene'
 import { MenuScene } from './Scenes/MenuScene'
 import { InterfaceScene } from './Scenes/InterfaceScene'
@@ -34,16 +32,6 @@ export class Game extends Phaser.Game {
                     // debug: true,
                     gravity: { y: 0 }
                 }
-            },
-
-            plugins: {
-                scene: [
-                    {
-                        key: 'AnimatedTiles',
-                        plugin: AnimatedTiles,
-                        mapping: 'animatedTiles'
-                    }
-                ]
             },
 
             scene: [
