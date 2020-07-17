@@ -4,6 +4,8 @@ const TilesetTwo = '/16x16 dungeon ii wall reconfig v04 spritesheet.png'
 const LevelOneTiledTileMap = '/LevelOne.json'
 const EmotesStyleOne = '/emotes_pixel_style1.png'
 
+export const LOG_PREFIX = 'Game'
+
 export const FrameConfig16x16 = {
     frameWidth: 16,
     frameHeight: 16,

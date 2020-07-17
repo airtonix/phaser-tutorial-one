@@ -22,6 +22,7 @@ export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
             this.sprite = this.createSprite()
             this.emote = this.createEmoteSprite()
             this.shadow = this.createShadowSprite()
+
         }
 
         /**

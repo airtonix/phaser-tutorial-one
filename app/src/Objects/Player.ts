@@ -7,6 +7,14 @@ export function Player<TBase extends Constructor>(Base: TBase) {
         constructor(...args: any[]) {
             super(...args)
             this.log('stuff')
+
+            this.add(this.sprite)
+            this.add(this.emote)
+            this.add(this.shadow)
+
+            this.scene.add.existing(this)
+            this.scene.physics.add.existing(this)
+            this.scene.physics.world.enable(this)
         }
 
         update(time, delta, keys) {

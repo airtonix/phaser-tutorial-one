@@ -6,7 +6,7 @@ export function CanInteract<TBase extends Constructor>(Base: TBase) {
 
         constructor (...args: any[]) {
             super(...args)
-            console.log('CanInteract')
+            this.log('CanInteract')
         }
 
         use () {}
