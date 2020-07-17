@@ -1,6 +1,5 @@
 import { Player } from './Player'
 import { Animations } from '~/constants'
-import { CanAnimate } from '~/Interfaces/CanAnimate'
 
 export class Warrior extends Phaser.GameObjects.Container {
     key = 'WarriorPlayer'

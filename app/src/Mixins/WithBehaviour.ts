@@ -3,7 +3,7 @@ import { BehaviourTree } from 'mistreevous'
 import { Constructor } from "~/Base";
 import { WritesLogs } from './WritesLogs';
 
-export function CanInteract<TBase extends Constructor>(Base: TBase) {
+export function WithBehaviour<TBase extends Constructor>(Base: TBase) {
     return class WithBehaviour extends WritesLogs(Base) {
         behaviour: BehaviourTree
         behaviours: object

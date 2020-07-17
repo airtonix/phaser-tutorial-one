@@ -4,14 +4,13 @@ import { WritesLogs } from './WritesLogs';
 import { CanMove } from './CanMove';
 import { CanInteract } from './CanInteract';
 import { CanAnimate } from './CanAnimate';
+import { ShouldDisplay } from "./ShouldDisplay";
 
 export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
 
-    return class IsPlayerControlled extends CanInteract(CanMove(CanAnimate(WritesLogs(Base)))) {
+    return class IsPlayerControlled extends CanInteract(CanAnimate(ShouldDisplay(CanMove(WritesLogs(Base))))) {
         isMoving: boolean
         orientation: string
-        beforeMove: Function
-        afterMove: Function
         isIdle: boolean
 
         constructor(...args: any[]) {
@@ -19,7 +18,8 @@ export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
             this.log('IsPlayerControlled')
         }
 
-        updateKeysPressed(time, delta, keys) {
+        updateKeysPressed (...args: any[]) {
+            const [time, delta, keys] = args
             this.isMoving = keys.left.isDown
                 || keys.right.isDown
                 || keys.down.isDown
@@ -45,7 +45,6 @@ export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
                 this.log('up')
                 this.orientation = Orientation.Up
                 this.moveToUp()
-
             }
             else if (keys.down.isDown) {
                 this.log('down')
@@ -60,14 +59,15 @@ export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
 
             if (keys.jump.isDown) {
                 this.log('jump')
-
                 this.jump()
             }
 
             this.afterMove()
 
             if (!this.isMoving && !this.isIdle) {
+                this.log('idle')
                 this.idle()
+
             }
         }
     }

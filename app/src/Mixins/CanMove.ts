@@ -52,7 +52,8 @@ export function CanMove<TBase extends Constructor>(Base: TBase) {
         }
 
         jump = () => {}
-        idle = () => {}
+        idle = () => {
+        }
 
         beforeMove() {
             if (!this.active) return

@@ -1,7 +1,10 @@
 import { State } from 'mistreevous'
-import { Thing } from './Thing'
 import { Animations } from '~/constants'
 import { LootChestBehaviour } from '~/Behaviours/LootChestBehaviour'
+import { CanAnimate } from '~/Mixins/CanAnimate'
+import { ShouldDisplay } from '~/Mixins/ShouldDisplay'
+
+
 
 const diff = (num1, num2) => {
     if (num1 > num2) {
@@ -19,46 +22,40 @@ const getDistance = (x1, y1, x2, y2) => {
 }
 
 
-export class LootChestThing extends Thing {
+class LootChest extends Phaser.GameObjects.Container {
     static STATE_CLOSED = 'closed'
     static STATE_OPENED = 'opened'
 
-    requestedState = LootChestThing.STATE_CLOSED
+    requestedState = LootChest.STATE_CLOSED
 
-    constructor(props) {
-        super({
-            key: 'LootChest',
-            footprintHeight: 16,
-            footprintWidth: 16,
-            width: 16,
-            height: 16,
-            speed: 0,
-            health: {
-                invincible: true
-            },
-            behaviours: {
-                default: LootChestBehaviour
-            },
-            animations: {
-                idle: {
-                    default: {
-                        anim: Animations.LootChestIdle
-                    }
-                },
-                open: {
-                    full: {
-                        anim: Animations.LootChestFull
-                    },
-                    empty: {
-                        anim: Animations.LootChestEmpty
-                    }
+    constructor (scene, ...args: any[]) {
+        super(scene)
+
+        this.key = 'LootChest'
+        this.footprintHeight = 16
+        this.footprintWidth = 16
+        this.width = 16
+        this.height = 16
+        this.speed = 0
+        this.isInvincible = true
+        this.behaviours = {
+            default: LootChestBehaviour
+        }
+        this.animations = {
+            idle: {
+                default: {
+                    anim: Animations.LootChestIdle
                 }
             },
-            ...props
-        })
-
-        this.addShadowSprite()
-        this.setBehaviour('default')
+            open: {
+                full: {
+                    anim: Animations.LootChestFull
+                },
+                empty: {
+                    anim: Animations.LootChestEmpty
+                }
+            }
+        }
     }
 
     isPlayerTouchingMe () {
@@ -100,3 +97,5 @@ export class LootChestThing extends Thing {
         this.animate(open)
     }
 }
+
+export class LootChestThing extends CanAnimate(ShouldDisplay(LootChest)) {}

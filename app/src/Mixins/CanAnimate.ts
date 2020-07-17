@@ -1,6 +1,6 @@
-import { Constructor } from "~/Base";
-import { Orientation } from '~/constants'
 import { get } from 'lodash'
+import { Orientation } from '~/constants'
+import { Constructor } from "~/Base";
 import { WritesLogs } from './WritesLogs'
 
 export interface IAnimationSheetConfig {
@@ -64,16 +64,16 @@ export function CanAnimate<TBase extends Constructor>(Base: TBase) {
             )
         }
 
-        animateMovement = (time: integer, delta: integer) => {
-            const animation = this.getAnimation('moving', this.orientation)
+        animateMovement = () => {
+            const {x,y} = this.body.velocity
+            const animation = this.getAnimation(
+                    this.isIdle && 'idle' || 'moving',
+                    this.orientation)
             this.animate(animation)
         }
 
-        animateIdle = () => {
-            if (!this.active) return
-            const animation = this.getAnimation('idle', this.orientation)
-            this.animate(animation)
-            this.isIdle = true
+        updateKeysPressed (time, delta, keys) {
+            // this.animateMovement()
         }
 
     }

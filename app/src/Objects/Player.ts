@@ -1,26 +1,18 @@
 import { Constructor } from "~/Base";
-import { IsPlayerControlled } from "~/Interfaces/IsPlayerControlled";
-import { ShouldDisplay } from "~/Interfaces/ShouldDisplay";
+import { IsPlayerControlled } from "~/Mixins/IsPlayerControlled";
+import { CanAnimate } from "~/Mixins/CanAnimate";
 
 export function Player<TBase extends Constructor>(Base: TBase) {
-    return class extends IsPlayerControlled(ShouldDisplay(Base)) {
+    return class extends IsPlayerControlled(CanAnimate(Base)) {
         constructor(...args: any[]) {
             super(...args)
-            this.log('stuff')
-
-            this.add(this.sprite)
-            this.add(this.emote)
-            this.add(this.shadow)
-
-            this.scene.add.existing(this)
-            this.scene.physics.add.existing(this)
-            this.scene.physics.world.enable(this)
+            this.log('Player')
         }
 
         update(time, delta, keys) {
             this.updateKeysPressed(time, delta, keys)
             this.updateMovements(time, delta)
-            this.animateMovement(time, delta)
+            this.animateMovement()
         }
     }
 }

@@ -3,10 +3,12 @@ import { BaseScene } from './BaseScene'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
 import { Player } from '~/Objects/Player'
+import * as StuffObjectMap from '~/Objects/StuffObjectMap'
 
 export class MapScene extends BaseScene {
     isInteractive = true
-    player: Player
+    player: typeof Player
+    objectLayers: object
 
     create () {
         super.create()
@@ -19,8 +21,9 @@ export class MapScene extends BaseScene {
         this.objectLayers = this.parseObjectLayers(this.map)
         this.animatedTiles = this.animateTiles(this.map, this.tileset)
 
-        this.player = new PlayerWarrior(this)
-        // this.stuff = this.createStuff()
+        this.player = this.createPlayer()
+        window.Player = this.player
+        this.stuff = this.createStuff()
         // this.createColliders(
         //     this.player,
         //     this.stuff
@@ -38,11 +41,7 @@ export class MapScene extends BaseScene {
     }
 
     createPlayer () {
-        const player = new PlayerWarrior({
-            scene: this,
-            x: 0,
-            y: 0
-        })
+        const player = new PlayerWarrior(this)
         this.placePlayer(player)
 
         return player
@@ -77,11 +76,11 @@ export class MapScene extends BaseScene {
             .filter(definition => !!definition.type)
             .map(({ type, x, y, width, height }) => {
                 const ThingClass = StuffObjectMap[type]
-                const thing = new ThingClass({
-                    scene: this,
-                    x: x + width / 2,
-                    y: y + height / 2
-                })
+                const thing = new ThingClass(
+                    this,
+                    x + width / 2,
+                    y + height / 2
+                )
                 thing.setDepth(depth)
                 return thing
             })

@@ -20,9 +20,16 @@ export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
             this.scene = args[0]
             this.log('ShouldDisplay')
             this.sprite = this.createSprite()
-            this.emote = this.createEmoteSprite()
             this.shadow = this.createShadowSprite()
+            this.emote = this.createEmoteSprite()
 
+            this.add(this.sprite)
+            this.add(this.shadow)
+            this.add(this.emote)
+
+            this.scene.add.existing(this)
+            this.scene.physics.add.existing(this)
+            this.scene.physics.world.enable(this)
         }
 
         /**
@@ -46,8 +53,12 @@ export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
             const { sheet } = animation.anim
             const frame = animation.anim.frames[0]
 
-            const sprite = new Phaser.GameObjects.Sprite(
-                this.scene, 0, 0, sheet, frame)
+            const sprite = this.scene.make.sprite({
+                x: 0,
+                y: 0,
+                key: sheet,
+                frame
+            })
 
             sprite.setTexture(sheet)
             sprite.setFrame(frame)
@@ -69,7 +80,7 @@ export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
 
         createEmoteSprite (): Phaser.GameObjects.Sprite {
             const sheet = get(this.emotes, "sheet")
-            const sprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, sheet)
+            const sprite = this.scene.make.sprite(0, 0, sheet)
             sprite.setTexture(sheet)
             sprite.setSize(this.width, this.height)
             sprite.setOrigin(0.5, 2)
