@@ -51,8 +51,17 @@ export function CanMove<TBase extends Constructor>(Base: TBase) {
             this.body.setVelocityY(-this.speed)
         }
 
-        jump = () => {}
+        jump = () => {
+            if (!this.active) return
+            this.isJumping = true
+            this.scene.time.addEvent({
+                delay: 800,
+                callbackScope: this,
+                callback: () => this.isJumping = false
+            })
+        }
         idle = () => {
+            if (!this.active) return
         }
 
         beforeMove() {

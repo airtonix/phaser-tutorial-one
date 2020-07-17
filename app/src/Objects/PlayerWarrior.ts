@@ -17,6 +17,9 @@ export class Warrior extends Phaser.GameObjects.Container {
             up: {anim: Animations.PlayerWarriorMove },
             left: {flip: true, anim: Animations.PlayerWarriorMove },
             right: {flip: false, anim: Animations.PlayerWarriorMove },
+        },
+        jump: {
+            default: { anim: Animations.PlayerWarriorJump },
         }
     }
 }

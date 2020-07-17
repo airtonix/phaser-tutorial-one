@@ -20,11 +20,6 @@ export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
 
         updateKeysPressed (...args: any[]) {
             const [time, delta, keys] = args
-            this.isMoving = keys.left.isDown
-                || keys.right.isDown
-                || keys.down.isDown
-                || keys.up.isDown
-
             this.beforeMove()
 
             // Horizontal movement
@@ -64,11 +59,6 @@ export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
 
             this.afterMove()
 
-            if (!this.isMoving && !this.isIdle) {
-                this.log('idle')
-                this.idle()
-
-            }
         }
     }
 

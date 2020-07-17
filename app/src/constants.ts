@@ -83,6 +83,15 @@ export const Animations = {
         sheet: SpriteSheets.Characters.key,
     },
 
+    PlayerWarriorJump: {
+        key: 'PlayerWarriorJump',
+        frameRate: 8,
+        repeat: -1,
+        padding: 1,
+        frames: [ 75, 76, 77, 80, 80 ],
+        sheet: SpriteSheets.Characters.key,
+    },
+
     PlayerWarriorIdle: {
         key: 'PlayerWarriorIdle',
         sheet: SpriteSheets.Characters.key,
