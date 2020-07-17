@@ -69,7 +69,6 @@ export function CanAnimate<TBase extends Constructor>(Base: TBase) {
             const action = this.isJumping && 'jump' ||
                 !this.isIdle && 'moving' ||
                 this.isIdle && 'idle'
-            this.log('animateMovement', action)
             const animation = this.getAnimation(action, this.orientation)
             this.animate(animation)
         }

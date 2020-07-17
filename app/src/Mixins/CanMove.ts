@@ -54,10 +54,16 @@ export function CanMove<TBase extends Constructor>(Base: TBase) {
         jump = () => {
             if (!this.active) return
             this.isJumping = true
+            this.sprite.setY(this.sprite.y-0.3)
+            this.shadow.scale = 0.8
             this.scene.time.addEvent({
                 delay: 800,
                 callbackScope: this,
-                callback: () => this.isJumping = false
+                callback: () => {
+                    this.isJumping = false
+                    this.sprite.setY(this.sprite.y+0.3)
+                    this.shadow.scale = 1
+                }
             })
         }
         idle = () => {
