@@ -2,7 +2,6 @@ import Phaser from 'phaser'
 import { BaseScene } from './BaseScene'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
-import { Player } from '~/Objects/Player'
 import * as StuffObjectMap from '~/Objects/StuffObjectMap'
 
 export class MapScene extends BaseScene {
@@ -18,18 +17,19 @@ export class MapScene extends BaseScene {
         this.map = map
         this.tileset = tileset
         this.mapLayers = this.createMapLayers(this.map)
-        this.objectLayers = this.parseObjectLayers(this.map)
+        this.setLayersColliable(this.mapLayers)
         this.animatedTiles = this.animateTiles(this.map, this.tileset)
 
-        this.player = this.createPlayer()
-        window.Player = this.player
-        this.stuff = this.createStuff()
-        // this.createColliders(
-        //     this.player,
-        //     this.stuff
-        // )
-        this.initCamera()
+        this.objectLayers = this.parseObjectLayers(this.map)
 
+        this.player = this.createPlayer()
+        this.createColliders(this.player, Object.values(this.mapLayers))
+        window.Player = this.player
+
+        this.stuff = this.createStuff()
+        this.createColliders(this.player, this.stuff.getChildren())
+
+        this.initCamera()
         this.countdown = 450
 
     }
@@ -201,21 +201,27 @@ export class MapScene extends BaseScene {
         return animatedTiles
     }
 
-    onActorCollide = (actor, tile) => {
-        this.log('onActorCollide', actor, tile)
-        actor.idle()
+    onActorCollide = (actor, target) => {
+        this.log('onActorCollide', actor instanceof Phaser.Events.EventEmitter)
+
     }
 
-    createColliders (...actors) {
-        Object.keys(this.mapLayers)
+    setLayersColliable (layers) {
+        Object.keys(layers)
             .forEach(layerId => {
-                this.log(`${layerId}.creatColliders`)
-                const layer = this.mapLayers[layerId]
+                this.log(`setLayersCollidable: ${layerId}`)
+                const layer = layers[layerId]
                 layer.setCollisionByProperty({ collides: true })
-                actors.forEach(actor => {
-                    this.physics.add.collider(actor, layer, this.onActorCollide, null, this)
-                })
             })
+    }
+
+    createColliders (actors, collidables) {
+        // if (!Array.isArray(collidables)) return
+
+        collidables.forEach(collidable => {
+            this.log(`createColliders: ${collidable}`)
+            this.physics.add.collider(actors, collidable, this.onActorCollide, null, this)
+        })
     }
 
     // addColliders() { }
