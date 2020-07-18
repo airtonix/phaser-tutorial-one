@@ -3,6 +3,8 @@ import { Animations } from '~/constants'
 import { LootChestBehaviour } from '~/Behaviours/LootChestBehaviour'
 import { CanAnimate } from '~/Mixins/CanAnimate'
 import { ShouldDisplay } from '~/Mixins/ShouldDisplay'
+import { IsImovable } from '~/Mixins/IsImovable'
+import { IsInteractive } from '~/Mixins/IsInteractive'
 
 
 
@@ -29,8 +31,8 @@ class LootChest extends Phaser.GameObjects.Container {
     requestedState = LootChest.STATE_CLOSED
 
     key = 'LootChest'
-    footprintHeight = 16
     footprintWidth = 16
+    footprintHeight = 6
     width = 16
     height = 16
     speed = 0
@@ -94,4 +96,4 @@ class LootChest extends Phaser.GameObjects.Container {
     }
 }
 
-export const LootChestThing = CanAnimate(ShouldDisplay(LootChest))
+export const LootChestThing = CanAnimate(IsImovable(ShouldDisplay(IsInteractive(LootChest))))
