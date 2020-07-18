@@ -20,8 +20,8 @@ export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
         }
 
         update(time, delta, keys) {
+            super.update(time, delta, keys)
             this.updateKeysPressed(time, delta, keys)
-            this.updateMovements(time, delta)
             this.animateMovement()
         }
 
@@ -31,36 +31,29 @@ export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
 
             // Horizontal movement
             if (keys.left.isDown) {
-                this.log('left')
-
                 this.orientation = Orientation.Left
                 this.moveToLeft()
             }
             else if (keys.right.isDown) {
-                this.log('right')
                 this.orientation = Orientation.Right
                 this.moveToRight()
             }
 
             // Vertical movement
             if (keys.up.isDown) {
-                this.log('up')
                 this.orientation = Orientation.Up
                 this.moveToUp()
             }
             else if (keys.down.isDown) {
-                this.log('down')
                 this.orientation = Orientation.Down
                 this.moveToDown()
             }
 
             if (keys.use.isDown) {
-                this.log('use')
                 this.use()
             }
 
             if (keys.jump.isDown) {
-                this.log('jump')
                 this.jump()
             }
 

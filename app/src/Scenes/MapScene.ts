@@ -37,7 +37,7 @@ export class MapScene extends BaseScene {
     update (time, delta) {
         this.animatedTiles.forEach(tile => tile.update(delta))
         this.player && this.player.update(time, delta, this.keys)
-        // this.stuff.children.each( thing => thing.update(time, delta) )
+        this.stuff.getChildren().forEach( thing => thing.update(time, delta) )
     }
 
     createPlayer () {
@@ -201,8 +201,13 @@ export class MapScene extends BaseScene {
         return animatedTiles
     }
 
-    onActorCollide = (actor, target) => {
-        this.log('onActorCollide', actor instanceof Phaser.Events.EventEmitter)
+    onActorCollide = (...actors) => {
+        this.log('onActorCollide', actors)
+        actors.forEach(actor => {
+            if (typeof actor.emit === 'function') {
+                actor.emit('collide', { actors })
+            }
+        })
 
     }
 

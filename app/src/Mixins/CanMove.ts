@@ -92,9 +92,5 @@ export function CanMove<TBase extends Constructor>(Base: TBase) {
             this.body.velocity.normalize().scale(this.speed)
         }
 
-        updateMovements = throttle((time, delta) => {
-            this.log(time)
-        }, 1000)
-
     }
 }

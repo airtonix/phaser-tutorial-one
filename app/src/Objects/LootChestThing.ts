@@ -1,34 +1,18 @@
+import { get } from 'lodash'
 import { State } from 'mistreevous'
 import { Animations } from '~/constants'
+import { getDistance, isWithin, position } from '~/Core/distance'
 import { LootChestBehaviour } from '~/Behaviours/LootChestBehaviour'
-import { CanAnimate } from '~/Mixins/CanAnimate'
+import { CanAnimate, IAnimationConfig } from '~/Mixins/CanAnimate'
 import { ShouldDisplay } from '~/Mixins/ShouldDisplay'
 import { IsImovable } from '~/Mixins/IsImovable'
 import { IsInteractive } from '~/Mixins/IsInteractive'
 
-
-
-const diff = (num1, num2) => {
-    if (num1 > num2) {
-        return (num1 - num2)
-    } else {
-        return (num2 - num1)
-    }
-}
-
-const getDistance = (x1, y1, x2, y2) => {
-    var deltaX = diff(x1, x2)
-    var deltaY = diff(y1, y2)
-    var dist   = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2))
-    return (dist)
-}
-
-
 class LootChest extends Phaser.GameObjects.Container {
-    static STATE_CLOSED = 'closed'
-    static STATE_OPENED = 'opened'
-
-    requestedState = LootChest.STATE_CLOSED
+    static LID_STATE_CLOSED = 'close'
+    static LID_STATE_OPENED = 'open'
+    static CONTENT_STATE_FULL = 'full'
+    static CONTENT_STATE_EMPTY = 'empty'
 
     key = 'LootChest'
     footprintWidth = 16
@@ -37,6 +21,8 @@ class LootChest extends Phaser.GameObjects.Container {
     height = 16
     speed = 0
     isInvincible = true
+    isOpen = false
+    contents = true
     behaviours = {
         default: LootChestBehaviour
     }
@@ -48,51 +34,39 @@ class LootChest extends Phaser.GameObjects.Container {
         },
         open: {
             full: {
-                anim: Animations.LootChestFull
+                anim: Animations.LootChestOpenFull
             },
             empty: {
-                anim: Animations.LootChestEmpty
+                anim: Animations.LootChestOpenEmpty
             }
-        }
+        },
+        close: {
+            full: {
+                anim: Animations.LootChestCloseFull
+            },
+            empty: {
+                anim: Animations.LootChestCloseEmpty
+            }
+        },
     }
 
-    isPlayerTouchingMe () {
-        const player = this.scene?.player
-        if (!player) return false
+    handlePerformUse (...args: any[]) {
+        this.isOpen = !this.isOpen
+        const lidState = this.isOpen
+            ? LootChest.LID_STATE_OPENED
+            : LootChest.LID_STATE_CLOSED
+        const contentState = this.contents
+            ? LootChest.CONTENT_STATE_FULL
+            : LootChest.CONTENT_STATE_EMPTY
 
-        const yesno = getDistance(
-            player.x, player.y,
-            this.x, this.y
-        ) < 10
-        return yesno
-    }
+        this.log('onPerformUse', lidState, contentState)
 
-    playerHasOpenedMe () {
-        return this.requestedState === LootChestThing.STATE_OPENED
-            ? State.SUCCEEDED
-            : State.FAILED
-    }
-
-    playerHasClosedMe () {
-        return this.requestedState === LootChestThing.STATE_CLOSED
-            ? State.SUCCEEDED
-            : State.FAILED
-    }
-
-    open () {
-        this.log('open')
-        const {
-            animations: { open }
-        } = this.props
-        this.animate(open)
-    }
-
-    close () {
-        this.log('close')
-        const {
-            animations: { open }
-        } = this.props
-        this.animate(open)
+        const animation: IAnimationConfig = get(
+            this.animations, [lidState, contentState],
+            this.animations.idle.default
+        )
+        this.log('onPerformUse', animation)
+        this.animate(animation)
     }
 }
 

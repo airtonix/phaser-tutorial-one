@@ -54,7 +54,7 @@ export function CanEmote<TBase extends Constructor>(Base: TBase) {
         handleShowEmote = debounce((event) => {
             this.log('handleShowEmote', event)
             const {frame, timeout} = event
-            this.showEmoteFrame(frame)
+            this.showEmoteFrame(frame, timeout)
         }, 500)
 
         showEmoteFrame (frame: integer, timeout: integer = 1000): void {

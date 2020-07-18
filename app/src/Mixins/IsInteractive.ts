@@ -8,11 +8,11 @@ export function IsInteractive<TBase extends Constructor>(Base: TBase) {
         constructor (...args: any[]) {
             super(...args)
             this.log('IsInteractive')
-            this.on('perform-use', this.onPerformUse)
+            this.on('perform-use', this.handlePerformUse)
         }
 
-        onPerformUse = throttle((event) => {
-            this.log('onPerformUse', event)
+        handlePerformUse = throttle((...args: any[]) => {
+            super.handlePerformUse(...args)
         }, 500)
 
     }

@@ -107,33 +107,55 @@ export const Animations = {
         key: 'LootChestIdle',
         sheet: SpriteSheets.Dungeon.key,
         frames: [ 595 ],
-        repeat: -1,
+        repeat: 0,
         margin: 0,
         spacing: 0
     },
 
-    LootChestFull: {
-        key: 'LootChestIdle',
+    LootChestOpenFull: {
+        key: 'LootChestOpenFull',
         sheet: SpriteSheets.Dungeon.key,
         frames: [ 627, 628, 629 ],
-        repeat: 1,
+        repeat: 0,
         margin: 0,
         spacing: 0
     },
 
-    LootChestEmpty: {
-        key: 'LootChestIdle',
+    LootChestOpenEmpty: {
+        key: 'LootChestOpenEmpty',
         sheet: SpriteSheets.Dungeon.key,
         frames: [ 595, 596, 597 ],
-        repeat: 1,
+        repeat: 0,
+        margin: 0,
+        spacing: 0
+    },
+
+    LootChestCloseFull: {
+        key: 'LootChestCloseFull',
+        sheet: SpriteSheets.Dungeon.key,
+        frames: [
+            629,
+            628,
+            627,
+        ],
+        repeat: 0,
+        margin: 0,
+        spacing: 0
+    },
+
+    LootChestCloseEmpty: {
+        key: 'LootChestCloseEmpty',
+        sheet: SpriteSheets.Dungeon.key,
+        frames: [ 597, 596, 595 ],
+        repeat: 0,
         margin: 0,
         spacing: 0
     },
 
 }
 
-export const Emotes: IEmoteGroup = {
-    Default: <IEmoteConfig>{
+export const Emotes = {
+    Default: {
         width: 16,
         height: 16,
         sheet: SpriteSheets.EmotesStyleOne.key,

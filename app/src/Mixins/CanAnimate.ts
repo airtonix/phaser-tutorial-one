@@ -42,6 +42,9 @@ export function CanAnimate<TBase extends Constructor>(Base: TBase) {
         animate (animation: IAnimationConfig) {
             if(!this.active) return
             if(!animation) return
+            if(this.sprite.anims.currentAnim?.key === animation.anim?.key) return
+
+            this.log('animation', animation)
 
             const { flip, anim } = animation
 
