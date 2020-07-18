@@ -21,11 +21,9 @@ export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
             this.log('ShouldDisplay')
             this.sprite = this.createSprite()
             this.shadow = this.createShadowSprite()
-            this.emote = this.createEmoteSprite()
 
             this.add(this.sprite)
             this.add(this.shadow)
-            this.add(this.emote)
 
             this.scene.add.existing(this)
             this.scene.physics.add.existing(this)
@@ -78,19 +76,5 @@ export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
             return shadow
         }
 
-        createEmoteSprite (): Phaser.GameObjects.Sprite {
-            const sheet = get(this.emotes, "sheet")
-            const sprite = this.scene.make.sprite(0, 0, sheet)
-            sprite.setTexture(sheet)
-            sprite.setSize(this.width, this.height)
-            sprite.setOrigin(0.5, 2)
-            sprite.setVisible(false)
-            return sprite
-        }
-
-        showEmoteFrame (frame: integer): void {
-            this.emote.setFrame(frame)
-            this.emote.setVisible(true)
-        }
     }
 }

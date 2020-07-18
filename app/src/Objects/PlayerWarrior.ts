@@ -1,10 +1,10 @@
-import { Player } from './Player'
-import { Animations } from '~/constants'
+import { Animations, SpriteSheets } from '~/constants'
+import { IsPlayerControlled } from '~/Mixins/IsPlayerControlled'
 
 export class Warrior extends Phaser.GameObjects.Container {
     key = 'WarriorPlayer'
-    width = 16
-    height = 32
+    width = 12
+    height = 6
     speed = 55
     footprintHeight = 8
     footprintWidth = 12
@@ -24,4 +24,4 @@ export class Warrior extends Phaser.GameObjects.Container {
     }
 }
 
-export const PlayerWarrior = Player(Warrior)
+export const PlayerWarrior = IsPlayerControlled(Warrior)

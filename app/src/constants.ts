@@ -1,3 +1,5 @@
+import { IEmoteGroup, IEmoteConfig } from "./Mixins/CanEmote"
+
 const TilesetOneExtruded = '/0x72_DungeonTilesetII_v1.3--extruded.png'
 const TilesetOne = '/0x72_DungeonTilesetII_v1.3.png'
 const TilesetTwo = '/16x16 dungeon ii wall reconfig v04 spritesheet.png'
@@ -86,7 +88,7 @@ export const Animations = {
     PlayerWarriorJump: {
         key: 'PlayerWarriorJump',
         frameRate: 8,
-        repeat: -1,
+        repeat: 0,
         padding: 1,
         frames: [ 75, 76, 77, 80, 80 ],
         sheet: SpriteSheets.Characters.key,
@@ -128,4 +130,44 @@ export const Animations = {
         spacing: 0
     },
 
+}
+
+export const Emotes: IEmoteGroup = {
+    Default: <IEmoteConfig>{
+        width: 16,
+        height: 16,
+        sheet: SpriteSheets.EmotesStyleOne.key,
+        frames: {
+            Stressed: 0, // @
+            Chirpy: 1, // music
+            Sad: 2, // :(
+            Woops: 3, // teardrop
+            Pious: 4, // halo
+            Expletive: 5, // stars
+            Laugh: 6, // haha
+            Happy: 7, // :)
+            SarcasticDisbelief: 8, // ...
+            Greed: 9, // $
+            Pride: 10, // star
+            Idea: 11,
+            Blank: 12,
+            Sarcasm: 13,
+            Attack: 14,
+            Sleep: 15,
+            Love: 16,
+            Alarm: 17,
+            Unsure: 18,
+            Annoyed: 19,
+            Tired: 20,
+            Unlike: 21,
+            Exclamation: 22,
+            No: 23,
+            Shocked: 24,
+            Query: 25,
+            Like: 26,
+            BigWoops: 27,
+            Despair: 28,
+            Angry: 29,
+        }
+    }
 }

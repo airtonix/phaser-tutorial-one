@@ -28,32 +28,28 @@ class LootChest extends Phaser.GameObjects.Container {
 
     requestedState = LootChest.STATE_CLOSED
 
-    constructor (scene, ...args: any[]) {
-        super(scene)
-
-        this.key = 'LootChest'
-        this.footprintHeight = 16
-        this.footprintWidth = 16
-        this.width = 16
-        this.height = 16
-        this.speed = 0
-        this.isInvincible = true
-        this.behaviours = {
-            default: LootChestBehaviour
-        }
-        this.animations = {
-            idle: {
-                default: {
-                    anim: Animations.LootChestIdle
-                }
+    key = 'LootChest'
+    footprintHeight = 16
+    footprintWidth = 16
+    width = 16
+    height = 16
+    speed = 0
+    isInvincible = true
+    behaviours = {
+        default: LootChestBehaviour
+    }
+    animations = {
+        idle: {
+            default: {
+                anim: Animations.LootChestIdle
+            }
+        },
+        open: {
+            full: {
+                anim: Animations.LootChestFull
             },
-            open: {
-                full: {
-                    anim: Animations.LootChestFull
-                },
-                empty: {
-                    anim: Animations.LootChestEmpty
-                }
+            empty: {
+                anim: Animations.LootChestEmpty
             }
         }
     }
@@ -98,4 +94,4 @@ class LootChest extends Phaser.GameObjects.Container {
     }
 }
 
-export class LootChestThing extends CanAnimate(ShouldDisplay(LootChest)) {}
+export const LootChestThing = CanAnimate(ShouldDisplay(LootChest))
