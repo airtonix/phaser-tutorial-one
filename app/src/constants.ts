@@ -1,10 +1,14 @@
-import { IEmoteGroup, IEmoteConfig } from "./Mixins/CanEmote"
+import { range } from '~/Core/collections'
 
-const TilesetOneExtruded = '/0x72_DungeonTilesetII_v1.3--extruded.png'
-const TilesetOne = '/0x72_DungeonTilesetII_v1.3.png'
-const TilesetTwo = '/16x16 dungeon ii wall reconfig v04 spritesheet.png'
-const LevelOneTiledTileMap = '/LevelOne.json'
-const EmotesStyleOne = '/emotes_pixel_style1.png'
+const UrlTilesetOneExtrudedSpritesheet = '/0x72_DungeonTilesetII_v1.3--extruded.png'
+const UrlTilesetOneSpritesheet = '/0x72_DungeonTilesetII_v1.3.png'
+const UrlTilesetTwoSpritesheet = '/16x16 dungeon ii wall reconfig v04 spritesheet.png'
+const UrlLevelOneTiledTileMap = '/LevelOne.json'
+const UrlEmotesStyleOneSpritesheet = '/emotes_pixel_style1.png'
+const UrlUiDialogNineSlice = '/interface_bg_tan.png'
+const UrlItemsSpritesheet = '/items_spritesheet_16x16.png'
+const UrlVormgeversFont = '/Vormgevers_315x250x72p.png'
+const UrlAwkwardFont = '/Awkward_2018_L.png'
 
 export const LOG_PREFIX = 'Game'
 
@@ -23,7 +27,7 @@ export const Orientation = {
 export const SpriteSheets = {
     Dungeon: {
         key: 'DungeonSpriteSheet',
-        url: TilesetOne,
+        url: UrlTilesetOneSpritesheet,
         frameConfig: {
             frameWidth: 16,
             frameHeight: 16,
@@ -32,7 +36,7 @@ export const SpriteSheets = {
 
     EmotesStyleOne: {
         key: 'EmotesStyleOne',
-        url: EmotesStyleOne,
+        url: UrlEmotesStyleOneSpritesheet,
         frameConfig: {
             frameWidth: 16,
             frameHeight: 16,
@@ -43,7 +47,7 @@ export const SpriteSheets = {
 
     Characters: {
         key: 'Characters',
-        url: TilesetOneExtruded,
+        url: UrlTilesetOneExtrudedSpritesheet,
         frameConfig: {
             frameWidth: 16,
             frameHeight: 32,
@@ -54,7 +58,13 @@ export const SpriteSheets = {
 
     TilesetTwo: {
         key: 'TilesetTwo',
-        url: TilesetTwo,
+        url: UrlTilesetTwoSpritesheet,
+        frameConfig: FrameConfig16x16
+    },
+
+    Items: {
+        key: 'Items',
+        url: UrlItemsSpritesheet,
         frameConfig: FrameConfig16x16
     }
 }
@@ -62,14 +72,38 @@ export const SpriteSheets = {
 export const Images = {
     DungeonTiles: {
         key: 'Dungeon',
-        url: TilesetOne
+        url: UrlTilesetOneSpritesheet
     },
+    UiDialogBg: {
+        key: 'UiDialogBg',
+        url: UrlUiDialogNineSlice
+    },
+    VormgeverFont: {
+        key: 'VormgeverFont',
+        url: UrlVormgeversFont
+    },
+    AwkwardFont: {
+        key: 'AwkwardFont',
+        url: UrlAwkwardFont
+    }
+}
+
+export const Nineslices = {
+    Dialog: {
+        startX: 0,
+        startY: 0,
+        width: 48,
+        height: 48,
+        key: Images.UiDialogBg.key,
+        cornerOffset: 16,
+        border: 2
+    }
 }
 
 export const TiledTileMaps = {
     LevelOne: {
         key: 'LevelOneTiledMap',
-        url: LevelOneTiledTileMap,
+        url: UrlLevelOneTiledTileMap,
         tileset: Images.DungeonTiles.key,
         tileimage: Images.DungeonTiles.key,
     }
@@ -191,5 +225,63 @@ export const Emotes = {
             Despair: 28,
             Angry: 29,
         }
+    }
+}
+
+export const ItemIcons = {
+    armour: {
+        sheet: SpriteSheets.Items,
+        frames: range(0, 4)
+    },
+    artifacts: {
+        sheet: SpriteSheets.Items,
+        frames: range(303, 317)
+    },
+    currency: {
+        sheet: SpriteSheets.Items,
+        frames: range(268, 272)
+    },
+    enchantment: {
+        sheet: SpriteSheets.Items,
+        frames: range(268, 272)
+    },
+    gems: {
+        sheet: SpriteSheets.Items,
+        frames: range(126, 135)
+    },
+    jewels: {
+        sheet: SpriteSheets.Items,
+        frames: [
+            ...range(208, 222),
+            ...range(253, 267),
+        ]
+    },
+    weapon: {
+        sheet: SpriteSheets.Items,
+        frames: range(339, 343)
+    },
+}
+
+export const RetroFonts = {
+    vormgevers: {
+        // image
+        image: Images.AwkwardFont.key,
+        offset: {
+            x: 128,
+            y: 128
+        },
+
+        // characters
+        width: 16,
+        height: 16,
+        chars: Phaser.GameObjects.RetroFont.TEXT_SET1,
+        charsPerRow: 10,
+
+        // spacing
+        spacing: {
+            x: 0,
+            y: 0
+        },
+        lineSpacing: 0
     }
 }

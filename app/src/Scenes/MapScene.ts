@@ -2,7 +2,9 @@ import Phaser from 'phaser'
 import { BaseScene } from './BaseScene'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
+import { Dialog } from '~/Objects/Dialog'
 import * as StuffObjectMap from '~/Objects/StuffObjectMap'
+import { LootDialog } from '~/Objects/LootDialog'
 
 export class MapScene extends BaseScene {
     isInteractive = true
@@ -24,10 +26,11 @@ export class MapScene extends BaseScene {
 
         this.player = this.createPlayer()
         this.createColliders(this.player, Object.values(this.mapLayers))
-        window.Player = this.player
 
         this.stuff = this.createStuff()
         this.createColliders(this.player, this.stuff.getChildren())
+
+        this.dialog = this.createDialog()
 
         this.initCamera()
         this.countdown = 450
@@ -38,6 +41,15 @@ export class MapScene extends BaseScene {
         this.animatedTiles.forEach(tile => tile.update(delta))
         this.player && this.player.update(time, delta, this.keys)
         this.stuff.getChildren().forEach( thing => thing.update(time, delta) )
+    }
+
+    createDialog () {
+        const dialog = new LootDialog(this)
+        dialog.setDepth(1000)
+        dialog.open({ position: { x: 20, y: 20 }, content: ['one']})
+        this.events.on('show-dialog', dialog.open)
+        this.events.on('close-dialog', dialog.close)
+        this.add.existing(dialog)
     }
 
     createPlayer () {
@@ -208,7 +220,6 @@ export class MapScene extends BaseScene {
                 actor.emit('collide', { actors })
             }
         })
-
     }
 
     setLayersColliable (layers) {

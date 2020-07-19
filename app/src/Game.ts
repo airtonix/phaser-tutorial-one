@@ -1,4 +1,6 @@
 import Phaser from 'phaser'
+import { Plugin as NineSlicePlugin } from 'phaser3-nineslice'
+
 import { PreloaderScene } from './Scenes/PreloaderScene'
 import { MenuScene } from './Scenes/MenuScene'
 import { InterfaceScene } from './Scenes/InterfaceScene'
@@ -24,6 +26,10 @@ export class Game extends Phaser.Game {
                 antialiasGL: false,
                 // prevent pixel art from becoming blurry when scaled
                 pixelArt: true
+            },
+
+            plugins: {
+                global: [ NineSlicePlugin.DefaultCfg ],
             },
 
             physics: {

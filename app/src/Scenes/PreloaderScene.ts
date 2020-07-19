@@ -155,6 +155,7 @@ export class PreloaderScene extends BaseScene {
     }
 
     prepare () {
+        require('~/Items')
         this.process(
             'animations',
             Animations,

@@ -1,18 +1,13 @@
 import { get } from 'lodash'
-import { State } from 'mistreevous'
-import { Animations } from '~/constants'
-import { getDistance, isWithin, position } from '~/Core/distance'
+import { Animations, Nineslices } from '~/constants'
 import { LootChestBehaviour } from '~/Behaviours/LootChestBehaviour'
 import { CanAnimate, IAnimationConfig } from '~/Mixins/CanAnimate'
 import { ShouldDisplay } from '~/Mixins/ShouldDisplay'
 import { IsImovable } from '~/Mixins/IsImovable'
 import { IsInteractive } from '~/Mixins/IsInteractive'
+import { ContainsItems } from '~/Mixins/ContainsItems'
 
 class LootChest extends Phaser.GameObjects.Container {
-    static LID_STATE_CLOSED = 'close'
-    static LID_STATE_OPENED = 'open'
-    static CONTENT_STATE_FULL = 'full'
-    static CONTENT_STATE_EMPTY = 'empty'
 
     key = 'LootChest'
     footprintWidth = 16
@@ -23,9 +18,19 @@ class LootChest extends Phaser.GameObjects.Container {
     isInvincible = true
     isOpen = false
     contents = true
+    loot = [
+        {from: '/loot/currency', luck: 0.4, stack: '1-4' },
+        {from: '/loot/gems', luck: 0.2, stack: '1-2' },
+        {from: '/loot/jewellry', luck: 0.2, stack: 1 },
+        {from: '/loot/artifacts', luck: 0.1, stack: 1 },
+        {from: '/loot/armour', luck: 0.2, stack: 1 },
+        {from: '/loot/weapons', luck: 0.2, stack: 1 }
+    ]
+
     behaviours = {
         default: LootChestBehaviour
     }
+
     animations = {
         idle: {
             default: {
@@ -49,25 +54,6 @@ class LootChest extends Phaser.GameObjects.Container {
             }
         },
     }
-
-    handlePerformUse (...args: any[]) {
-        this.isOpen = !this.isOpen
-        const lidState = this.isOpen
-            ? LootChest.LID_STATE_OPENED
-            : LootChest.LID_STATE_CLOSED
-        const contentState = this.contents
-            ? LootChest.CONTENT_STATE_FULL
-            : LootChest.CONTENT_STATE_EMPTY
-
-        this.log('onPerformUse', lidState, contentState)
-
-        const animation: IAnimationConfig = get(
-            this.animations, [lidState, contentState],
-            this.animations.idle.default
-        )
-        this.log('onPerformUse', animation)
-        this.animate(animation)
-    }
 }
 
-export const LootChestThing = CanAnimate(IsImovable(ShouldDisplay(IsInteractive(LootChest))))
+export const LootChestThing = CanAnimate(IsImovable(ShouldDisplay(IsInteractive(ContainsItems(LootChest)))))

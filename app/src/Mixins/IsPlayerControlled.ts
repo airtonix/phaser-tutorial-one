@@ -30,21 +30,23 @@ export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
             this.beforeMove()
 
             // Horizontal movement
-            if (keys.left.isDown) {
+            if (keys.left.isDown && !keys.right.isDown) {
                 this.orientation = Orientation.Left
                 this.moveToLeft()
             }
-            else if (keys.right.isDown) {
+
+            if (keys.right.isDown && !keys.left.isDown) {
                 this.orientation = Orientation.Right
                 this.moveToRight()
             }
 
             // Vertical movement
-            if (keys.up.isDown) {
+            if (keys.up.isDown && !keys.down.isDown) {
                 this.orientation = Orientation.Up
                 this.moveToUp()
             }
-            else if (keys.down.isDown) {
+
+            if (keys.down.isDown && !keys.up.isDown) {
                 this.orientation = Orientation.Down
                 this.moveToDown()
             }
