@@ -4,7 +4,7 @@ import {
     Images,
     TiledTileMaps,
     Animations,
-
+    BitmapFonts,
 } from '~/constants'
 import { LevelOneScene } from './LevelOneScene'
 
@@ -140,6 +140,11 @@ export class PreloaderScene extends BaseScene {
             'tiledtilemaps',
             TiledTileMaps,
             ({ key, url }) => this.load.tilemapTiledJSON(key, url)
+        )
+        this.process(
+            'fonts',
+            BitmapFonts,
+            ({ key, png, fnt }) => this.load.bitmapFont(key, png, fnt)
         )
     }
 

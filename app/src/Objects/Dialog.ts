@@ -1,9 +1,9 @@
-import { Nineslices, RetroFonts } from "~/constants"
+import { Nineslices, BitmapFonts } from "~/constants"
 import { NineSlice } from "phaser3-nineslice"
 
 export class Dialog extends Phaser.GameObjects.Container {
     ui: NineSlice
-    content: Phaser.GameObjects.Group
+    content: []
     nineslices = {
         ui: Nineslices.Dialog
     }
@@ -11,27 +11,12 @@ export class Dialog extends Phaser.GameObjects.Container {
     constructor (...args: any[]) {
         super(...args)
         this.ui = this.createUi()
+        this.content = []
+
         this.add([
             this.ui
         ])
-        const parsedFont = Phaser.GameObjects.RetroFont.Parse(
-            this.scene,
-            RetroFonts.vormgevers
-        )
 
-        this.scene.cache.bitmapFont
-            .add(RetroFonts.vormgevers.image, parsedFont)
-        this.content = new Phaser.GameObjects.Group(this.scene)
-
-        const text = this.scene.make.bitmapText({
-            x: 0,
-            y: 0,
-            font: RetroFonts.vormgevers.image,
-            text: 'Some text'
-        })
-        this.content.add(
-            text
-        )
 
     }
 
@@ -62,7 +47,7 @@ export class Dialog extends Phaser.GameObjects.Container {
     open = (args) => {
         const { position, content } = args || {}
         const { x, y } = position || {}
-        console.log('open')
+
         this.ui.setPosition(x, y)
         this.ui.setVisible(true)
 
@@ -72,7 +57,10 @@ export class Dialog extends Phaser.GameObjects.Container {
     close = () => {
         console.log('close')
         this.ui.setVisible(false)
-        this.content.getChildren().forEach(item => this.content.remove(item, true, true))
+        this.content
+            .forEach(
+                item => this.remove(item, true)
+            )
     }
 
     renderContent (content) {

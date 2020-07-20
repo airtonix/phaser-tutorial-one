@@ -7,8 +7,8 @@ const UrlLevelOneTiledTileMap = '/LevelOne.json'
 const UrlEmotesStyleOneSpritesheet = '/emotes_pixel_style1.png'
 const UrlUiDialogNineSlice = '/interface_bg_tan.png'
 const UrlItemsSpritesheet = '/items_spritesheet_16x16.png'
-const UrlVormgeversFont = '/Vormgevers_315x250x72p.png'
-const UrlAwkwardFont = '/Awkward_2018_L.png'
+const UrlSixteenbfZXFont = '/16bfZX.fnt'
+const UrlSixteenbfZXPng = '/16bfZX_0.png'
 
 export const LOG_PREFIX = 'Game'
 
@@ -78,13 +78,13 @@ export const Images = {
         key: 'UiDialogBg',
         url: UrlUiDialogNineSlice
     },
-    VormgeverFont: {
-        key: 'VormgeverFont',
-        url: UrlVormgeversFont
-    },
-    AwkwardFont: {
-        key: 'AwkwardFont',
-        url: UrlAwkwardFont
+}
+
+export const BitmapFonts = {
+    SixteenbfZXFont: {
+        key: 'SixteenbfZXFont',
+        png: UrlSixteenbfZXPng,
+        fnt: UrlSixteenbfZXFont
     }
 }
 
@@ -260,28 +260,4 @@ export const ItemIcons = {
         sheet: SpriteSheets.Items,
         frames: range(339, 343)
     },
-}
-
-export const RetroFonts = {
-    vormgevers: {
-        // image
-        image: Images.AwkwardFont.key,
-        offset: {
-            x: 128,
-            y: 128
-        },
-
-        // characters
-        width: 16,
-        height: 16,
-        chars: Phaser.GameObjects.RetroFont.TEXT_SET1,
-        charsPerRow: 10,
-
-        // spacing
-        spacing: {
-            x: 0,
-            y: 0
-        },
-        lineSpacing: 0
-    }
 }

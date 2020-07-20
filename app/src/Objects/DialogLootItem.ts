@@ -1,4 +1,4 @@
-// Phaser.GameObjects.RetroFont.Parse(scene, config)
+import { BitmapFonts } from "~/constants"
 
 export class DialogLootItem extends Phaser.GameObjects.Container {
     itemName: Phaser.GameObjects.Text
@@ -7,6 +7,7 @@ export class DialogLootItem extends Phaser.GameObjects.Container {
         super(scene, x, y)
         // this.icon = this.createText(text)
         this.itemName = this.createText(content.name)
+        this.setDepth(2000)
         this.add([
             this.itemName
         ])
@@ -17,12 +18,12 @@ export class DialogLootItem extends Phaser.GameObjects.Container {
     }
 
     createText (text) {
-        const content = new Phaser.GameObjects.Text(this.scene, 0, 0, text, {
-            wordWrap: {
-                useAdvancedWrap: true
-            }
-        })
-        console.log(text)
+        const content = new Phaser.GameObjects.BitmapText(
+            this.scene,
+            this.x + 4, this.y + 4,
+            BitmapFonts.SixteenbfZXFont.key,
+            text
+        )
         return content
     }
 

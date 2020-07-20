@@ -28,7 +28,7 @@ export function ContainsItems<TBase extends Constructor>(Base: TBase) {
             this.log('ContainsItems')
         }
 
-        handlePerformUse (...args: any[]) {
+        handlePerformUse () {
             const lidState = this.lidState
             switch (lidState) {
                 case ContainsItems.LID_STATE_CLOSED:
@@ -54,7 +54,6 @@ export function ContainsItems<TBase extends Constructor>(Base: TBase) {
                     },
                     content: this.items
                 })
-            this.log(this.items)
         }
 
         handleClose () {

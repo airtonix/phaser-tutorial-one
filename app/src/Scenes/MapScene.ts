@@ -46,7 +46,6 @@ export class MapScene extends BaseScene {
     createDialog () {
         const dialog = new LootDialog(this)
         dialog.setDepth(1000)
-        dialog.open({ position: { x: 20, y: 20 }, content: ['one']})
         this.events.on('show-dialog', dialog.open)
         this.events.on('close-dialog', dialog.close)
         this.add.existing(dialog)

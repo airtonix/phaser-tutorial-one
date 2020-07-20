@@ -5,12 +5,14 @@ import { Frame } from 'phaser-ui-tools'
 export class LootDialog extends Dialog {
     renderContent (content) {
         super.renderContent(content)
-        this.add(content.map(item =>
-            new DialogLootItem(this.scene, 0, 0, item)
-        ))
-    }
-
-    close () {
-        this.removeAll(true)
+        this.content = content.map((item, index) =>
+            new DialogLootItem(
+                this.scene,
+                this.x + 4,
+                this.y + 4,
+                item
+            )
+        )
+        this.add(this.content)
     }
 }
