@@ -11,7 +11,6 @@ export interface IItem {
 }
 
 export function ContainsItems<TBase extends Constructor>(Base: TBase) {
-
     return class ContainsItems extends WritesLogs(Base) {
         static LID_STATE_CLOSED = 'close'
         static LID_STATE_OPENED = 'open'
