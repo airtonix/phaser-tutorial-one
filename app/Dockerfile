@@ -13,26 +13,6 @@ RUN apk --update --no-cache add \
      util-linux \
     && curl -sL https://git.io/tusk | sh -s -- -b /usr/local/bin $TUSK_VERSION
 
-
-#
-#
-#
-FROM base as install
-
-COPY ./package.json \
-     ./package-lock.json \
-     ./
-
-# parce@next requirements
-# RUN apk --no-cache --update add \
-#     python2 \
-#     make \
-#     gcc \
-#     g++ \
-#     fts-dev
-
-RUN npm install
-
 ENV ENTRYPOINT_TASKS_DIR=/entrypoint.d/
 
 COPY ./entrypoint.sh /entrypoint.sh
@@ -45,9 +25,30 @@ ENTRYPOINT [ "/entrypoint.sh" ]
 #
 #
 #
-FROM install as prod
+FROM base as install
 
-COPY ./src ./src
-COPY ./tools ./tools
+WORKDIR /build
 
-CMD ["npm", "run", "prod"]
+COPY ./package.json \
+     ./yarn.lock \
+     ./
+
+RUN yarn install
+
+#
+#
+#
+FROM base as prod
+
+COPY --from=install /build/node_modules /app/node_modules
+
+COPY ./tusk.yml \
+     ./ava.config.js \
+     ./tsconfig.json \
+     ./tslint.json \
+     ./tsconfig.json \
+     ./src \
+     ./tools \
+     ./
+
+CMD ["tusk", "build"]

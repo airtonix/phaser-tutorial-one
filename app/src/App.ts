@@ -1,24 +1,29 @@
-/* global module */
-import {Game} from './Game'
-import { settings } from 'ts-mixer'
+import { Logger } from '~/core/Logger'
+import { IApp } from '~/core/types/App'
+import { Game } from '~/Game'
 
-let game
+const log = Logger(module.id)
 
-function newGame () {
-    if (game) return
-    game = new Game()
+declare global {
+    // tslint:disable-next-line: interface-name
+    interface Window {
+        App: IApp
+    }
 }
 
-function destroyGame () {
-    if (!game) return
-    game.destroy(true)
-    game.runDestroy()
-    game = null
+class App implements IApp {
+
+    public static launch = () => {
+        window.App = new App()
+    }
+
+    public game: Game
+
+    constructor () {
+        log('start')
+        this.game = new Game();
+    }
+
 }
 
-if (module.hot) {
-    module.hot.dispose(destroyGame)
-    module.hot.accept(newGame)
-}
-
-if (!game) newGame()
+window.onload = App.launch

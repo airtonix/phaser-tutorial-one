@@ -1,29 +1,37 @@
+options:
+  hmrport:
+    default: 5678
+    environment: HMR_PORT
+  port:
+    default: 1234
+    environment: PORT
+  host:
+    default: localhost
+    environment: HOST
+
 tasks:
+
   dev:
-    run: >-
-      tusk dev:serve
+    run:
+      - set-environment:
+          PARCEL_AUTOINSTALL: false
+      - >-
+        npx parcel serve
+        --host ${host}
+        --hmr-port ${hmrport}
+        --port ${port}
+        ./src/index.html
 
-  dev:serve:
-    run: >-
-      npx parcel serve
-      --hmr-port $HMR_PORT
-      --port $PORT
-      ./src/index.html
+  build:
+    run:
+      - npx tsc --project .
 
-  dev:extrude:tilemap:
-    run: >-
-      npx tile-extruder
-      --tileWidth 16
-      --tileHeight 32
-      --input ./src/Assets/0x72_DungeonTilesetII_v1.3.png
-      --output ./src/Assets/0x72_DungeonTilesetII_v1.3--extruded.png
+  lint:
+    run:
+      - npx eslint src --ext .ts --cache
 
   test:
     run:
-      - >-
-        npx ava
-
-  test:watch:
-    run:
-      - >-
-        npx ava --watch
+      - task: lint
+      - task: build
+      - npx jest
