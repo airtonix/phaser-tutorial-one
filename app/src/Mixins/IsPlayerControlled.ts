@@ -7,6 +7,7 @@ import { CanInteract } from './CanInteract';
 import { CanAnimate } from './CanAnimate';
 import { ShouldDisplay } from "./ShouldDisplay";
 
+
 export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
 
     return class IsPlayerControlled extends CanInteract(CanAnimate(CanEmote(ShouldDisplay(CanMove(WritesLogs(Base)))))) {

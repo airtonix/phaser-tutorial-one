@@ -7,8 +7,10 @@ const UrlLevelOneTiledTileMap = '/LevelOne.json'
 const UrlEmotesStyleOneSpritesheet = '/emotes_pixel_style1.png'
 const UrlUiDialogNineSlice = '/interface_bg_tan.png'
 const UrlItemsSpritesheet = '/items_spritesheet_16x16.png'
-const UrlSixteenbfZXFont = '/16bfZX.fnt'
-const UrlSixteenbfZXPng = '/16bfZX_0.png'
+const UrlBlackSixteenbfZXFont = '/black_16bfZX.fnt'
+const UrlBlackSixteenbfZXPng = '/black_16bfZX_0.png'
+const UrlWhiteSixteenbfZXFont = '/white_16bfZX.fnt'
+const UrlWhiteSixteenbfZXPng = '/white_16bfZX_0.png'
 
 export const LOG_PREFIX = 'Game'
 
@@ -81,10 +83,15 @@ export const Images = {
 }
 
 export const BitmapFonts = {
-    SixteenbfZXFont: {
-        key: 'SixteenbfZXFont',
-        png: UrlSixteenbfZXPng,
-        fnt: UrlSixteenbfZXFont
+    WhiteSixteenbfZXFont: {
+        key: 'WhiteSixteenbfZXFont',
+        png: UrlWhiteSixteenbfZXPng,
+        fnt: UrlWhiteSixteenbfZXFont
+    }
+    BlackSixteenbfZXFont: {
+        key: 'BlackSixteenbfZXFont',
+        png: UrlBlackSixteenbfZXPng,
+        fnt: UrlBlackSixteenbfZXFont
     }
 }
 
@@ -233,7 +240,7 @@ export const ItemIcons = {
         sheet: SpriteSheets.Items,
         frames: range(0, 4)
     },
-    artifacts: {
+    artifact: {
         sheet: SpriteSheets.Items,
         frames: range(303, 317)
     },
@@ -245,11 +252,11 @@ export const ItemIcons = {
         sheet: SpriteSheets.Items,
         frames: range(268, 272)
     },
-    gems: {
+    gem: {
         sheet: SpriteSheets.Items,
         frames: range(126, 135)
     },
-    jewels: {
+    jewellery: {
         sheet: SpriteSheets.Items,
         frames: [
             ...range(208, 222),
