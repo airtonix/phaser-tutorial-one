@@ -4,7 +4,7 @@ import gems from '@xaroth8088/random-names/generators/miscellaneous/gemMinerals.
 import jewels from '@xaroth8088/random-names/generators/miscellaneous/jewelrys.mjs'
 
 Factory('jewellry', {
-    type: () => 'jewellry',
+    type: () => 'jewellery',
     name: () => `${gems()} ${jewels()}`,
     enchantments: () => Generate('enchantment', 1),
     value: 'number',
