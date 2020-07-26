@@ -1,5 +1,5 @@
 import { throttle, debounce } from 'lodash'
-import { Constructor } from "~/Base";
+import { Constructor } from '~/Core/framework'
 import { WritesLogs } from "./WritesLogs";
 import { Emotes } from "~/constants";
 import { isWithin, position } from '~/Core/distance';

@@ -1,6 +1,6 @@
 import { get, debounce } from 'lodash'
 import { SpriteSheets, Emotes } from '~/constants'
-import { Constructor } from '~/Base'
+import { Constructor } from '~/Core/framework'
 import { WritesLogs } from './WritesLogs'
 
 

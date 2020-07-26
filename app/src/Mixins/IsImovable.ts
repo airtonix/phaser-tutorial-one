@@ -1,4 +1,4 @@
-import { Constructor } from "~/Base";
+import { Constructor } from "~Core/framework";
 import { WritesLogs } from "./WritesLogs";
 
 export function IsImovable<TBase extends Constructor>(Base: TBase) {

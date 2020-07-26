@@ -1,6 +1,5 @@
 import { get } from 'lodash'
-import { Orientation } from '~/constants'
-import { Constructor } from "~/Base";
+import { Constructor } from '~/Core/framework'
 import { WritesLogs } from './WritesLogs'
 
 export interface IAnimationSheetConfig {

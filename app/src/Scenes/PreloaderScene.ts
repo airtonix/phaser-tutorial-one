@@ -1,4 +1,3 @@
-import { BaseScene } from './BaseScene'
 import {
     SpriteSheets,
     Images,
@@ -6,19 +5,19 @@ import {
     Animations,
     BitmapFonts,
 } from '~/constants'
-import { LevelOneScene } from './LevelOneScene'
+import { BaseScene } from './BaseScene'
+import { GameScene } from './GameScene'
 
 export class PreloaderScene extends BaseScene {
+    static key = 'PreloaderScene'
+
     WHITE = 0xffffff
     GREY = 0x666666
     DARKGREY = 0x222222
 
-    static data = {
-        next: LevelOneScene.key
-    }
 
     constructor () {
-        super({ key: 'Preloader' })
+        super({ key: PreloaderScene.key })
     }
 
     handleProgress = (value) => {
@@ -173,6 +172,7 @@ export class PreloaderScene extends BaseScene {
 
     create () {
         this.prepare()
-        this.scene.start(PreloaderScene.data.next)
+        this.log('Starting game')
+        this.scene.start(GameScene.key)
     }
 }

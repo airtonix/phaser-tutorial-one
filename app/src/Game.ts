@@ -1,15 +1,14 @@
 import Phaser from 'phaser'
 import { Plugin as NineSlicePlugin } from 'phaser3-nineslice'
 
-import { PreloaderScene } from './Scenes/PreloaderScene'
-import { MenuScene } from './Scenes/MenuScene'
-import { InterfaceScene } from './Scenes/InterfaceScene'
-import { LevelOneScene } from './Scenes/LevelOneScene'
+import { PreloaderScene } from '~/Scenes/PreloaderScene'
+import { MenuScene } from '~/Scenes/MenuScene'
+import { InterfaceScene } from '~/Scenes/InterfaceScene'
+import { LevelOneScene } from '~/Scenes/LevelOneScene'
+import { GameScene } from '~Scenes/GameScene'
 
 export class Game extends Phaser.Game {
-
     constructor() {
-        // init game
         super({
             title: 'Maintainable Game',
 
@@ -18,8 +17,8 @@ export class Game extends Phaser.Game {
 
             parent: 'game_content',
 
-            width: window.innerWidth,
-            height: window.innerHeight,
+            width: window.innerWidth / 2,
+            height: window.innerHeight / 2,
 
             render: {
                 // prevent tile bleeding
@@ -31,7 +30,9 @@ export class Game extends Phaser.Game {
             zoom: 2,
 
             plugins: {
-                global: [ NineSlicePlugin.DefaultCfg ],
+                global: [
+                    NineSlicePlugin.DefaultCfg
+                ],
             },
 
             physics: {
@@ -45,8 +46,9 @@ export class Game extends Phaser.Game {
             scene: [
                 PreloaderScene,
                 MenuScene,
-                LevelOneScene,
+                GameScene,
                 InterfaceScene,
+                LevelOneScene,
             ]
         })
     }

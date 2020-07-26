@@ -1,11 +1,11 @@
 import debug from 'debug'
 import { LOG_PREFIX } from '~/constants'
-import { Constructor } from '~/Base'
+import { Constructor } from '~/Core/framework'
 
 export function WritesLogs<TBase extends Constructor>(Base: TBase) {
     return class extends Base {
         key: string
-        logger: Function
+        logger: debug
 
         constructor (...args: any[]) {
             super(...args)

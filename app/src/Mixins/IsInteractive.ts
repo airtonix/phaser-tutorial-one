@@ -1,5 +1,5 @@
 import { throttle } from 'lodash'
-import { Constructor } from "~/Base";
+import { Constructor } from '~/Core/framework'
 import { WritesLogs } from "./WritesLogs";
 
 export function IsInteractive<TBase extends Constructor>(Base: TBase) {

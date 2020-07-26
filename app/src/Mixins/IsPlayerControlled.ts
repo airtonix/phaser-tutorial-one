@@ -1,4 +1,4 @@
-import { Constructor } from "~/Base";
+import { Constructor } from "~Core/framework";
 import { Orientation } from '~/constants'
 import { WritesLogs } from './WritesLogs';
 import { CanMove } from './CanMove';

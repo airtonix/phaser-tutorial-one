@@ -1,5 +1,5 @@
 import { get } from 'lodash'
-import { Constructor } from '~/Base'
+import { Constructor } from '~/Core/framework'
 import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
 import { WritesLogs } from './WritesLogs'
 

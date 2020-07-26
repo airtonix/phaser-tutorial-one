@@ -24,4 +24,5 @@ export class Warrior extends Phaser.GameObjects.Container {
     }
 }
 
-export const PlayerWarrior = IsPlayerControlled(Warrior)
+@IsPlayerControlled
+export class PlayerWarrior extends Warrior {}

@@ -1,8 +1,11 @@
-import { Logger } from '~/core/Logger'
-import { IApp } from '~/core/types/App'
+import { Logger } from '~/Core/Logger'
 import { Game } from '~/Game'
 
 const log = Logger(module.id)
+
+export interface IApp {
+    game: Phaser.Game
+}
 
 declare global {
     // tslint:disable-next-line: interface-name

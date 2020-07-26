@@ -1,5 +1,5 @@
 import Health from 'phaser-component-health'
-import { Constructor } from '~/Base'
+import { Constructor } from '~/Core/framework'
 import { CanAnimate, IAnimationConfig } from './CanAnimate'
 import { WritesLogs } from './WritesLogs'
 

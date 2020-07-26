@@ -1,15 +1,10 @@
 import Phaser from 'phaser'
-import { BaseScene } from './BaseScene'
+
 import { AnimatedTile } from '~/Objects/AnimatedTile'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
 import * as StuffObjectMap from '~/Objects/StuffObjectMap'
-import { InventoryDialogUi } from '~Objects/InventoryDialogUi'
-import { Row, Viewport } from 'phaser-ui-tools';
 
-import {
-    EVENT_INVENTORY_SHOW_DIALOG,
-    EVENT_INVENTORY_HIDE_DIALOG
-} from '~/Mixins/ContainsItems'
+import { BaseScene } from './BaseScene'
 
 export class MapScene extends BaseScene {
     isInteractive = true
@@ -19,8 +14,6 @@ export class MapScene extends BaseScene {
     tileset: Phaser.Tilemaps.Tileset
     mapLayers: Phaser.Tilemaps.DynamicTilemapLayer[]
     animatedTiles: AnimatedTile[]
-    playerInventoryDialog: InventoryDialogUi
-    containerInventoryDialog: InventoryDialogUi
 
     create () {
         super.create()
@@ -40,9 +33,6 @@ export class MapScene extends BaseScene {
         this.stuff = this.createStuff()
         this.createColliders(this.player, this.stuff.getChildren())
 
-        this.playerInventoryDialog = this.createPlayerContainerDialog()
-        this.containerInventoryDialog = this.createContainerInventoryDialog()
-
         this.initCamera()
         this.countdown = 450
     }
@@ -51,40 +41,6 @@ export class MapScene extends BaseScene {
         this.animatedTiles.forEach(tile => tile.update(delta))
         this.player && this.player.update(time, delta, this.keys)
         this.stuff.getChildren().forEach( thing => thing.update(time, delta) )
-    }
-
-    createPlayerContainerDialog (): InventoryDialogUi {
-        const dialog = new InventoryDialogUi(this, {
-            cells: 5,
-            rows: 5
-        })
-        dialog.setDepth(1000)
-        this.events.on(
-            EVENT_INVENTORY_SHOW_DIALOG,
-            dialog.open)
-        this.events.on(
-            EVENT_INVENTORY_HIDE_DIALOG,
-            dialog.close)
-
-        this.add.existing(dialog)
-        return dialog
-    }
-
-    createContainerInventoryDialog (): InventoryDialogUi {
-        const dialog = new InventoryDialogUi(this, {
-            cells: 5,
-            rows: 5
-        })
-        dialog.setDepth(1000)
-        this.events.on(
-            EVENT_INVENTORY_SHOW_DIALOG,
-            dialog.open)
-        this.events.on(
-            EVENT_INVENTORY_HIDE_DIALOG,
-            dialog.close)
-
-        this.add.existing(dialog)
-        return dialog
     }
 
     createPlayer () {

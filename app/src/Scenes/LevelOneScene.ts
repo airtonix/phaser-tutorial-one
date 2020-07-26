@@ -2,7 +2,7 @@ import { MapScene } from './MapScene'
 import { TiledTileMaps } from '~/constants'
 
 export class LevelOneScene extends MapScene {
-    static key = 'LevelOne'
+    static key = 'LevelOneScene'
 
     constructor () {
         super({

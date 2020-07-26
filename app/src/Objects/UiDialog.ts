@@ -1,8 +1,21 @@
+import { uniqueId } from 'lodash'
 import { NineSlice } from "phaser3-nineslice"
-import { Row, Viewport } from 'phaser-ui-tools';
-import { Nineslices, BitmapFonts } from "~/constants"
+import { Row, Viewport } from 'phaser-ui-tools'
 
-export class DialogUi extends Phaser.GameObjects.Container {
+import { Nineslices, BitmapFonts } from "~/constants"
+import { WritesLogs } from '~Mixins/WritesLogs'
+
+export interface DialogOpenConfiguration {
+    position: {
+        x: number
+        y: number
+    }
+    content: string
+}
+
+@WritesLogs
+export class UiDialog extends Phaser.GameObjects.Container {
+    key: string
     bg: NineSlice
     ui: Viewport
     shadow: Phaser.GameObjects.Graphics
@@ -11,12 +24,16 @@ export class DialogUi extends Phaser.GameObjects.Container {
         ui: Nineslices.Dialog
     }
 
-    constructor (scene, options) {
+    constructor(scene, options) {
         super(scene)
+
         const {
+            key,
             x, y, w, h,
             cells, rows
         } = options
+
+        this.key = key || uniqueId('dialog')
         this.options = options
 
         this.bg = this.createUi()
@@ -30,9 +47,21 @@ export class DialogUi extends Phaser.GameObjects.Container {
 
         this.sendToBack(this.shadow)
         this.setVisible(false)
+
+        scene.events.on(
+            `open-${this.key}`,
+            this.open
+        )
+
+        scene.events.on(
+            `close-${this.key}`,
+            this.close
+        )
+
+        scene.add.existing(this)
     }
 
-    createUi () : NineSlice {
+    createUi(): NineSlice {
         const {
             startX,
             startY,
@@ -55,35 +84,37 @@ export class DialogUi extends Phaser.GameObjects.Container {
         return bg
     }
 
-    createShadow () {
+    createShadow():Phaser.GameObjects.Graphics {
         const shadow = new Phaser.GameObjects.Graphics(this.scene)
         shadow.fillStyle(0x000000, 0.1)
         shadow.fillRect(2, 2, this.width, this.height)
         return shadow
     }
 
-    setShadowSize (x, y, width, height) {
+    setShadowSize(x, y, width, height):void {
         this.shadow.clear()
         this.shadow.fillRect(x, y, width, height)
     }
 
-    setWidth (width: integer) {
+    setWidth(width: integer):void {
         this.setSize(width, this.height)
         this.ui.setSize(width, this.height)
         this.bg.setSize(width, this.height)
         this.setShadowSize(2, 2, width - 4, this.height + 4)
     }
 
-    setHeight (height: integer) {
+    setHeight(height: integer):void {
         this.setSize(this.width, height)
         this.ui.setSize(this.width, height)
         this.bg.setSize(this.width, height)
         this.setShadowSize(2, 2, this.width - 4, height + 4)
     }
 
-    open = (args) => {
-        const { position, content } = args || {}
-        const { x, y } = position || {}
+    open = (options: DialogOpenConfiguration):void => {
+        const {
+            position: { x, y },
+            content
+        } = options || {}
 
         this.setPosition(x, y)
         this.setVisible(true)
@@ -91,7 +122,7 @@ export class DialogUi extends Phaser.GameObjects.Container {
         this.renderContent(content)
     }
 
-    close = () => {
+    close = ():void => {
         console.log('close')
         this.setVisible(false)
         this.content
@@ -100,7 +131,7 @@ export class DialogUi extends Phaser.GameObjects.Container {
             )
     }
 
-    renderContent (content) {
+    renderContent(content: any): void {
         console.log('renderContent', content)
     }
 

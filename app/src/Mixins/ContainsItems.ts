@@ -1,6 +1,6 @@
 import { get } from 'lodash'
 import { Loot } from '~/Items'
-import { Constructor } from '~/Base'
+import { Constructor } from '~/Core/framework'
 import { WritesLogs } from './WritesLogs'
 import { IAnimationConfig, IAnimationGroup, IAnimations } from './CanAnimate'
 

@@ -2,14 +2,13 @@ import { BaseScene } from './BaseScene'
 import { TextButton } from '~/Objects/TextButton'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
 import { LevelOneScene } from '~/Scenes/LevelOneScene'
+import { GameScene } from './GameScene'
 
 export class MenuScene extends BaseScene {
-    static key = 'Menu'
+    static key = 'MenuScene'
 
     constructor () {
-        super({
-            key: MenuScene.key
-        })
+        super({ key: MenuScene.key })
         this.log('constructed')
     }
 
@@ -53,6 +52,6 @@ export class MenuScene extends BaseScene {
         ]
         this.log('handleStartButtonClick', { scenes })
         scenes.forEach(key => this.scene.start(key))
-        // this.scene.launch('Interface')
+        this.scene.launch(GameScene.key)
     }
 }

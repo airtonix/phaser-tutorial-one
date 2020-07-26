@@ -1,4 +1,4 @@
-import { Constructor } from '~/Base'
+import { Constructor } from '~Core/framework'
 import { throttle } from 'lodash'
 import { WritesLogs } from "./WritesLogs"
 

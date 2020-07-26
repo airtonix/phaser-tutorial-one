@@ -1,8 +1,7 @@
-import { DialogUi } from "./DialogUi";
+import { UiDialog } from "./UiDialog";
 import { InventoryItemUi } from './InventoryItemUi'
-import { Row, Viewport } from 'phaser-ui-tools';
 
-export class InventoryDialogUi extends DialogUi {
+export class UiDialogInventory extends UiDialog {
     slotWidth = 32
     slotHeight = 32
     slotMargin = 2
