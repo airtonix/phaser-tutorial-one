@@ -10,6 +10,9 @@ export interface IItem {
     icon: string
 }
 
+export const EVENT_INVENTORY_SHOW_DIALOG: string = 'show-inventory-dialog'
+export const EVENT_INVENTORY_HIDE_DIALOG: string = 'hide-inventory-dialog'
+
 export function ContainsItems<TBase extends Constructor>(Base: TBase) {
     return class ContainsItems extends WritesLogs(Base) {
         static LID_STATE_CLOSED = 'close'
@@ -21,6 +24,7 @@ export function ContainsItems<TBase extends Constructor>(Base: TBase) {
         items: []
         lidState:string = ContainsItems.LID_STATE_CLOSED
         animations: IAnimations
+        dialogId: string
 
         constructor (...args: any[]) {
             super(...args)
@@ -44,8 +48,10 @@ export function ContainsItems<TBase extends Constructor>(Base: TBase) {
             this.lidState = ContainsItems.LID_STATE_OPENED
             this.items = Loot.loot(this.loot)
             this.animateLidState()
-            this.dialogId = this.scene.events.emit(
-                'show-dialog',
+
+            if (!this.items.length) return
+            this.scene.events.emit(
+                EVENT_INVENTORY_SHOW_DIALOG,
                 {
                     position: {
                         x: this.x,
@@ -58,7 +64,9 @@ export function ContainsItems<TBase extends Constructor>(Base: TBase) {
         handleClose () {
             this.log('handleClose')
             this.lidState = ContainsItems.LID_STATE_CLOSED
-            this.scene.events.emit('close-dialog', this.dialogId)
+            this.scene.events.emit(
+                EVENT_INVENTORY_HIDE_DIALOG,
+            )
             this.animateLidState()
         }
 

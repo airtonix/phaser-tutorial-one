@@ -87,7 +87,7 @@ export const BitmapFonts = {
         key: 'WhiteSixteenbfZXFont',
         png: UrlWhiteSixteenbfZXPng,
         fnt: UrlWhiteSixteenbfZXFont
-    }
+    },
     BlackSixteenbfZXFont: {
         key: 'BlackSixteenbfZXFont',
         png: UrlBlackSixteenbfZXPng,
@@ -246,7 +246,7 @@ export const ItemIcons = {
     },
     currency: {
         sheet: SpriteSheets.Items,
-        frames: range(268, 272)
+        frames: range(99, 123)
     },
     enchantment: {
         sheet: SpriteSheets.Items,
@@ -263,8 +263,16 @@ export const ItemIcons = {
             ...range(253, 267),
         ]
     },
-    weapon: {
+    sword: {
         sheet: SpriteSheets.Items,
         frames: range(339, 343)
+    },
+    spear: {
+        sheet: SpriteSheets.Items,
+        frames: range(318, 322)
+    },
+    bow: {
+        sheet: SpriteSheets.Items,
+        frames: range(68, 82)
     },
 }

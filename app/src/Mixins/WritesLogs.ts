@@ -9,7 +9,11 @@ export function WritesLogs<TBase extends Constructor>(Base: TBase) {
 
         constructor (...args: any[]) {
             super(...args)
-            this.logger = debug(`${LOG_PREFIX}.${this.key}`)
+            this.createLogger(this.key)
+        }
+
+        createLogger (key) {
+            this.logger = debug(`${LOG_PREFIX}.${key}`)
             this.logger(`WritesLogs`)
         }
 

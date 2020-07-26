@@ -1,35 +1,70 @@
-import { Factory, Generate } from './Factories'
-import { Chance } from 'chance'
+import { uniqueId, sample } from 'lodash'
 import swords from '@xaroth8088/random-names/generators/weapons/swords.mjs'
 import spears from '@xaroth8088/random-names/generators/weapons/spears.mjs'
-import whips from '@xaroth8088/random-names/generators/weapons/whips.mjs'
-import axes from '@xaroth8088/random-names/generators/weapons/battleAxes.mjs'
 import bows from '@xaroth8088/random-names/generators/weapons/bows.mjs'
 import daggers from '@xaroth8088/random-names/generators/weapons/daggers.mjs'
 import staffs from '@xaroth8088/random-names/generators/weapons/staffs.mjs'
-import hammers from '@xaroth8088/random-names/generators/weapons/warHammers.mjs'
-import thrown from '@xaroth8088/random-names/generators/weapons/throwingWeapons.mjs'
-
 import abilities from '@xaroth8088/random-names/generators/miscellaneous/weaponAbilities.mjs'
 
-const types = {
-    swords,
-    spears,
-    whips,
-    axes,
-    bows,
-    daggers,
-    staffs,
-    hammers,
-    thrown
-}
+import { Factory, Generate } from './Factories'
+import { Loot } from './Loot'
+import { ItemIcons } from '~constants'
 
-Factory('weapons', {
+
+Factory('swords', {
+    id: () => uniqueId('sword'),
+    icon: () => ({
+        ...ItemIcons.sword,
+        frame: sample(ItemIcons.sword.frames),
+    }),
     type: () => 'weapon',
-    name: () => Chance().pickone(Object.values(types))(),
+    name: () => swords(),
+    abilities: () => abilities(),
+    enchantments: () => Generate('enchantment', 2),
+    value: 'number',
+})
+Factory('spears', {
+    id: () => uniqueId('spear'),
+    icon: () => ({
+        ...ItemIcons.spear,
+        frame: sample(ItemIcons.spear.frames),
+    }),
+    type: () => 'weapon',
+    name: () => spears(),
+    abilities: () => abilities(),
+    enchantments: () => Generate('enchantment', 2),
+    value: 'number',
+})
+Factory('bows', {
+    id: () => uniqueId('bow'),
+    icon: () => ({
+        ...ItemIcons.bow,
+        frame: sample(ItemIcons.bow.frames),
+    }),
+    type: () => 'bow',
+    name: () => bows(),
     abilities: () => abilities(),
     enchantments: () => Generate('enchantment', 2),
     value: 'number',
 })
 
-export const Weapons = Generate('weapons', 100)
+Generate('swords', 4)
+    .forEach(item =>
+        Loot
+            .branch('/loot/weapons/swords')
+            .add(item)
+    )
+
+Generate('spears', 4)
+    .forEach(item =>
+        Loot
+            .branch('/loot/weapons/spears')
+            .add(item)
+    )
+
+Generate('bows', 4)
+    .forEach(item =>
+        Loot
+            .branch('/loot/weapons/bows')
+            .add(item)
+    )

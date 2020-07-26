@@ -2,14 +2,25 @@ import Phaser from 'phaser'
 import { BaseScene } from './BaseScene'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
-import { Dialog } from '~/Objects/Dialog'
 import * as StuffObjectMap from '~/Objects/StuffObjectMap'
-import { LootDialog } from '~/Objects/LootDialog'
+import { InventoryDialogUi } from '~Objects/InventoryDialogUi'
+import { Row, Viewport } from 'phaser-ui-tools';
+
+import {
+    EVENT_INVENTORY_SHOW_DIALOG,
+    EVENT_INVENTORY_HIDE_DIALOG
+} from '~/Mixins/ContainsItems'
 
 export class MapScene extends BaseScene {
     isInteractive = true
-    player: typeof Player
+    player: any
     objectLayers: object
+    map: Phaser.Tilemaps.Tilemap
+    tileset: Phaser.Tilemaps.Tileset
+    mapLayers: Phaser.Tilemaps.DynamicTilemapLayer[]
+    animatedTiles: AnimatedTile[]
+    playerInventoryDialog: InventoryDialogUi
+    containerInventoryDialog: InventoryDialogUi
 
     create () {
         super.create()
@@ -19,22 +30,21 @@ export class MapScene extends BaseScene {
         this.map = map
         this.tileset = tileset
         this.mapLayers = this.createMapLayers(this.map)
-        this.setLayersColliable(this.mapLayers)
         this.animatedTiles = this.animateTiles(this.map, this.tileset)
-
         this.objectLayers = this.parseObjectLayers(this.map)
 
         this.player = this.createPlayer()
+        this.setLayersColliable(this.mapLayers)
         this.createColliders(this.player, Object.values(this.mapLayers))
 
         this.stuff = this.createStuff()
         this.createColliders(this.player, this.stuff.getChildren())
 
-        this.dialog = this.createDialog()
+        this.playerInventoryDialog = this.createPlayerContainerDialog()
+        this.containerInventoryDialog = this.createContainerInventoryDialog()
 
         this.initCamera()
         this.countdown = 450
-
     }
 
     update (time, delta) {
@@ -43,12 +53,38 @@ export class MapScene extends BaseScene {
         this.stuff.getChildren().forEach( thing => thing.update(time, delta) )
     }
 
-    createDialog () {
-        const dialog = new LootDialog(this)
+    createPlayerContainerDialog (): InventoryDialogUi {
+        const dialog = new InventoryDialogUi(this, {
+            cells: 5,
+            rows: 5
+        })
         dialog.setDepth(1000)
-        this.events.on('show-dialog', dialog.open)
-        this.events.on('close-dialog', dialog.close)
+        this.events.on(
+            EVENT_INVENTORY_SHOW_DIALOG,
+            dialog.open)
+        this.events.on(
+            EVENT_INVENTORY_HIDE_DIALOG,
+            dialog.close)
+
         this.add.existing(dialog)
+        return dialog
+    }
+
+    createContainerInventoryDialog (): InventoryDialogUi {
+        const dialog = new InventoryDialogUi(this, {
+            cells: 5,
+            rows: 5
+        })
+        dialog.setDepth(1000)
+        this.events.on(
+            EVENT_INVENTORY_SHOW_DIALOG,
+            dialog.open)
+        this.events.on(
+            EVENT_INVENTORY_HIDE_DIALOG,
+            dialog.close)
+
+        this.add.existing(dialog)
+        return dialog
     }
 
     createPlayer () {

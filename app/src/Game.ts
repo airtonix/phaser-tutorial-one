@@ -25,8 +25,10 @@ export class Game extends Phaser.Game {
                 // prevent tile bleeding
                 antialiasGL: false,
                 // prevent pixel art from becoming blurry when scaled
-                pixelArt: true
+                pixelArt: true,
             },
+
+            zoom: 2,
 
             plugins: {
                 global: [ NineSlicePlugin.DefaultCfg ],

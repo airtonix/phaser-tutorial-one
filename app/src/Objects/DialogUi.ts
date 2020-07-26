@@ -1,22 +1,30 @@
-import { Nineslices, BitmapFonts } from "~/constants"
 import { NineSlice } from "phaser3-nineslice"
+import { Row, Viewport } from 'phaser-ui-tools';
+import { Nineslices, BitmapFonts } from "~/constants"
 
-export class Dialog extends Phaser.GameObjects.Container {
-    ui: NineSlice
+export class DialogUi extends Phaser.GameObjects.Container {
+    bg: NineSlice
+    ui: Viewport
     shadow: Phaser.GameObjects.Graphics
     content: []
     nineslices = {
         ui: Nineslices.Dialog
     }
 
-    constructor (...args: any[]) {
-        super(...args)
-        this.ui = this.createUi()
+    constructor (scene, options) {
+        super(scene)
+        const {
+            x, y, w, h,
+            cells, rows
+        } = options
+        this.options = options
+
+        this.bg = this.createUi()
+        this.ui = new Viewport(this.scene, 0, 0, w, h)
         this.shadow = this.createShadow()
         this.content = []
-
         this.add([
-            this.ui,
+            this.bg,
             this.shadow
         ])
 
@@ -35,16 +43,16 @@ export class Dialog extends Phaser.GameObjects.Container {
             border,
         } = this.nineslices.ui || {}
 
-        const ui = this.scene.add.nineslice(
+        const bg = this.scene.add.nineslice(
             startX, startY,
             width, height,
             key,
             cornerOffset,
             border
         )
-        ui.setSize(128, 64)
-        ui.setOrigin(0, 0)
-        return ui
+        bg.setSize(128, 64)
+        bg.setOrigin(0, 0)
+        return bg
     }
 
     createShadow () {
@@ -53,6 +61,7 @@ export class Dialog extends Phaser.GameObjects.Container {
         shadow.fillRect(2, 2, this.width, this.height)
         return shadow
     }
+
     setShadowSize (x, y, width, height) {
         this.shadow.clear()
         this.shadow.fillRect(x, y, width, height)
@@ -61,11 +70,14 @@ export class Dialog extends Phaser.GameObjects.Container {
     setWidth (width: integer) {
         this.setSize(width, this.height)
         this.ui.setSize(width, this.height)
+        this.bg.setSize(width, this.height)
         this.setShadowSize(2, 2, width - 4, this.height + 4)
     }
+
     setHeight (height: integer) {
         this.setSize(this.width, height)
         this.ui.setSize(this.width, height)
+        this.bg.setSize(this.width, height)
         this.setShadowSize(2, 2, this.width - 4, height + 4)
     }
 

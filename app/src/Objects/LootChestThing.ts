@@ -19,12 +19,14 @@ class LootChest extends Phaser.GameObjects.Container {
     isOpen = false
     contents = true
     loot = [
-        {from: '/loot/currency', luck: 0.4, stack: '1-4' },
-        {from: '/loot/gems', luck: 0.2, stack: '1-2' },
-        {from: '/loot/jewellry', luck: 0.2, stack: 1 },
-        {from: '/loot/artifacts', luck: 0.1, stack: 1 },
-        {from: '/loot/armour', luck: 0.2, stack: 1 },
-        {from: '/loot/weapons', luck: 0.2, stack: 1 }
+        {from: '/loot/currency', luck: 1, stack: '5-100' },
+        {from: '/loot/gems', luck: 0.05, stack: '1-2' },
+        {from: '/loot/jewellry', luck: 0.05, stack: 1 },
+        {from: '/loot/artifacts', luck: 1, stack: 1 },
+        {from: '/loot/armour', luck: 0.01, stack: 1 },
+        {from: '/loot/weapons/swords', luck: 1, depth: Infinity, stack: 1 },
+        {from: '/loot/weapons/spears', luck: 1, depth: Infinity, stack: 1 },
+        {from: '/loot/weapons/bows', luck: 1, depth: Infinity, stack: 1 }
     ]
 
     behaviours = {
