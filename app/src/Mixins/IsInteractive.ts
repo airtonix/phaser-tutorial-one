@@ -2,6 +2,8 @@ import { throttle } from 'lodash'
 import { Constructor } from '~/Core/framework'
 import { WritesLogs } from "./WritesLogs";
 
+export const EVENT_KEY_USE = 'perform-use'
+
 export function IsInteractive<TBase extends Constructor>(Base: TBase) {
     return class IsInteractive extends WritesLogs(Base) {
 
@@ -10,7 +12,7 @@ export function IsInteractive<TBase extends Constructor>(Base: TBase) {
         constructor (...args: any[]) {
             super(...args)
             this.log('IsInteractive')
-            this.on('perform-use', this.handlePerformUse)
+            this.on(EVENT_KEY_USE, this.handlePerformUse)
 
             this.scene.physics.add.existing(this)
             this.scene.physics.world.enable(this)

@@ -21,6 +21,8 @@ interface IEmotive {
     emotes: IEmoteGroup
 }
 
+export const EVENT_KEY_SHOW_EMOTE = 'show-emote'
+
 type EmotiveSprite = Phaser.GameObjects.Sprite
 
 export function CanEmote<TBase extends Constructor>(Base: TBase) {
@@ -34,7 +36,7 @@ export function CanEmote<TBase extends Constructor>(Base: TBase) {
             this.emote = this.createEmoteSprite()
             this.add(this.emote)
 
-            this.on('show-emote', this.handleShowEmote)
+            this.on(EVENT_KEY_SHOW_EMOTE, this.handleShowEmote)
         }
 
         createEmoteSprite (): EmotiveSprite {

@@ -15,7 +15,8 @@ export class GameScene extends BaseScene {
     create () {
         super.create()
         this.log('created')
-        this.scene.launch(InterfaceScene.key)
         this.scene.launch(LevelOneScene.key)
+        this.scene.launch(InterfaceScene.key)
+        this.scene.moveUp(InterfaceScene.key)
     }
 }

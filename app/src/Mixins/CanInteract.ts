@@ -1,8 +1,10 @@
 import { throttle, debounce } from 'lodash'
 import { Emotes } from "~/constants";
 import { Constructor } from '~/Core/framework'
-import { isWithin, getDistance, position } from '~/Core/distance';
+import { getDistance, position } from '~/Core/distance';
 import { WritesLogs } from "./WritesLogs";
+import { EVENT_KEY_USE } from '~/Mixins/IsInteractive'
+import { EVENT_KEY_SHOW_EMOTE } from './CanEmote';
 
 export function CanInteract<TBase extends Constructor>(Base: TBase) {
     return class CanInteract extends WritesLogs(Base) {
@@ -39,13 +41,13 @@ export function CanInteract<TBase extends Constructor>(Base: TBase) {
             if (!target || typeof target.emit != 'function') {
                 this.log('Nothing Interactable')
                 // TODO: the emote used needs to be configured by the base class
-                this.emit('show-emote', {
+                this.emit(EVENT_KEY_SHOW_EMOTE, {
                     frame: Emotes.Default.frames.Query
                 }, 1500)
                 return
             }
 
-            target.emit('perform-use')
+            target.emit(EVENT_KEY_USE, { actor: this })
         }, 150, { leading: true, trailing: false })
 
         removeNoInteractables = () => {

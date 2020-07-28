@@ -10,8 +10,8 @@ export interface IItem {
     icon: string
 }
 
-export const EVENT_INVENTORY_SHOW_DIALOG: string = 'show-inventory-dialog'
-export const EVENT_INVENTORY_HIDE_DIALOG: string = 'hide-inventory-dialog'
+export const EVENT_KEY_INVENTORY_SHOW_DIALOG = 'show-inventory-dialog'
+export const EVENT_KEY_INVENTORY_HIDE_DIALOG = 'hide-inventory-dialog'
 
 export function ContainsItems<TBase extends Constructor>(Base: TBase) {
     return class ContainsItems extends WritesLogs(Base) {
@@ -50,22 +50,17 @@ export function ContainsItems<TBase extends Constructor>(Base: TBase) {
             this.animateLidState()
 
             if (!this.items.length) return
-            this.scene.events.emit(
-                EVENT_INVENTORY_SHOW_DIALOG,
-                {
-                    position: {
-                        x: this.x,
-                        y: this.y
-                    },
-                    content: this.items
-                })
+
+            this.scene.game.events.emit(
+                EVENT_KEY_INVENTORY_SHOW_DIALOG,
+                { content: this.items })
         }
 
         handleClose () {
             this.log('handleClose')
             this.lidState = ContainsItems.LID_STATE_CLOSED
-            this.scene.events.emit(
-                EVENT_INVENTORY_HIDE_DIALOG,
+            this.scene.game.events.emit(
+                EVENT_KEY_INVENTORY_HIDE_DIALOG,
             )
             this.animateLidState()
         }

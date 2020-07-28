@@ -1,7 +1,9 @@
-import { Constructor } from "~/Core/framework";
+import { debounce } from 'lodash'
 import { Orientation } from '~/constants'
+import { Constructor } from "~/Core/framework";
 import { WritesLogs } from './WritesLogs';
 
+export const EVENT_KEY_OPEN_PLAYER_INVENTORY = 'open-player-inventory'
 
 export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
 
@@ -55,9 +57,16 @@ export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
                 this.jump()
             }
 
-            this.afterMove()
+            if (keys.inventory.isDown) {
+                this.openInventory()
+            }
 
+            this.afterMove()
         }
+
+        openInventory = debounce(() => {
+            this.scene.game.events.emit(EVENT_KEY_OPEN_PLAYER_INVENTORY, { actor: this })
+        }, 500)
     }
 
 }

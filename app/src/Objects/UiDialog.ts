@@ -3,7 +3,7 @@ import { NineSlice } from "phaser3-nineslice"
 import { Row, Viewport } from 'phaser-ui-tools'
 
 import { Nineslices, BitmapFonts } from "~/constants"
-import { WritesLogs } from '~Mixins/WritesLogs'
+import { WritesLogs } from '~/Mixins/WritesLogs'
 
 export interface DialogOpenConfiguration {
     position: {
@@ -34,6 +34,7 @@ export class UiDialog extends Phaser.GameObjects.Container {
         } = options
 
         this.key = key || uniqueId('dialog')
+        this.createLogger(this.key)
         this.options = options
 
         this.bg = this.createUi()
@@ -47,7 +48,7 @@ export class UiDialog extends Phaser.GameObjects.Container {
 
         this.sendToBack(this.shadow)
         this.setVisible(false)
-
+        this.setPosition(x, y - this.height)
         scene.events.on(
             `open-${this.key}`,
             this.open
@@ -59,6 +60,7 @@ export class UiDialog extends Phaser.GameObjects.Container {
         )
 
         scene.add.existing(this)
+        this.log('ready')
     }
 
     createUi(): NineSlice {
@@ -93,10 +95,13 @@ export class UiDialog extends Phaser.GameObjects.Container {
 
     setShadowSize(x, y, width, height):void {
         this.shadow.clear()
+        this.shadow.fillStyle(0x000000, 0.1)
         this.shadow.fillRect(x, y, width, height)
     }
 
     setWidth(width: integer):void {
+        const { x , y } = this.options
+
         this.setSize(width, this.height)
         this.ui.setSize(width, this.height)
         this.bg.setSize(width, this.height)
@@ -104,21 +109,27 @@ export class UiDialog extends Phaser.GameObjects.Container {
     }
 
     setHeight(height: integer):void {
+        const { x , y } = this.options
+
         this.setSize(this.width, height)
         this.ui.setSize(this.width, height)
         this.bg.setSize(this.width, height)
         this.setShadowSize(2, 2, this.width - 4, height + 4)
+        this.setPosition(x, y - height)
+
     }
 
     open = (options: DialogOpenConfiguration):void => {
         const {
-            position: { x, y },
+            position,
             content
         } = options || {}
 
-        this.setPosition(x, y)
-        this.setVisible(true)
+        if ( position ) {
+            this.setPosition(position.x, position.y)
+        }
 
+        this.setVisible(true)
         this.renderContent(content)
     }
 
@@ -129,6 +140,14 @@ export class UiDialog extends Phaser.GameObjects.Container {
             .forEach(
                 item => this.remove(item, true)
             )
+    }
+
+    toggle = (options: DialogOpenConfiguration):void => {
+        if(!this.visible) {
+            this.open(options)
+        } else {
+            this.close()
+        }
     }
 
     renderContent(content: any): void {
