@@ -1,12 +1,13 @@
 import { throttle, debounce } from 'lodash'
-import { Constructor } from '~/Core/framework'
-import { WritesLogs } from "./WritesLogs";
 import { Emotes } from "~/constants";
-import { isWithin, position } from '~/Core/distance';
+import { Constructor } from '~/Core/framework'
+import { isWithin, getDistance, position } from '~/Core/distance';
+import { WritesLogs } from "./WritesLogs";
 
 export function CanInteract<TBase extends Constructor>(Base: TBase) {
     return class CanInteract extends WritesLogs(Base) {
         interactables: Phaser.GameObjects.GameObject[]
+        usageDistance: integer
 
         constructor (...args: any[]) {
             super(...args)
@@ -26,11 +27,9 @@ export function CanInteract<TBase extends Constructor>(Base: TBase) {
                     (result, target) => ([ ...result, target ]),
                     this.interactables
                 )
-        }
 
-        update (...args: any[]) {
-            super.update(...args)
             this.removeNoInteractables()
+
         }
 
         use = debounce(() => {
@@ -39,7 +38,10 @@ export function CanInteract<TBase extends Constructor>(Base: TBase) {
 
             if (!target || typeof target.emit != 'function') {
                 this.log('Nothing Interactable')
-                this.emit('show-emote', { frame: Emotes.Default.frames.Query }, 1500)
+                // TODO: the emote used needs to be configured by the base class
+                this.emit('show-emote', {
+                    frame: Emotes.Default.frames.Query
+                }, 1500)
                 return
             }
 
@@ -47,16 +49,22 @@ export function CanInteract<TBase extends Constructor>(Base: TBase) {
         }, 150, { leading: true, trailing: false })
 
         removeNoInteractables = () => {
+            const myPosition = position(this)
             const interactables = this.interactables
                 .filter(target => target.active)
                 .filter(target => {
-                    return isWithin(
-                        20,
-                        position(this),
-                        position(target)
-                    )
+                    const theirPosition = position(target)
+                    const distance = getDistance(myPosition, theirPosition)
+                    const isCloseEnough = distance <= this.usageDistance
+                    return isCloseEnough
                 })
             this.interactables = interactables
+
+            // if we still have anything nearby,
+            // check again in a few milliseconds
+            if (this.interactables.length > 0) {
+                setTimeout(this.removeNoInteractables.bind(this), 500)
+            }
         }
 
     }

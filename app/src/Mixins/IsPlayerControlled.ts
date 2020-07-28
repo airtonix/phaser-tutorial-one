@@ -1,19 +1,15 @@
-import { Constructor } from "~Core/framework";
+import { Constructor } from "~/Core/framework";
 import { Orientation } from '~/constants'
 import { WritesLogs } from './WritesLogs';
-import { CanMove } from './CanMove';
-import { CanEmote } from './CanEmote';
-import { CanInteract } from './CanInteract';
-import { CanAnimate } from './CanAnimate';
-import { ShouldDisplay } from "./ShouldDisplay";
 
 
 export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
 
-    return class IsPlayerControlled extends CanInteract(CanAnimate(CanEmote(ShouldDisplay(CanMove(WritesLogs(Base)))))) {
+    return class IsPlayerControlled extends WritesLogs(Base) {
         isMoving: boolean
         orientation: string
         isIdle: boolean
+        animateMovement: () => void
 
         constructor(...args: any[]) {
             super(...args)
@@ -34,22 +30,21 @@ export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
             if (keys.left.isDown && !keys.right.isDown) {
                 this.orientation = Orientation.Left
                 this.moveToLeft()
-            }
-
-            if (keys.right.isDown && !keys.left.isDown) {
+            }else if (keys.right.isDown && !keys.left.isDown) {
                 this.orientation = Orientation.Right
                 this.moveToRight()
+            } else {
             }
 
             // Vertical movement
             if (keys.up.isDown && !keys.down.isDown) {
                 this.orientation = Orientation.Up
                 this.moveToUp()
-            }
-
-            if (keys.down.isDown && !keys.up.isDown) {
+            }else if (keys.down.isDown && !keys.up.isDown) {
                 this.orientation = Orientation.Down
                 this.moveToDown()
+            } else {
+
             }
 
             if (keys.use.isDown) {

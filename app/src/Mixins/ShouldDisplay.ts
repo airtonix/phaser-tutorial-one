@@ -22,12 +22,15 @@ export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
             this.sprite = this.createSprite()
             this.shadow = this.createShadowSprite()
 
-            this.add(this.sprite)
-            this.add(this.shadow)
-
+            this.add([
+                this.shadow,
+                this.sprite,
+            ])
+            this.setSize(
+                this.footprintWidth,
+                this.footprintHeight
+            )
             this.scene.add.existing(this)
-            this.scene.physics.add.existing(this)
-            this.scene.physics.world.enable(this)
         }
 
         /**
@@ -61,7 +64,7 @@ export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
             sprite.setTexture(sheet)
             sprite.setFrame(frame)
             sprite.setSize(this.width, this.height)
-            sprite.setOrigin(0.5, 0.9)
+            sprite.setOrigin(0.5, 1)
 
             return sprite
         }
@@ -70,9 +73,8 @@ export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
             color = 0x000000,
         ): Phaser.GameObjects.Graphics {
             const shadow = new Phaser.GameObjects.Graphics(this.scene)
-            const ellipse = new Phaser.Geom.Ellipse(0, 3, this.width / 1.5, 4)
             shadow.fillStyle(color, 0.4)
-            shadow.fillEllipseShape(ellipse)
+            shadow.fillEllipse(0, 0, this.width / 1.6, 4)
             return shadow
         }
 

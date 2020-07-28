@@ -58,4 +58,9 @@ class LootChest extends Phaser.GameObjects.Container {
     }
 }
 
-export const LootChestThing = CanAnimate(IsImovable(ShouldDisplay(IsInteractive(ContainsItems(LootChest)))))
+@CanAnimate
+@IsImovable
+@ShouldDisplay
+@IsInteractive
+@ContainsItems
+export class LootChestThing extends LootChest {}

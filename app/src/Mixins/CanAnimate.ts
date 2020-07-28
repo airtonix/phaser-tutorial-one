@@ -28,7 +28,7 @@ export interface IAnimations {
 export function CanAnimate<TBase extends Constructor>(Base: TBase) {
     return class CanAnimate extends WritesLogs(Base) {
         sprite: Phaser.GameObjects.Sprite
-        active: boolean = true
+        active = true
         animations: IAnimations
         orientation: string
         isIdle: boolean

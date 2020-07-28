@@ -1,5 +1,4 @@
-import { Constructor } from '~Core/framework'
-import { throttle } from 'lodash'
+import { Constructor } from '~/Core/framework'
 import { WritesLogs } from "./WritesLogs"
 
 export function CanMove<TBase extends Constructor>(Base: TBase) {
@@ -9,10 +8,11 @@ export function CanMove<TBase extends Constructor>(Base: TBase) {
         body: any
         active: boolean
         prevVelocity = { x: 0, y: 0 }
-        speed: integer = 45
+        speed = 45
 
-        isIdle: boolean = false
-        isMoving: boolean = false
+        isIdle = false
+        isMoving = false
+        isJumping = false
 
         constructor (...args: any[]) {
             super(args[0], args[1], args[2])
@@ -29,8 +29,6 @@ export function CanMove<TBase extends Constructor>(Base: TBase) {
 
         moveToRight = () => {
             if (!this.active) return
-
-            // @ts-ignore
             this.log('moveToRight', this.speed, this.prevVelocity)
             this.body.setVelocityX(this.speed)
         }
