@@ -1,6 +1,6 @@
 import { IMove } from './Move.model'
 
-import { ModifierModel } from '~/Core/Store/Modifier/Modifier.model'
+import { ModifierModel } from '~/Store/Modifier/Modifier.model'
 
 export const getMoveActions = <T extends IMove>(self: T) => ({
   setCooldown (cd = 0): number { return self.cooldown = cd },

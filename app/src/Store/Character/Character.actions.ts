@@ -1,7 +1,7 @@
 import { ICharacter } from './Character.model'
 
-import { ModifierModel } from '~/Core/Store/Modifier/Modifier.model'
-import { MoveModel } from '~/Core/Store/Move/Move.model'
+import { ModifierModel } from '~/Store/Modifier/Modifier.model'
+import { MoveModel } from '~/Store/Move/Move.model'
 
 export const getCharacterActions = <T extends ICharacter>(self: T) => ({
   setLevel (lvl = 1): number { return self.level = lvl },

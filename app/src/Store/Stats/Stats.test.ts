@@ -1,5 +1,5 @@
-import { StatsMST, Stats } from '~/Core/Store/Stats/Stats.model'
-import { getStatsActions } from '~/Core/Store/Stats/Stats.actions'
+import { StatsMST, Stats } from '~/Store/Stats/Stats.model'
+import { getStatsActions } from '~/Store/Stats/Stats.actions'
 
 const statsTS = { ...(new Stats()) }
 const statsMST = StatsMST.actions(self => getStatsActions(self)).create(statsTS)

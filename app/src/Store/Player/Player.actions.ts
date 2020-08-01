@@ -1,6 +1,6 @@
 import { IPlayer } from './Player.model'
 
-import Character from '~/Core/Store/Character/Character.model'
+import Character from '~/Store/Character/Character.model'
 
 export const getPlayerActions = <T extends IPlayer>(self: T) => ({
 
