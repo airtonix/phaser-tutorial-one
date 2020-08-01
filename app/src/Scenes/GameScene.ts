@@ -14,7 +14,6 @@ export class GameScene extends BaseScene {
     }
 
     create ():void {
-        super.create()
         this.log('created')
         this.scene.launch(LevelOneScene.key)
         this.scene.launch(InterfaceScene.key)

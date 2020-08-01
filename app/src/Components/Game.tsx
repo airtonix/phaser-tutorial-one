@@ -10,6 +10,8 @@ import { GameScene } from '~/Scenes/GameScene'
 import { LevelOneScene } from '~/Scenes/LevelOneScene'
 import { InterfaceScene } from '~/Scenes/InterfaceScene'
 
+import classes from './Game.module.css'
+
 class PhaserGame extends Phaser.Game {
 
     constructor () {
@@ -37,6 +39,7 @@ export class Game extends Component {
     render (): React.ReactNode {
         return (
             <div
+                className={classes.block}
                 id={PARENT_DIV_TAG}
             />
         )

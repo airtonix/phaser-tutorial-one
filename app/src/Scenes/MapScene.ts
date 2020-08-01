@@ -19,7 +19,6 @@ export class MapScene extends BaseScene {
     countdown = 450
 
     create () {
-        super.create()
         this.log('create')
 
         const { map, tileset } = this.createMap()
@@ -35,13 +34,12 @@ export class MapScene extends BaseScene {
 
         this.stuff = this.createStuff()
         this.createColliders(this.player, this.stuff.getChildren())
-
         this.initCamera()
     }
 
     update (time, delta) {
         this.animatedTiles.forEach(tile => tile.update(delta))
-        this.player && this.player.update(time, delta, this.keys)
+        this.player && this.player.update(time, delta)
         this.stuff.getChildren().forEach( thing => thing.update(time, delta) )
     }
 

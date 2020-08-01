@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import { Plugin as NineSlicePlugin } from 'phaser3-nineslice'
+
 export const PARENT_DIV_TAG = 'phaser-game'
 
 export default {
@@ -22,14 +23,12 @@ export default {
   },
 
   scale: {
-    mode: Phaser.Scale.RESIZE,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
     zoom: Phaser.Scale.ZOOM_2X
   },
 
   plugins: {
     global: [
-      NineSlicePlugin.DefaultCfg
+      NineSlicePlugin.DefaultCfg,
     ],
   },
 

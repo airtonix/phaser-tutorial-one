@@ -9,12 +9,30 @@ import {
     BitmapFonts,
 } from '~/Config/constants'
 
+interface IProgressUiConfig {
+    width: number
+    height: number
+    centerX: number
+    centerY: number
+    boxWidth: number
+    boxHeight: number
+    boxPadding: number
+}
+
 export class PreloaderScene extends BaseScene {
     static key = 'PreloaderScene'
 
     WHITE = 0xffffff
     GREY = 0x666666
     DARKGREY = 0x222222
+
+    private box: Phaser.GameObjects.Graphics
+    private bar: Phaser.GameObjects.Graphics
+    private config: IProgressUiConfig
+    private percent: Phaser.GameObjects.Text
+    private header: Phaser.GameObjects.Text
+    private asset: Phaser.GameObjects.Text
+    private assetPercent: Phaser.GameObjects.Text
 
     constructor () {
         super({ key: PreloaderScene.key })
@@ -34,14 +52,14 @@ export class PreloaderScene extends BaseScene {
         this.log('progress', value)
     }
 
-    public handleFileProgress = (file: string, value: number): void => {
+    public handleFileProgress = (file: Phaser.Loader.File, value: number): void => {
         const percentage = value * 100
         this.log('fileProgress', file.key, percentage)
         this.asset.setText(`> ${file.key}`)
         this.assetPercent.setText(`${percentage}%`)
     }
 
-    handleComplete = () => {
+    public handleComplete = (): void => {
         this.bar.destroy()
         this.box.destroy()
         this.header.destroy()
@@ -50,20 +68,22 @@ export class PreloaderScene extends BaseScene {
         this.assetPercent.destroy()
     }
 
-    generateLayoutConfig = () => {
+    public generateLayoutConfig = (): IProgressUiConfig => {
         const config = {
+            centerX: 0,
+            centerY: 0,
             width: this.cameras.main.width,
             height: this.cameras.main.height,
             boxWidth: 320,
             boxHeight: 50,
-            boxPadding: 16
+            boxPadding: 16,
         }
         config.centerX = (config.width / 2)
         config.centerY = (config.height / 2)
         return config
     }
 
-    render () {
+    public render (): void {
         this.box = this.add.graphics()
         this.box.fillStyle(this.WHITE, 0.2)
         this.box.fillRect(
@@ -89,7 +109,7 @@ export class PreloaderScene extends BaseScene {
             style: {
                 font: '18px monospace',
                 fill: '#ffffff'
-            }
+            },
         })
         this.percent.setOrigin(0.5, 0.5)
         this.asset = this.make.text({
@@ -99,7 +119,7 @@ export class PreloaderScene extends BaseScene {
             style: {
                 font: '18px monospace',
                 fill: '#ffffff'
-            }
+            },
         })
         this.asset.setOrigin(0, 0.5)
         this.assetPercent = this.make.text({
@@ -109,7 +129,7 @@ export class PreloaderScene extends BaseScene {
             style: {
                 font: '18px monospace',
                 fill: '#ffffff'
-            }
+            },
         })
         this.assetPercent.setOrigin(1, 0.5)
 
@@ -126,12 +146,12 @@ export class PreloaderScene extends BaseScene {
         this.process(
             'sprites',
             SpriteSheets,
-            (spritesheet) => this.load.spritesheet(spritesheet)
+            (spritesheet: Phaser.Loader.FileTypes.SpriteSheetFile) => this.load.spritesheet(spritesheet),
         )
         this.process(
             'images',
             Images,
-            (image) => this.load.image(image)
+            (image: Phaser.Loader.FileTypes.ImageFile) => this.load.image(image),
         )
         this.process(
             'tiledtilemaps',
