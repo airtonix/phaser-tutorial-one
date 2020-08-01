@@ -1,9 +1,11 @@
 import { uniqueId, sample } from 'lodash'
 import gems from '@xaroth8088/random-names/generators/miscellaneous/gemMinerals.mjs'
 import jewels from '@xaroth8088/random-names/generators/miscellaneous/jewelrys.mjs'
+
 import { Factory, Generate } from './Factories'
 import { Loot } from './Loot'
-import { ItemIcons } from '~constants'
+
+import { ItemIcons } from '~/Config/constants'
 
 Factory('jewellry', {
     id: () => uniqueId('jewel'),

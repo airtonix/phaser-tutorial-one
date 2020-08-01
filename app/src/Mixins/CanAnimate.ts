@@ -1,6 +1,8 @@
 import { get } from 'lodash'
-import { Constructor } from '~/Core/framework'
+
 import { WritesLogs } from './WritesLogs'
+
+import { Constructor } from '~/Core/framework'
 
 export interface IAnimationSheetConfig {
     key: string,
@@ -25,7 +27,7 @@ export interface IAnimations {
     [animationGroup: string]: IAnimationGroup
 }
 
-export function CanAnimate<TBase extends Constructor>(Base: TBase) {
+export function CanAnimate<TBase extends Constructor> (Base: TBase) {
     return class CanAnimate extends WritesLogs(Base) {
         sprite: Phaser.GameObjects.Sprite
         active = true
@@ -33,7 +35,7 @@ export function CanAnimate<TBase extends Constructor>(Base: TBase) {
         orientation: string
         isIdle: boolean
 
-        constructor(...props: any[]) {
+        constructor (...props: any[]) {
             super(...props)
             this.log('CanAnimate')
         }

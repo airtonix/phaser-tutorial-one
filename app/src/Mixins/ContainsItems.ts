@@ -1,8 +1,10 @@
 import { get } from 'lodash'
-import { Loot } from '~/Items'
-import { Constructor } from '~/Core/framework'
+
 import { WritesLogs } from './WritesLogs'
 import { IAnimationConfig, IAnimationGroup, IAnimations } from './CanAnimate'
+
+import { Loot } from '~/Items'
+import { Constructor } from '~/Core/framework'
 
 export interface IItem {
     name: string
@@ -13,7 +15,7 @@ export interface IItem {
 export const EVENT_KEY_INVENTORY_SHOW_DIALOG = 'show-inventory-dialog'
 export const EVENT_KEY_INVENTORY_HIDE_DIALOG = 'hide-inventory-dialog'
 
-export function ContainsItems<TBase extends Constructor>(Base: TBase) {
+export function ContainsItems<TBase extends Constructor> (Base: TBase) {
     return class ContainsItems extends WritesLogs(Base) {
         static LID_STATE_CLOSED = 'close'
         static LID_STATE_OPENED = 'open'

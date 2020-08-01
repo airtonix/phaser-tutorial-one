@@ -1,7 +1,8 @@
-import { Constructor } from '~/Core/framework'
-import { WritesLogs } from "./WritesLogs"
+import { WritesLogs } from './WritesLogs'
 
-export function CanMove<TBase extends Constructor>(Base: TBase) {
+import { Constructor } from '~/Core/framework'
+
+export function CanMove<TBase extends Constructor> (Base: TBase) {
 
     return class CanMove extends WritesLogs(Base) {
         scene: Phaser.Scene
@@ -68,7 +69,7 @@ export function CanMove<TBase extends Constructor>(Base: TBase) {
             if (!this.active) return
         }
 
-        beforeMove() {
+        beforeMove () {
             if (!this.active) return
 
             // @ts-ignore
@@ -78,7 +79,7 @@ export function CanMove<TBase extends Constructor>(Base: TBase) {
             this.body.setVelocity(0)
         }
 
-        afterMove() {
+        afterMove () {
             if (!this.active) return
             const { x, y } = this.prevVelocity
             this.isIdle = (y === 0 && x === 0)

@@ -1,7 +1,9 @@
 import { get, debounce } from 'lodash'
-import { SpriteSheets, Emotes } from '~/constants'
-import { Constructor } from '~/Core/framework'
+
 import { WritesLogs } from './WritesLogs'
+
+import { SpriteSheets, Emotes } from '~/Config/constants'
+import { Constructor } from '~/Core/framework'
 
 
 export interface IEmoteConfig {
@@ -25,7 +27,7 @@ export const EVENT_KEY_SHOW_EMOTE = 'show-emote'
 
 type EmotiveSprite = Phaser.GameObjects.Sprite
 
-export function CanEmote<TBase extends Constructor>(Base: TBase) {
+export function CanEmote<TBase extends Constructor> (Base: TBase) {
     return class CanEmote extends WritesLogs(Base) {
         on: Function
         emote: EmotiveSprite

@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
-import { SpriteSheets } from '~/constants'
+
+import { SpriteSheets } from '~/Config/constants'
 
 export class LogoSprite extends Phaser.GameObjects.Sprite {
     constructor (scene, x, y) {

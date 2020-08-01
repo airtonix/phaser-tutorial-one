@@ -1,8 +1,8 @@
 import { uniqueId } from 'lodash'
-import { NineSlice } from "phaser3-nineslice"
+import { NineSlice } from 'phaser3-nineslice'
 import { Row, Viewport } from 'phaser-ui-tools'
 
-import { Nineslices, BitmapFonts } from "~/constants"
+import { Nineslices, BitmapFonts } from '~/Config/constants'
 import { WritesLogs } from '~/Mixins/WritesLogs'
 
 export interface DialogOpenConfiguration {
@@ -24,7 +24,7 @@ export class UiDialog extends Phaser.GameObjects.Container {
         ui: Nineslices.Dialog
     }
 
-    constructor(scene, options) {
+    constructor (scene, options) {
         super(scene)
 
         const {
@@ -63,7 +63,7 @@ export class UiDialog extends Phaser.GameObjects.Container {
         this.log('ready')
     }
 
-    createUi(): NineSlice {
+    createUi (): NineSlice {
         const {
             startX,
             startY,
@@ -86,20 +86,20 @@ export class UiDialog extends Phaser.GameObjects.Container {
         return bg
     }
 
-    createShadow():Phaser.GameObjects.Graphics {
+    createShadow ():Phaser.GameObjects.Graphics {
         const shadow = new Phaser.GameObjects.Graphics(this.scene)
         shadow.fillStyle(0x000000, 0.1)
         shadow.fillRect(2, 2, this.width, this.height)
         return shadow
     }
 
-    setShadowSize(x, y, width, height):void {
+    setShadowSize (x, y, width, height):void {
         this.shadow.clear()
         this.shadow.fillStyle(0x000000, 0.1)
         this.shadow.fillRect(x, y, width, height)
     }
 
-    setWidth(width: integer):void {
+    setWidth (width: integer):void {
         const { x , y } = this.options
 
         this.setSize(width, this.height)
@@ -108,7 +108,7 @@ export class UiDialog extends Phaser.GameObjects.Container {
         this.setShadowSize(2, 2, width - 4, this.height + 4)
     }
 
-    setHeight(height: integer):void {
+    setHeight (height: integer):void {
         const { x , y } = this.options
 
         this.setSize(this.width, height)
@@ -150,7 +150,7 @@ export class UiDialog extends Phaser.GameObjects.Container {
         }
     }
 
-    renderContent(content: any): void {
+    renderContent (content: any): void {
         console.log('renderContent', content)
     }
 

@@ -1,10 +1,11 @@
 import Phaser from 'phaser'
 
+import { BaseScene } from './BaseScene'
+
 import { AnimatedTile } from '~/Objects/AnimatedTile'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
 import * as StuffObjectMap from '~/Objects/StuffObjectMap'
 
-import { BaseScene } from './BaseScene'
 
 export class MapScene extends BaseScene {
     isInteractive = true

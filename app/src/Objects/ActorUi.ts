@@ -1,6 +1,8 @@
 import Phaser from 'phaser'
-import { WritesLogs } from '~/Mixins/WritesLogs'
+
 import { Warrior } from './PlayerWarrior'
+
+import { WritesLogs } from '~/Mixins/WritesLogs'
 
 @WritesLogs
 export class ActorUi extends Phaser.GameObjects.Container {

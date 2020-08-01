@@ -23,7 +23,7 @@ interface IPosition {
     y: integer
 }
 
-export function position(actor) : IPosition {
+export function position (actor) : IPosition {
     const { x, y } = actor
     return { x, y }
 }

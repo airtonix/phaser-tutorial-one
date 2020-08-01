@@ -1,14 +1,23 @@
 module.exports = {
-  parser: '@typescript-eslint/parser', // Specifies the ESLint parser
+  parser: '@typescript-eslint/parser',
   extends: [
-    'plugin:@typescript-eslint/recommended', // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+    'plugin:@typescript-eslint/recommended'
+  ],
+  plugins: [
+    'eslint-plugin-import'
   ],
   parserOptions: {
-    ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
-    sourceType: 'module', // Allows for the use of imports
+    ecmaVersion: 2018,
+    sourceType: 'module'
   },
   rules: {
-    // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
-    // e.g. "@typescript-eslint/explicit-function-return-type": "off",
-  },
+    'no-extra-semi': [
+      'error'
+    ],
+    'space-before-function-paren': 'error',
+    'import/order': ['error', {'newlines-between': 'always'}] ,
+    'jsx-quotes': [2, 'prefer-single'],
+    '@typescript-eslint/quotes': [2, 'single'],
+    'quotes': [2, 'single']
+  }
 };

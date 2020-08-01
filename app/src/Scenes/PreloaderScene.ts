@@ -1,12 +1,13 @@
+import { BaseScene } from './BaseScene'
+import { GameScene } from './GameScene'
+
 import {
     SpriteSheets,
     Images,
     TiledTileMaps,
     Animations,
     BitmapFonts,
-} from '~/constants'
-import { BaseScene } from './BaseScene'
-import { GameScene } from './GameScene'
+} from '~/Config/constants'
 
 export class PreloaderScene extends BaseScene {
     static key = 'PreloaderScene'
@@ -15,12 +16,11 @@ export class PreloaderScene extends BaseScene {
     GREY = 0x666666
     DARKGREY = 0x222222
 
-
     constructor () {
         super({ key: PreloaderScene.key })
     }
 
-    handleProgress = (value) => {
+    public handleProgress = (value: number): void => {
         this.bar.clear()
         this.bar.fillStyle(this.WHITE, 0.4)
         this.bar.fillRect(
@@ -29,15 +29,13 @@ export class PreloaderScene extends BaseScene {
             (this.config.boxWidth - (this.config.boxPadding)) * value,
             this.config.boxHeight - (this.config.boxPadding)
         )
-        // @ts-ignore
-        const percentage = parseInt(value * 100)
+        const percentage = value * 100
         this.percent.setText(`${percentage}%`)
         this.log('progress', value)
     }
 
-    handleFileProgress = (file, value) => {
-        // @ts-ignore
-        const percentage = parseInt(value * 100)
+    public handleFileProgress = (file: string, value: number): void => {
+        const percentage = value * 100
         this.log('fileProgress', file.key, percentage)
         this.asset.setText(`> ${file.key}`)
         this.assetPercent.setText(`${percentage}%`)

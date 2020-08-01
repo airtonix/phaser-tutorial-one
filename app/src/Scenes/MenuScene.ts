@@ -1,8 +1,9 @@
 import { BaseScene } from './BaseScene'
+import { GameScene } from './GameScene'
+
 import { TextButton } from '~/Objects/TextButton'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
 import { LevelOneScene } from '~/Scenes/LevelOneScene'
-import { GameScene } from './GameScene'
 
 export class MenuScene extends BaseScene {
     static key = 'MenuScene'

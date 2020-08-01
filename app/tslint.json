@@ -1,11 +1,15 @@
 {
     "defaultSeverity": "error",
-    "extends": ["tslint:recommended", "tslint-eslint-rules"],
-    "jsRules": {},
+    "extends": ["tslint:recommended", "tslint-eslint-rules" ],
+    "jsRules": {
+      "ordered-imports": [true]
+    },
     "rules": {
       "quotemark": [true, "single"],
+      "quotes": [true, "single"],
       "semicolon": [ false ],
-      "space-before-function-paren": [false],
+      "ordered-imports": [false],
+      "space-before-function-paren": [true],
       "object-literal-sort-keys": [false],
       "arrow-parens": [true, "ban-single-arg-parens"],
       "no-reference-import": [false],

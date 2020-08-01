@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 
 export class HeaderText extends Phaser.GameObjects.Text {
-    constructor(props) {
+    constructor (props) {
         const {
             scene,
             x,

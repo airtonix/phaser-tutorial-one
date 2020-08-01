@@ -5,7 +5,7 @@ export function Factory (name, schema) {
         .schema(name, schema)
 }
 
-export function Generate(name, count = 1) {
+export function Generate (name, count = 1) {
     return dream.useSchema(name)
         .generateRnd(count)
         .output()

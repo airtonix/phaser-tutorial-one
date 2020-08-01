@@ -1,8 +1,10 @@
 import { uniqueId, sample } from 'lodash'
 import names from '@xaroth8088/random-names/generators/miscellaneous/currencys.mjs'
+
 import { Factory, Generate } from './Factories'
 import { Loot } from './Loot'
-import { ItemIcons } from '~/constants'
+
+import { ItemIcons } from '~/Config/constants'
 
 Factory('currency', {
     id: () => uniqueId('currency'),

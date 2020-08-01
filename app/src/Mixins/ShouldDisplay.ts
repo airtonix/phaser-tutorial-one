@@ -1,9 +1,11 @@
 import { get } from 'lodash'
-import { Constructor } from '~/Core/framework'
-import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
+
 import { WritesLogs } from './WritesLogs'
 
-export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
+import { Constructor } from '~/Core/framework'
+import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
+
+export function ShouldDisplay<TBase extends Constructor> (Base: TBase) {
     return class ShouldDisplay extends WritesLogs(Base) {
         scene: Phaser.Scene
         sprite: Phaser.GameObjects.Sprite
@@ -15,7 +17,7 @@ export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
         width: integer
         height: integer
 
-        constructor(...args: any[]) {
+        constructor (...args: any[]) {
             super(...args)
             this.scene = args[0]
             this.log('ShouldDisplay')
@@ -49,7 +51,7 @@ export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
             const animation = get(
                 this.animations,
                 `idle.${this.orientation}`,
-                get(this.animations, `idle.default`, {})
+                get(this.animations, 'idle.default', {})
             )
             const { sheet } = animation.anim
             const frame = animation.anim.frames[0]
@@ -69,7 +71,7 @@ export function ShouldDisplay<TBase extends Constructor>(Base: TBase) {
             return sprite
         }
 
-        createShadowSprite(
+        createShadowSprite (
             color = 0x000000,
         ): Phaser.GameObjects.Graphics {
             const shadow = new Phaser.GameObjects.Graphics(this.scene)

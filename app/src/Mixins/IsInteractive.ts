@@ -1,10 +1,12 @@
 import { throttle } from 'lodash'
+
+import { WritesLogs } from './WritesLogs';
+
 import { Constructor } from '~/Core/framework'
-import { WritesLogs } from "./WritesLogs";
 
 export const EVENT_KEY_USE = 'perform-use'
 
-export function IsInteractive<TBase extends Constructor>(Base: TBase) {
+export function IsInteractive<TBase extends Constructor> (Base: TBase) {
     return class IsInteractive extends WritesLogs(Base) {
 
         on: (eventName: string, handler: CallableFunction) => void

@@ -1,32 +1,46 @@
 {
 	"compilerOptions": {
-		"target": "ESNext",
-		"module": "es6",
-		"strict": true,
-		"noImplicitAny": false,
-		"strictPropertyInitialization": false,
-		"noEmit": true,
+		"baseUrl": ".",
+		"outDir": "./dist",
+		"module": "esnext",
+		"target": "es5",
+		"lib": ["es6", "dom"],
+		"sourceMap": true,
 		"allowJs": true,
 		"jsx": "preserve",
-		"importHelpers": true,
 		"moduleResolution": "node",
+		"strict": true,
+
+		// code rules
+		"strictPropertyInitialization": false,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noImplicitAny": true,
+		"importHelpers": true,
+		"strictNullChecks": true,
+		"noEmit": true,
 		"experimentalDecorators": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
-		"sourceMap": true,
-		"baseUrl": "./src",
+		"forceConsistentCasingInFileNames": true,
+		"suppressImplicitAnyIndexErrors": true,
+		"noUnusedLocals": false,
+
+		//resolution
+		"rootDir": "./src",
 		"paths": {
-		  "~/*": ["./*"]
+		  "~/*": ["./src/*"]
 		},
 		"typeRoots": [
 			"node_modules/@types",
 			"node_module/phaser/types"
 		],
 		"types": [
+			"jest",
 			"phaser"
 		]
 	},
 	"include": [
-		"src/**/*"
+		"src",
 	]
 }

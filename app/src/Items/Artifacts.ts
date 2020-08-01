@@ -1,9 +1,11 @@
 import { uniqueId, sample } from 'lodash'
 import artifacts from '@xaroth8088/random-names/generators/miscellaneous/artifacts.mjs'
 import prophecies from '@xaroth8088/random-names/generators/descriptions/prophecys.mjs'
+
 import { Factory, Generate } from './Factories'
 import { Loot } from './Loot'
-import { ItemIcons } from '~/constants'
+
+import { ItemIcons } from '~/Config/constants'
 
 Factory('artifacts', {
     id: () => uniqueId('artifact'),

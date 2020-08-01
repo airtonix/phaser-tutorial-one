@@ -1,12 +1,15 @@
 import { throttle, debounce } from 'lodash'
-import { Emotes } from "~/constants";
-import { Constructor } from '~/Core/framework'
-import { getDistance, position } from '~/Core/distance';
-import { WritesLogs } from "./WritesLogs";
-import { EVENT_KEY_USE } from '~/Mixins/IsInteractive'
+
+import { WritesLogs } from './WritesLogs';
 import { EVENT_KEY_SHOW_EMOTE } from './CanEmote';
 
-export function CanInteract<TBase extends Constructor>(Base: TBase) {
+import { Emotes } from '~/Config/constants';
+import { Constructor } from '~/Core/framework'
+import { getDistance, position } from '~/Core/distance';
+import { EVENT_KEY_USE } from '~/Mixins/IsInteractive'
+
+
+export function CanInteract<TBase extends Constructor> (Base: TBase) {
     return class CanInteract extends WritesLogs(Base) {
         interactables: Phaser.GameObjects.GameObject[]
         usageDistance: integer

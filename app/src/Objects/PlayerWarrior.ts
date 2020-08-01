@@ -1,4 +1,4 @@
-import { Animations, SpriteSheets } from '~/constants'
+import { Animations, SpriteSheets } from '~/Config/constants'
 import { IsPlayerControlled } from '~/Mixins/IsPlayerControlled'
 import { CanInteract } from '~/Mixins/CanInteract'
 import { CanAnimate } from '~/Mixins/CanAnimate'

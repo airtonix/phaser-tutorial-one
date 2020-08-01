@@ -10,11 +10,11 @@ export type MergeConstructorTypes<T extends Array<Constructor<any>>> =
 	UnionToIntersection<InstanceType<T[number]>>;
 
 
-export function Mixin<T extends Array<Constructor<any>>>(constructors: T): Constructor<MergeConstructorTypes<T>> {
+export function Mixin<T extends Array<Constructor<any>>> (constructors: T): Constructor<MergeConstructorTypes<T>> {
 	const cls = class {
 		state = {
 		}
-		constructor() {
+		constructor () {
 			constructors.forEach((c: any) => {
 				const oldState = this.state;
 				c.apply(this);

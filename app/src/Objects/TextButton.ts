@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 
 export class TextButton extends Phaser.GameObjects.Text {
-    constructor(props) {
+    constructor (props) {
         const {
             scene,
             x,
@@ -44,15 +44,15 @@ export class TextButton extends Phaser.GameObjects.Text {
         this.enterButtonHoverState()
     }
 
-    enterButtonHoverState() {
+    enterButtonHoverState () {
         this.setStyle({ fill: '#ff0'})
     }
 
-    enterButtonRestState() {
+    enterButtonRestState () {
         this.setStyle({ fill: '#0f0'})
     }
 
-    enterButtonActiveState() {
+    enterButtonActiveState () {
         this.setStyle({ fill: '#0ff' })
     }
 }

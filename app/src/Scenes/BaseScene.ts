@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+
 import { WritesLogs } from '~Mixins/WritesLogs'
 
 export interface SceneProps {

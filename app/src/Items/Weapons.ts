@@ -8,7 +8,8 @@ import abilities from '@xaroth8088/random-names/generators/miscellaneous/weaponA
 
 import { Factory, Generate } from './Factories'
 import { Loot } from './Loot'
-import { ItemIcons } from '~constants'
+
+import { ItemIcons } from '~/Config/constants'
 
 
 Factory('swords', {

@@ -1,6 +1,6 @@
 export class AnimatedTile {
 
-    constructor(tile, tileAnimationData, firstgid) {
+    constructor (tile, tileAnimationData, firstgid) {
         this.tile = tile
         this.tileAnimationData = tileAnimationData
         this.firstgid = firstgid
@@ -8,7 +8,7 @@ export class AnimatedTile {
         this.animationDuration = tileAnimationData[0].duration * tileAnimationData.length
     }
 
-    update(delta) {
+    update (delta) {
         this.elapsedTime += delta
         this.elapsedTime %= this.animationDuration
 

@@ -1,5 +1,6 @@
 import { MapScene } from './MapScene'
-import { TiledTileMaps } from '~/constants'
+
+import { TiledTileMaps } from '~/Config/constants'
 
 export class LevelOneScene extends MapScene {
     static key = 'LevelOneScene'

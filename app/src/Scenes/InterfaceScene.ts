@@ -1,4 +1,5 @@
 import { BaseScene } from './BaseScene'
+
 import { UiDialogInventory } from '~/Objects/UiDialogInventory'
 import { WritesLogs } from '~/Mixins/WritesLogs'
 import { ActorUi } from '~/Objects/ActorUi'

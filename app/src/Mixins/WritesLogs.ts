@@ -1,8 +1,9 @@
 import debug from 'debug'
-import { LOG_PREFIX } from '~/constants'
+
+import { LOG_PREFIX } from '~/Config/constants'
 import { Constructor } from '~/Core/framework'
 
-export function WritesLogs<TBase extends Constructor>(Base: TBase) {
+export function WritesLogs<TBase extends Constructor> (Base: TBase) {
     return class extends Base {
         key: string
         logger: debug
@@ -14,7 +15,7 @@ export function WritesLogs<TBase extends Constructor>(Base: TBase) {
 
         createLogger (key) {
             this.logger = debug(`${LOG_PREFIX}.${key}`)
-            this.logger(`WritesLogs`)
+            this.logger('WritesLogs')
         }
 
         log (...messages) {

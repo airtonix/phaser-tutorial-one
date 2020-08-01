@@ -1,5 +1,10 @@
-import { UiDialog } from "./UiDialog";
-import { InventoryItemUi } from './InventoryItemUi'
+import { UiDialog } from './UiDialog';
+import { InventoryItemUi, InventoryItemModel } from './InventoryItemUi'
+
+export interface IUiDialogInventoryOptions {
+    cells: integer,
+    rows: integer
+}
 
 export class UiDialogInventory extends UiDialog {
     slotWidth = 32
@@ -7,8 +12,9 @@ export class UiDialogInventory extends UiDialog {
     slotMargin = 2
     uiMargin = 4
     minimumCells = 1
+    options: IUiDialogInventoryOptions
 
-    renderContent (content) {
+    renderContent (content: InventoryItemModel[]):void {
         super.renderContent(content)
         this.setWidth(this.slotWidth)
         this.setHeight(this.slotHeight)
@@ -39,16 +45,16 @@ export class UiDialogInventory extends UiDialog {
         this.setHeight((this.slotHeight * rows) + ((this.slotMargin + this.uiMargin) * 2))
     }
 
-    collateItems (content) {
-        return content.reduce((result, item) => {
+    collateItems (content: InventoryItemModel[]): InventoryItemModel[] {
+        return content.reduce((result: InventoryItemModel[], item: InventoryItemModel) => {
             const existing = result
-                .find(lootItem => item.id === lootItem.id)
-
+                .find((lootItem: InventoryItemModel) => {
+                    return item.id === lootItem.id
+                })
             if (existing) {
                 existing.count += 1
                 return result
             }
-
             return [
                 ...result,
                 { ...item, count: 1 }

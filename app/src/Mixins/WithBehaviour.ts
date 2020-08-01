@@ -1,9 +1,11 @@
 import { get, throttle } from 'lodash'
 import { BehaviourTree } from 'mistreevous'
-import { Constructor } from "~Core/framework";
+
 import { WritesLogs } from './WritesLogs';
 
-export function WithBehaviour<TBase extends Constructor>(Base: TBase) {
+import { Constructor } from '~Core/framework';
+
+export function WithBehaviour<TBase extends Constructor> (Base: TBase) {
     return class WithBehaviour extends WritesLogs(Base) {
         behaviour: BehaviourTree
         behaviours: object

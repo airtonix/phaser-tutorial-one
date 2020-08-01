@@ -1,17 +1,19 @@
 import Health from 'phaser-component-health'
-import { Constructor } from '~/Core/framework'
+
 import { CanAnimate, IAnimationConfig } from './CanAnimate'
 import { WritesLogs } from './WritesLogs'
 
-export function WithHealth<Tbase extends Constructor<{}>>(Base: Tbase) {
+import { Constructor } from '~/Core/framework'
+
+export function WithHealth<Tbase extends Constructor<{}>> (Base: Tbase) {
     return class WithHealth extends CanAnimate(WritesLogs(Base)) {
-        on: Function
-        behaviour: object
+        on: CallableFunction
+        behaviour: any
         active: boolean
         minHealth: integer = 0
         maxHealth: integer = 100
         regenHealthRate: integer = 5
-        isInvincible: boolean = false
+        isInvincible = false
         health: Health
         sprite: Phaser.GameObjects.Sprite
 

@@ -1,11 +1,13 @@
 import { debounce } from 'lodash'
-import { Orientation } from '~/constants'
-import { Constructor } from "~/Core/framework";
+
 import { WritesLogs } from './WritesLogs';
+
+import { Orientation } from '~/Config/constants'
+import { Constructor } from '~/Core/framework';
 
 export const EVENT_KEY_OPEN_PLAYER_INVENTORY = 'open-player-inventory'
 
-export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
+export function IsPlayerControlled<TBase extends Constructor> (Base: TBase) {
 
     return class IsPlayerControlled extends WritesLogs(Base) {
         isMoving: boolean
@@ -13,12 +15,12 @@ export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
         isIdle: boolean
         animateMovement: () => void
 
-        constructor(...args: any[]) {
+        constructor (...args: any[]) {
             super(...args)
             this.log('IsPlayerControlled')
         }
 
-        update(time, delta, keys) {
+        update (time, delta, keys) {
             super.update(time, delta, keys)
             this.updateKeysPressed(time, delta, keys)
             this.animateMovement()
@@ -65,7 +67,11 @@ export function IsPlayerControlled<TBase extends Constructor>(Base: TBase) {
         }
 
         openInventory = debounce(() => {
-            this.scene.game.events.emit(EVENT_KEY_OPEN_PLAYER_INVENTORY, { actor: this })
+            const content = this.scene.game.registry.get('player-inventory')
+            this.scene.game.events.emit(EVENT_KEY_OPEN_PLAYER_INVENTORY, {
+                actor: this,
+                content
+            })
         }, 500)
     }
 

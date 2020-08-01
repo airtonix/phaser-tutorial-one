@@ -1,5 +1,6 @@
 import { get } from 'lodash'
-import { Animations, Nineslices } from '~/constants'
+
+import { Animations, Nineslices } from '~/Config/constants'
 import { LootChestBehaviour } from '~/Behaviours/LootChestBehaviour'
 import { CanAnimate, IAnimationConfig } from '~/Mixins/CanAnimate'
 import { ShouldDisplay } from '~/Mixins/ShouldDisplay'

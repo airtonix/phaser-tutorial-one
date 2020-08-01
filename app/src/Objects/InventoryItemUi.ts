@@ -1,17 +1,17 @@
-import { BitmapFonts, ItemIcons } from "~/constants"
-import { WritesLogs } from "~Mixins/WritesLogs"
+import { BitmapFonts, ItemIcons } from '~/Config/constants'
+import { WritesLogs } from '~/Mixins/WritesLogs'
 
 export interface InventoryItemModel {
-    id: String
-    count: Number
+    id: string
+    count: number
     icon: {
         sheet: {
-            key: String
-            frame: Number,
-            frames: Number[]
+            key: string
+            frame: number,
+            frames: number[]
         }
     }
-    name: String
+    name: string
 }
 
 export class InventoryItemUi extends WritesLogs(Phaser.GameObjects.Container) {

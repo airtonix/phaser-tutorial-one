@@ -1,0 +1,1 @@
+it('BaseModel Test', () => undefined)
