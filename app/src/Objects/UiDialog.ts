@@ -1,8 +1,6 @@
 import { uniqueId } from 'lodash'
 import { NineSlice } from 'phaser3-nineslice'
-import { Row, Viewport } from 'phaser-ui-tools'
 
-import { Nineslices, BitmapFonts } from '~/Config/constants'
 import { WritesLogs } from '~/Mixins/WritesLogs'
 
 export interface DialogOpenConfiguration {

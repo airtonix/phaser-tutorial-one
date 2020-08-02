@@ -1,7 +1,7 @@
-import { ICharacter } from './Character.model'
+import { ModifierModel, IModifier } from '~/Store/Modifier/Modifier.model'
+import { MoveModel, IMove } from '~/Store/Move/Move.model'
 
-import { ModifierModel } from '~/Store/Modifier/Modifier.model'
-import { MoveModel } from '~/Store/Move/Move.model'
+import { ICharacter } from './Character.model'
 
 export const getCharacterActions = <T extends ICharacter>(self: T) => ({
   setLevel (lvl = 1): number { return self.level = lvl },
@@ -15,21 +15,23 @@ export const getCharacterActions = <T extends ICharacter>(self: T) => ({
   minusDefense (def = 1): number { return self.defense -= def },
   setIndestructable (des = true): boolean { return self.indestructable = des },
   setHitPoints (hp = 100): number { return self.hitPoints = hp },
-  addModifier (mod = new ModifierModel()): string[] {
-    self.modifiers.push(mod.id)
+  addModifier (mod = new ModifierModel()): IModifier[] {
+    self.modifiers.push({ ...mod })
     return self.modifiers.slice()
   },
-  removeModifier (modId: string): string[] {
-    const filtered = self.modifiers.slice().filter(v => v !== modId)
+  removeModifier (modifierId: string): IModifier[] {
+    const filtered = self.modifiers.slice()
+      .filter(modifier => modifier.id !== modifierId)
     self.modifiers.replace(filtered)
     return self.modifiers.slice()
   },
-  addMove (move = new MoveModel()): string[] {
-    self.moves.push(move.id)
+  addMove (move = new MoveModel()): IMove[] {
+    self.moves.push({ ...move })
     return self.moves.slice()
   },
-  removeMove (moveId: string): string[] {
-    const filtered = self.moves.slice().filter(v => v !== moveId)
+  removeMove (moveId: string): IMove[] {
+    const filtered = self.moves.slice()
+      .filter(move => move.id !== moveId)
     self.moves.replace(filtered)
     return self.moves.slice()
   }

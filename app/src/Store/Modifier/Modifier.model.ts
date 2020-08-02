@@ -1,4 +1,4 @@
-import { types, Instance } from 'mobx-state-tree'
+import { types, Instance, ModelSnapshotType, SnapshotOrInstance, SnapshotIn, SnapshotOut } from 'mobx-state-tree'
 import { Guid } from 'guid-typescript'
 
 import BaseModel from '~/Store/BaseModel'
@@ -12,7 +12,9 @@ export const ModifierMST = types.model('Modifier', {
   defense: types.optional(types.number, 0) // Can be negative or positive numbers to add or minus on stats
 })
 
-export type IModifier = Instance<typeof ModifierMST>
+export interface IModifier extends Instance<typeof ModifierMST> {}
+export interface IModifierSnapshotIn extends SnapshotIn<typeof ModifierMST> {}
+export interface IModifierSnapshotIOut extends SnapshotOut<typeof ModifierMST> {}
 
 export class ModifierModel extends BaseModel implements IModifier {
   id = generatedID

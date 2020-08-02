@@ -1,13 +1,15 @@
-import { PlayerModel, PlayerMST } from './Player.model'
-import { getPlayerActions } from './Player.actions'
+import { CharacterModel } from '~/Store/Character/Character.model'
+
+import { PlayerModel } from './Player.model'
+import { PlayerStore } from './Player.store'
 
 const playerTS = { ...(new PlayerModel()) }
-const playerMST = PlayerMST.actions(self => getPlayerActions(self)).create(playerTS)
+const playerMST = PlayerStore.create(playerTS)
 
 it('addCharacter & removeCharacter', () => {
   expect(playerMST.characters).toHaveLength(0)
-  const mods = playerMST.addCharacter()
+  const characters = playerMST.addCharacter()
   expect(playerMST.characters).toHaveLength(1)
-  playerMST.removeCharacter(mods[0])
+  playerMST.removeCharacter(characters[0].id)
   expect(playerMST.characters).toHaveLength(0)
 })

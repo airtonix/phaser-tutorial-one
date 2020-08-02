@@ -1,8 +1,10 @@
-import { MoveModel, MoveMST } from './Move.model'
-import { getMoveActions } from './Move.actions'
+import { ModifierModel } from '../Modifier/Modifier.model'
+
+import { MoveModel } from './Move.model'
+import { MoveStore } from './Move.store'
 
 const moveTS = { ...(new MoveModel()) }
-const moveMST = MoveMST.actions(self => getMoveActions(self)).create(moveTS)
+const moveMST = MoveStore.create(moveTS)
 
 it('setCooldown', () => {
   moveMST.setCooldown(100)
@@ -28,8 +30,9 @@ it('setIsReaction', () => {
 
 it('addModifier & removeModifier', () => {
   expect(moveMST.modifiers).toHaveLength(0)
-  const mods = moveMST.addModifier()
+  const modifier = new ModifierModel()
+  const modifiers = moveMST.addModifier({ ...modifier })
   expect(moveMST.modifiers).toHaveLength(1)
-  moveMST.removeModifier(mods[0])
+  moveMST.removeModifier(modifier.id)
   expect(moveMST.modifiers).toHaveLength(0)
 })

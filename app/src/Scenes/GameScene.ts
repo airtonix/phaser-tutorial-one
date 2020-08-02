@@ -3,6 +3,8 @@ import { LevelOneScene } from './LevelOneScene';
 import { InterfaceScene } from './InterfaceScene';
 
 import { WritesLogs } from '~/Mixins/WritesLogs';
+import { Store } from '~/Store';
+import { PlayerModel } from '~/Store/Player/Player.model';
 
 @WritesLogs
 export class GameScene extends BaseScene {

@@ -1,4 +1,4 @@
-import { types, Instance } from 'mobx-state-tree'
+import { types, Instance, SnapshotIn } from 'mobx-state-tree'
 import { Guid } from 'guid-typescript'
 
 import BaseModel from '~/Store/BaseModel'
@@ -13,9 +13,10 @@ export const EntityMST = types.model('Entity', {
   indestructable: types.optional(types.boolean, false)
 })
 
-export type IEntity = Instance<typeof EntityMST>
+export interface IEntity extends Instance<typeof EntityMST> {}
+export interface IEntitySnapshotIn extends SnapshotIn<typeof EntityMST> {}
 
-export class EntityModel extends BaseModel implements IEntity {
+export class EntityModel extends BaseModel implements IEntitySnapshotIn {
   id = generatedID
   indestructable = false
   level = 0

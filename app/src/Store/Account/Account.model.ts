@@ -1,4 +1,4 @@
-import { types, Instance, IModelType } from 'mobx-state-tree'
+import { types, Instance, IModelType, SnapshotIn } from 'mobx-state-tree'
 import { Guid } from 'guid-typescript'
 
 import BaseModel from '~/Store/BaseModel'
@@ -15,9 +15,10 @@ export const AccountMST = types.model('Account', {
   password: types.optional(types.string, '')
 })
 
-export type IAccount = Instance<typeof AccountMST>
+export interface IAccount extends Instance<typeof AccountMST> {}
+export interface IAccountSnapshotIn extends SnapshotIn<typeof AccountMST> {}
 
-export class AccountModel extends BaseModel implements IAccount {
+export class AccountModel extends BaseModel implements IAccountSnapshotIn {
   id = generatedID
   balance = 0
   firstname = ''

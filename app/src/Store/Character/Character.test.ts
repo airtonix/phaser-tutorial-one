@@ -69,7 +69,7 @@ it('addModifier & removeModifier', () => {
   expect(characterMST.modifiers).toHaveLength(0)
   const mods = characterMST.addModifier()
   expect(characterMST.modifiers).toHaveLength(1)
-  characterMST.removeModifier(mods[0])
+  characterMST.removeModifier(mods[0].id)
   expect(characterMST.modifiers).toHaveLength(0)
 })
 
@@ -77,6 +77,6 @@ it('addMove & removeMove', () => {
   expect(characterMST.moves).toHaveLength(0)
   const moves = characterMST.addMove()
   expect(characterMST.moves).toHaveLength(1)
-  characterMST.removeMove(moves[0])
+  characterMST.removeMove(moves[0].id)
   expect(characterMST.moves).toHaveLength(0)
 })

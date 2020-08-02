@@ -1,4 +1,4 @@
-import { types, Instance } from 'mobx-state-tree'
+import { types, Instance, SnapshotIn } from 'mobx-state-tree'
 import { Guid } from 'guid-typescript'
 
 import BaseModel from '~/Store/BaseModel'
@@ -14,9 +14,10 @@ export const ActorMST = types.model('Actor', {
   hitPoints: types.optional(types.number, 100)
 })
 
-export type IActor = Instance<typeof ActorMST>
+export interface IActor extends Instance<typeof ActorMST> {}
+export interface IActorSnapshotIn extends SnapshotIn<typeof ActorMST> {}
 
-export class ActorModel extends BaseModel implements IActor {
+export class ActorModel extends BaseModel implements IActorSnapshotIn {
   id = generatedID
   hitPoints = 100
   indestructable = false

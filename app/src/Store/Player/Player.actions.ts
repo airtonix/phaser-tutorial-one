@@ -1,16 +1,17 @@
-import { IPlayer } from './Player.model'
+import {CharacterModel, ICharacter } from '~/Store/Character/Character.model'
 
-import Character from '~/Store/Character/Character.model'
+import { IPlayer } from './Player.model'
 
 export const getPlayerActions = <T extends IPlayer>(self: T) => ({
 
-  addCharacter (char = new Character()): string[] {
-    self.characters.push(char.id)
+  addCharacter (character = new CharacterModel()): ICharacter[] {
+    self.characters.push({ ...character })
     return self.characters.slice()
   },
 
-  removeCharacter (charId = ''): string[] {
-    const filtered = self.characters.slice().filter(v => v !== charId)
+  removeCharacter (characterId = ''): ICharacter[] {
+    const filtered = self.characters.slice()
+      .filter(character => character.id !== characterId)
     self.characters.replace(filtered)
     return self.characters.slice()
   }

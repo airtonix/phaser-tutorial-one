@@ -12,7 +12,7 @@ export const StatsMST = types.model('Stats', {
   defense: types.optional(types.number, 0)
 })
 
-export type IStats = Instance<typeof StatsMST>
+export interface IStats extends Instance<typeof StatsMST> {}
 
 export class Stats extends BaseModel implements IStats {
   id = generatedID

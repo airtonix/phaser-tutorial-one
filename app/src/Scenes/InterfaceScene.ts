@@ -1,10 +1,11 @@
 import { BaseScene } from './BaseScene'
 
-import { UiDialogInventory } from '~/Objects/UiDialogInventory'
+import { ContainerDialog } from '~/Objects/ContainerDialog'
 import { WritesLogs } from '~/Mixins/WritesLogs'
 import { ActorUi } from '~/Objects/ActorUi'
 import { EVENT_KEY_INVENTORY_SHOW_DIALOG, EVENT_KEY_INVENTORY_HIDE_DIALOG } from '~/Mixins/ContainsItems'
 import { EVENT_KEY_OPEN_PLAYER_INVENTORY } from '~/Mixins/IsPlayerControlled'
+import { Store } from '~/Store'
 
 @WritesLogs
 export class InterfaceScene extends BaseScene {
@@ -13,8 +14,8 @@ export class InterfaceScene extends BaseScene {
     log: (...args: any[]) => string
     gamebar: Phaser.GameObjects.Graphics
     player: ActorUi
-    playerInventory: UiDialogInventory
-    containerInventory: UiDialogInventory
+    playerInventory: ContainerDialog
+    containerInventory: ContainerDialog
 
     constructor () {
         super({ key: InterfaceScene.key })
@@ -28,24 +29,38 @@ export class InterfaceScene extends BaseScene {
 
         this.gamebar = this.createBg(
             0, y, w, 22,
-            0x333333
+            0x333333,
         )
 
-        this.player = new ActorUi(this,
-            0, Number(this.game.config.height) - 52)
-
-        this.playerInventory = new UiDialogInventory(this, {
+        this.log('PlayerItems', Store.player)
+        this.playerInventory = new ContainerDialog(this, {
             key: 'PlayerInventory',
-            x: 48, y,
-            cells: 5,
-            rows: 5
+            direction: ContainerDialog.DIRECTIONS.DIRECTION_VERTICAL,
+            lanes: 5,
+            height: 200,
+            anchor: {
+                left: 'left+50',
+                bottom: 'bottom-26'
+            },
+            items: Store.player.activeCharacter.inventory
         })
 
-        this.containerInventory = new UiDialogInventory(this, {
+        this.containerInventory = new ContainerDialog(this, {
             key: 'ContainerInventory',
-            x: 128, y,
-            cells: 5,
-            rows: 5
+            direction: ContainerDialog.DIRECTIONS.DIRECTION_VERTICAL,
+            lanes: 5,
+            height: 200,
+            anchor: {
+                left: 'left+250',
+                bottom: 'bottom-26'
+            }
+        })
+
+
+        this.player = new ActorUi(this, {
+            x: 0,
+            y: Number(this.game.config.height) - 52,
+            onClick: this.playerInventory.toggle
         })
 
         this.game.events
@@ -58,6 +73,10 @@ export class InterfaceScene extends BaseScene {
         this.game.events
             .on(EVENT_KEY_INVENTORY_HIDE_DIALOG,
                 this.containerInventory.close)
+    }
+
+    togglePlayerInventory = () => {
+        this.playerInventory.toggle()
     }
 
     createBg (
@@ -78,7 +97,7 @@ export class InterfaceScene extends BaseScene {
         return bg
     }
 
-    update () {
+    update (): void {
         this.player.update()
     }
 }

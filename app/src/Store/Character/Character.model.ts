@@ -1,9 +1,10 @@
-import { types, Instance } from 'mobx-state-tree'
+import { types, Instance, SnapshotIn, SnapshotOut } from 'mobx-state-tree'
 import { Guid } from 'guid-typescript'
 
 import BaseModel from '~/Store/BaseModel'
-import { MoveModel } from '~/Store/Move/Move.model'
-import { ModifierModel, ModifierMST } from '~/Store/Modifier/Modifier.model'
+import { MoveMST, IMove } from '~/Store/Move/Move.model'
+import { ModifierMST, IModifier } from '~/Store/Modifier/Modifier.model'
+import { InventoryMST, IInventory, InventoryModel, IInventorySnaphotIn } from '~/Store/Inventory/Inventory.model'
 
 const generatedID = Guid.create().toString()
 
@@ -14,19 +15,22 @@ export const CharacterMST = types.model('Character', {
   defense: types.optional(types.number, 0),
   indestructable: types.optional(types.boolean, false),
   hitPoints: types.optional(types.number, 100),
-  modifiers: types.optional(types.array(types.string), []),
-  moves: types.optional(types.array(types.string), [])
+  modifiers: types.optional(types.array(ModifierMST), []),
+  moves: types.optional(types.array(MoveMST), []),
+  inventory: InventoryMST
 })
 
-export type ICharacter = Instance<typeof CharacterMST>
+export interface ICharacter extends Instance<typeof CharacterMST> {}
+export interface ICharacterSnapshotIn extends SnapshotIn<typeof CharacterMST> {}
+export interface ICharacterSnapshotOut extends SnapshotOut<typeof CharacterMST> {}
 
-export class CharacterModel extends BaseModel {
-  id = generatedID
-  hitPoints = 100
-  indestructable = false
+export class CharacterModel extends BaseModel implements ICharacterSnapshotIn {
   level = 0
   damage = 0
   defense = 0
-  modifiers: string[] = []
-  moves: string[] = []
+  indestructable = false
+  hitPoints = 100
+  modifiers: IModifier[] = []
+  moves: IMove[] = []
+  inventory: IInventorySnaphotIn = {...(new InventoryModel())}
 }

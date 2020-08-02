@@ -30,16 +30,16 @@ export function IsPlayerControlled<TBase extends Constructor> (Base: TBase) {
             const baseDiameter = width * 0.25
             const controlDiameter = width * 0.1
 
-            this.joystick = new VirtualJoystick(this.scene, {
-                x: width / 2,
-                y: height - (baseDiameter * 2),
-                radius: baseDiameter,
-                base: this.scene.add.circle(0, 0, baseDiameter, 0x888888),
-                thumb: this.scene.add.circle(0, 0, controlDiameter, 0xcccccc),
-                dir: '8dir',   // 'up&down'|0|'left&right'|1|'4dir'|2|'8dir'|3
-                forceMin: 16,
-                enable: true
-            })
+            // this.joystick = new VirtualJoystick(this.scene, {
+            //     x: width / 2,
+            //     y: height - (baseDiameter * 2),
+            //     radius: baseDiameter,
+            //     base: this.scene.add.circle(0, 0, baseDiameter, 0x888888),
+            //     thumb: this.scene.add.circle(0, 0, controlDiameter, 0xcccccc),
+            //     dir: '8dir',   // 'up&down'|0|'left&right'|1|'4dir'|2|'8dir'|3
+            //     forceMin: 16,
+            //     enable: true
+            // })
 
             this.keyboard = this.scene.input.keyboard.addKeys({
                 up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -72,6 +72,7 @@ export function IsPlayerControlled<TBase extends Constructor> (Base: TBase) {
                 this.orientation = Orientation.Right
                 this.moveToRight()
             } else {
+
             }
 
             // Vertical movement
