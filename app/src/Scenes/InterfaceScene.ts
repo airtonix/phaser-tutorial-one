@@ -42,7 +42,9 @@ export class InterfaceScene extends BaseScene {
                 left: 'left+50',
                 bottom: 'bottom-26'
             },
-            items: Store.player.activeCharacter.inventory
+            items: Store.player
+                ? Store.player.inventory
+                : []
         })
 
         this.containerInventory = new ContainerDialog(this, {

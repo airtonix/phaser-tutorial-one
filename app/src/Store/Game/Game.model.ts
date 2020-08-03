@@ -8,7 +8,7 @@ const generatedID = Guid.create().toString()
 
 export const GameMST = types.model('Game', {
   id: types.optional(types.identifier, generatedID),
-  player: types.maybe(PlayerMST),
+  player: types.maybeNull(PlayerMST),
 })
 
 export interface IGame extends Instance<typeof GameMST> {}
@@ -17,12 +17,5 @@ export interface IGameMSTSnapshotOut extends SnapshotOut<typeof GameMST> {}
 
 export class GameModel extends BaseModel implements IGameMSTSnapshotIn {
   id: string
-  player: IPlayerSnapshotIn
-
-  constructor (
-    id: string = Guid.create().toString(),
-  ) {
-    super()
-    this.id = id
-  }
+  player: PlayerModel
 }

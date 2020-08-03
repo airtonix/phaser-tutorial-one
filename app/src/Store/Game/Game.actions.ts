@@ -1,13 +1,15 @@
-import { PlayerModel, IPlayer} from '~/Store/Player/Player.model'
+import { PlayerModel, IPlayer, IPlayerSnapshotIn} from '~/Store/Player/Player.model'
 
 import { IGame } from './Game.model'
 
+export const STORAGE_KEY = 'SOMESPECIALKEY'
+
 export const getGameActions = <T extends IGame>(self: T) => ({
-  setPlayer (player: IPlayer = new PlayerModel()): PlayerModel {
-    self.player = { ...player }
-    return player
-  },
   afterCreate () {
-    console.log('Created a new todo!')
+    console.log('afterCreate')
+    const save = localStorage.getItem(STORAGE_KEY)
+    console.log(save
+      ? JSON.parse(save)
+      : {})
   }
 })
