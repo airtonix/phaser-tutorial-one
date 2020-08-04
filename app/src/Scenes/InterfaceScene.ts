@@ -71,10 +71,16 @@ export class InterfaceScene extends BaseScene {
 
         this.game.events
             .on(EVENT_KEY_INVENTORY_SHOW_DIALOG,
-                this.containerInventory.open)
+                ({ contents }) => {
+                    this.containerInventory.open({ contents })
+                    this.playerInventory.open()
+                })
         this.game.events
             .on(EVENT_KEY_INVENTORY_HIDE_DIALOG,
-                this.containerInventory.close)
+                () => {
+                    this.containerInventory.close()
+                    this.playerInventory.close()
+                })
     }
 
     togglePlayerInventory = () => {

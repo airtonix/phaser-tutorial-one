@@ -1,7 +1,7 @@
 import { types, Instance, ModelSnapshotType, SnapshotOrInstance, SnapshotIn, SnapshotOut } from 'mobx-state-tree'
 import { Guid } from 'guid-typescript'
 
-import BaseModel from '~/Store/BaseModel'
+import { BaseModel } from '~/Store/BaseModel'
 
 const generatedID = Guid.create().toString()
 

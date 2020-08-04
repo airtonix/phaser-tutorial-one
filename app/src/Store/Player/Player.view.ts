@@ -5,9 +5,7 @@ import { IPlayer } from './Player.model'
 export const getPlayerViews = <T extends IPlayer>(self: T) => ({
 
   get inventory () {
-    return self.activeCharacter
-      ? self.activeCharacter?.inventory.entities
-      : []
+    return self.activeCharacter?.inventory?.entities || []
   },
 
 })

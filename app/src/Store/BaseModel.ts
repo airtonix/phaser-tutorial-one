@@ -1,7 +1,17 @@
+import { plainToClassFromExist } from 'class-transformer'
+
 export interface IBaseModel {
   id: string
 }
 
-export default class BaseModel implements IBaseModel {
+export interface IModelProps {
+  [x: string]: any
+}
+
+export class BaseModel implements IBaseModel {
   id: string
+
+  constructor (props: IModelProps = {}) {
+    plainToClassFromExist(this, props)
+  }
 }

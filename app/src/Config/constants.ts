@@ -1,4 +1,8 @@
+
 import { range } from '~/Core/collections'
+
+export const APP_ID = process.env.APP_ID || 'Game'
+export const LOG_PREFIX = 'Game'
 
 const UrlTilesetOneExtrudedSpritesheet = '/0x72_DungeonTilesetII_v1.3--extruded.png'
 const UrlTilesetOneSpritesheet = '/0x72_DungeonTilesetII_v1.3.png'
@@ -12,7 +16,6 @@ const UrlBlackSixteenbfZXPng = '/black_16bfZX_0.png'
 const UrlWhiteSixteenbfZXFont = '/white_16bfZX.fnt'
 const UrlWhiteSixteenbfZXPng = '/white_16bfZX_0.png'
 
-export const LOG_PREFIX = 'Game'
 
 export const FrameConfig16x16 = {
     frameWidth: 16,

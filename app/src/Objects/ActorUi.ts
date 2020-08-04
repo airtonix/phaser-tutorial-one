@@ -8,13 +8,16 @@ import { WritesLogs } from '~/Mixins/WritesLogs'
 
 @WritesLogs
 export class ActorUi extends Phaser.GameObjects.Container {
+    static key = 'ActorUi'
+
     avatar: Warrior
     border: Phaser.GameObjects.Graphics
     bg: Phaser.GameObjects.Graphics
 
+
     constructor (scene, config) {
         super(scene, config.x || 0, config.y || 0)
-
+        this.key = ActorUi.key
         this.border = new Phaser.GameObjects.Graphics(
             scene,
             {x: 32, y: 32}

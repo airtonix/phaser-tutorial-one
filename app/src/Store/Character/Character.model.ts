@@ -1,7 +1,7 @@
 import { types, Instance, SnapshotIn, SnapshotOut } from 'mobx-state-tree'
 import { Guid } from 'guid-typescript'
 
-import BaseModel from '~/Store/BaseModel'
+import { BaseModel } from '~/Store/BaseModel'
 import { MoveMST, IMove } from '~/Store/Move/Move.model'
 import { ModifierMST, IModifier } from '~/Store/Modifier/Modifier.model'
 import { InventoryMST, InventoryModel, IInventorySnaphotIn } from '~/Store/Inventory/Inventory.model'

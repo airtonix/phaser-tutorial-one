@@ -3,7 +3,7 @@ import Phaser from 'phaser'
 import { WritesLogs } from '~/Mixins/WritesLogs'
 
 export interface SceneProps {
-    key?: string
+    key: string
     [x: string]: any
 }
 
@@ -14,11 +14,9 @@ export class BaseScene extends Phaser.Scene {
     props: SceneProps
     log: (...args: any[]) => void
 
-    constructor ({ key, ...props}: SceneProps) {
-        super({
-            key,
-            ...props,
-        })
+    constructor (props: SceneProps) {
+        super(props)
+        this.key = props.key
         this.props = props
     }
 

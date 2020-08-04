@@ -1,5 +1,3 @@
-import { CharacterModel } from '~/Store/Character/Character.model'
-
 import { PlayerModel } from './Player.model'
 import { PlayerStore } from './Player.store'
 
