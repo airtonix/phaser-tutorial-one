@@ -1,8 +1,9 @@
 import { Guid } from 'guid-typescript'
-import { types, Instance, SnapshotIn, SnapshotOut, IMSTArray } from 'mobx-state-tree'
+import { types, Instance, SnapshotIn, SnapshotOut, ReferenceIdentifier } from 'mobx-state-tree'
+import { ReferenceT } from 'mobx-state-tree/dist/internal'
 
 import BaseModel from '~/Store/BaseModel'
-import { CharacterMST, ICharacter, CharacterModel, ICharacterSnapshotIn } from '~/Store/Character/Character.model'
+import { CharacterMST } from '~/Store/Character/Character.model'
 
 
 const generatedID = Guid.create().toString()
@@ -16,19 +17,20 @@ export const PlayerMST = types.model('Player', {
 export interface IPlayer extends Instance<typeof PlayerMST> {}
 export interface IPlayerSnapshotIn extends SnapshotIn<typeof PlayerMST> {}
 export interface IPlayerSnapshotOut extends SnapshotOut<typeof PlayerMST> {}
+export interface IPlayerReference extends ReferenceT<typeof PlayerMST> {}
 
 export class PlayerModel extends BaseModel implements IPlayerSnapshotIn {
   characters: ICharacterSnapshotIn[]
-  activeCharacter: string | null
+  activeCharacter: ReferenceIdentifier
 
-  // constructor (
-  //   id: string = Guid.create().toString(),
-  //   // characters: ICharacterSnapshotIn[] = [],
-  //   // activeCharacter?: string
-  // ) {
-  //   super()
-  //   this.id = id
-  //   // this.characters = characters
-  //   // this.activeCharacter = activeCharacter
-  // }
+  constructor (
+    id: string = Guid.create().toString(),
+    characters: ICharacterSnapshotIn[] = [],
+    activeCharacter: ReferenceIdentifier
+  ) {
+    super()
+    this.id = id
+    this.characters = characters
+    this.activeCharacter = activeCharacter
+  }
 }

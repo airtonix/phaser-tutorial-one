@@ -4,7 +4,7 @@ import { Guid } from 'guid-typescript'
 import BaseModel from '~/Store/BaseModel'
 import { MoveMST, IMove } from '~/Store/Move/Move.model'
 import { ModifierMST, IModifier } from '~/Store/Modifier/Modifier.model'
-import { InventoryMST, IInventory, InventoryModel, IInventorySnaphotIn } from '~/Store/Inventory/Inventory.model'
+import { InventoryMST, InventoryModel, IInventorySnaphotIn } from '~/Store/Inventory/Inventory.model'
 
 const generatedID = Guid.create().toString()
 
@@ -17,7 +17,7 @@ export const CharacterMST = types.model('Character', {
   hitPoints: types.optional(types.number, 100),
   modifiers: types.optional(types.array(ModifierMST), []),
   moves: types.optional(types.array(MoveMST), []),
-  inventory: InventoryMST
+  inventory: types.maybe(InventoryMST)
 })
 
 export interface ICharacter extends Instance<typeof CharacterMST> {}
@@ -32,5 +32,10 @@ export class CharacterModel extends BaseModel implements ICharacterSnapshotIn {
   hitPoints = 100
   modifiers: IModifier[] = []
   moves: IMove[] = []
-  inventory: IInventorySnaphotIn = {...(new InventoryModel())}
+  inventory: IInventorySnaphotIn
+
+  constructor () {
+    super()
+    this.inventory = {...(new InventoryModel())}
+  }
 }

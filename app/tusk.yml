@@ -24,14 +24,21 @@ tasks:
 
   build:
     run:
-      - npx tsc --project .
+      - >-
+        npx tsc
+        --project
+        .
 
   lint:
     run:
-      - npx eslint src --ext .ts --cache
+      - >-
+        npx eslint
+        ./src
+        --ext .ts
+        --cache
 
   test:
     run:
-      - task: lint
-      - task: build
-      - npx jest
+      - >-
+        npx jest
+        --config ./jest.config.js

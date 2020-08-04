@@ -3,11 +3,6 @@ import {CharacterModel, ICharacter } from '~/Store/Character/Character.model'
 import { IPlayer } from './Player.model'
 
 export const getPlayerActions = <T extends IPlayer>(self: T) => ({
-  get inventory () {
-    return self.activeCharacter
-      ? self.activeCharacter?.inventory.entities
-      : []
-  },
 
   addCharacter (character = new CharacterModel()): ICharacter[] {
     self.characters.push({ ...character })

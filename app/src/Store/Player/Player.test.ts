@@ -13,3 +13,7 @@ it('addCharacter & removeCharacter', () => {
   playerMST.removeCharacter(characters[0].id)
   expect(playerMST.characters).toHaveLength(0)
 })
+
+it('reveals current inventory', () => {
+  expect(playerMST.inventory).toHaveLength(0)
+})
