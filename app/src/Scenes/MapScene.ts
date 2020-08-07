@@ -1,10 +1,12 @@
 import Phaser from 'phaser'
 
-import { BaseScene } from './BaseScene'
-
+import { Store } from '~/Store'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
 import * as StuffObjectMap from '~/Objects/StuffObjectMap'
+import { Zone } from '~/Store/Zone/ZoneModel'
+
+import { BaseScene } from './BaseScene'
 
 
 export class MapScene extends BaseScene {
@@ -20,6 +22,10 @@ export class MapScene extends BaseScene {
 
     create () {
         this.log('create')
+        Store.setZone(new Zone({
+            name: this.key,
+            type: Zone.Types.Dungeon
+        }))
 
         const { map, tileset } = this.createMap()
         this.map = map
@@ -146,16 +152,6 @@ export class MapScene extends BaseScene {
                 }
             }, {})
         return definitions
-    }
-
-    renderLayerDebug = (layer) => {
-        this.log('adding debug layer to', layer)
-        const debugGraphics = this.add.graphics().setAlpha(0.75)
-        layer.renderDebug(debugGraphics, {
-            tileColor: null, // Color of non-colliding tiles
-            collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
-            faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        })
     }
 
     animateTiles (map, tileset) {

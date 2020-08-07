@@ -20,14 +20,6 @@ persist(
     }
   ).then(() => log('someStore has been hydrated'))
 
-declare global {
-  interface Window {
-    /** documentation on foo */
-    Store: Game
-  }
-}
-
-window.Store = Store
 const connection = remotedev.connectViaExtension({
   name: 'GameStore',
 })

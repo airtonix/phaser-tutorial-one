@@ -11,5 +11,11 @@ export const ZONE_MODEL_KEY = 'Zone'
 @model(ZONE_MODEL_KEY)
 export class Zone extends ExtendedModel(Entity, {
     name: prop<string>(),
-}){
+}) {
+    static Types = {
+        Dungeon: 'dungeon',
+        Town: 'town',
+        Shop: 'shop',
+        World: 'world',
+    }
 }
