@@ -44,5 +44,9 @@
 	},
 	"include": [
 		"src",
-	]
+	],
+	"exclude": [
+		"**/*.spec.ts",
+		"./node_modules"
+	],
 }

@@ -1,6 +1,3 @@
-import { BaseScene } from './BaseScene'
-import { GameScene } from './GameScene'
-
 import {
     SpriteSheets,
     Images,
@@ -8,6 +5,9 @@ import {
     Animations,
     BitmapFonts,
 } from '~/Config/constants'
+
+import { BaseScene } from './BaseScene'
+import { MenuScene } from './MenuScene'
 
 interface IProgressUiConfig {
     width: number
@@ -138,7 +138,7 @@ export class PreloaderScene extends BaseScene {
         this.load.on('complete', this.handleComplete)
     }
 
-    preload () {
+    preload (): void {
         this.log('loading')
         this.config = this.generateLayoutConfig()
         this.render()
@@ -165,7 +165,7 @@ export class PreloaderScene extends BaseScene {
         )
     }
 
-    process (name, group, loaderFn) {
+    process (name, group, loaderFn): void {
         if (!group) return
         Object.keys(group)
             .forEach(key => {
@@ -176,8 +176,7 @@ export class PreloaderScene extends BaseScene {
             })
     }
 
-    prepare () {
-        require('~/Items')
+    prepare (): void {
         this.process(
             'animations',
             Animations,
@@ -188,9 +187,9 @@ export class PreloaderScene extends BaseScene {
         )
     }
 
-    create () {
+    create (): void {
         this.prepare()
         this.log('Starting game')
-        this.scene.start(GameScene.key)
+        this.scene.start(MenuScene.key)
     }
 }

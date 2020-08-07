@@ -1,36 +1,36 @@
-import { BaseScene } from './BaseScene'
-import { GameScene } from './GameScene'
-
 import { TextButton } from '~/Objects/TextButton'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
-import { LevelOneScene } from '~/Scenes/LevelOneScene'
+import { Store } from '~/Store'
+
+import { BaseScene } from './BaseScene'
+import { GameScene } from './GameScene'
+import { LevelOneScene } from './LevelOneScene'
 
 export class MenuScene extends BaseScene {
     static key = 'MenuScene'
+    startButton: TextButton
+    logo: PlayerWarrior
 
     constructor () {
         super({ key: MenuScene.key })
-        this.log('constructed')
     }
 
-    create () {
+    create (): void {
         super.create()
         this.log('create')
 
         const { width, height } = this.cameras.main
 
-        this.logo = new PlayerWarrior({
-            scene: this,
-            width: 16,
-            height: 32,
-            x: (width / 2) - 16,
-            y: (height / 2) - 32
-        })
-        this.logo.sprite.setDisplaySize(
-            this.logo.sprite.width * 8,
-            this.logo.sprite.height * 4
+        this.logo = new PlayerWarrior(this)
+        // this.logo.sprite.setDisplaySize(
+        //     this.logo.sprite.width * 8,
+        //     this.logo.sprite.height * 4
+        // )
+        this.logo.setDepth(100)
+        this.logo.setPosition(
+            width / 2,
+            height / 2
         )
-
         this.startButton = new TextButton({
             scene: this,
             x: width / 2,
@@ -42,16 +42,19 @@ export class MenuScene extends BaseScene {
         this.add.existing(this.startButton)
     }
 
-    update () {
-        this.logo.meander()
+    update (): void {
+        // this.logo.meander()
     }
 
-    handleStartButtonClick = () => {
+    handleStartButtonClick = (): void => {
         // this.logo.destroy()
         const scenes = [
             LevelOneScene.key,
         ]
         this.log('handleStartButtonClick', { scenes })
+        if (!Store.player) {
+            Store.createPlayer()
+        }
         scenes.forEach(key => this.scene.start(key))
         this.scene.launch(GameScene.key)
     }

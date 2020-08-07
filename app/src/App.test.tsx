@@ -11,10 +11,8 @@ it('renders React without crashing', () => {
   ReactDOM.unmountComponentAtNode(div)
 })
 
-
-// This fails due to a canvan error
-// it("renders Phaser without crashing", () => {
-//   const div = document.createElement("div")
-//   ReactDOM.render(<Game />, div)
-//   ReactDOM.unmountComponentAtNode(div)
-// })
+it('renders Phaser without crashing', () => {
+  const div = document.createElement('div')
+  ReactDOM.render(<Game />, div)
+  ReactDOM.unmountComponentAtNode(div)
+})

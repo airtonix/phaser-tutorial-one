@@ -1,20 +1,34 @@
+import * as remotedev from 'remotedev'
 import localForage from 'localforage'
-import { persist } from 'mst-persist'
+import { persist } from 'mobx-keystone-persist'
+import { connectReduxDevTools, registerRootStore } from 'mobx-keystone'
 
 import { APP_ID } from '~/Config/constants'
 import { Logger } from '~/Core/Logger'
 
-import { GameMST, GameModel } from './Game/Game.model'
-import { GameStore } from './Game/Game.store'
+import { Game } from './Game/GameModel'
 
 const log = Logger('Store')
-const gameTS = new GameModel()
-export const Store = GameStore
-    .create({ ...gameTS })
+export const Store = new Game({})
+registerRootStore(Store)
+persist(
+    APP_ID,
+    Store,
+    {
+        storage: localForage,
+        jsonify: false
+    }
+  ).then(() => log('someStore has been hydrated'))
 
-persist(APP_ID, Store, {jsonify: false})
-    .then(() => {
-        log('hydrated')
-    })
+declare global {
+  interface Window {
+    /** documentation on foo */
+    Store: Game
+  }
+}
 
 window.Store = Store
+const connection = remotedev.connectViaExtension({
+  name: 'GameStore',
+})
+connectReduxDevTools(remotedev, connection, Store)
