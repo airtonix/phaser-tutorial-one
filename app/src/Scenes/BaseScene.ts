@@ -14,13 +14,13 @@ export class BaseScene extends Phaser.Scene {
     props: SceneProps
     log: (...args: any[]) => void
 
-    constructor (props: SceneProps) {
-        super(props)
-        this.key = props.key
-        this.props = props
+    constructor (props: SceneProps = {}) {
+      super(props)
+      this.key = props.key
+      this.props = props
     }
 
     public create (): void {
-        return
+      return
     }
 }

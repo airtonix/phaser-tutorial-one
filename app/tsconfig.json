@@ -38,6 +38,7 @@
 			"node_module/phaser/types"
 		],
 		"types": [
+			"node",
 			"jest",
 			"phaser"
 		]

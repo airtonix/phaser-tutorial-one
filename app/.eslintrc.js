@@ -11,6 +11,15 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
+    'indent': ['error', 2, {
+      'MemberExpression': 1,
+      'SwitchCase': 1,
+      'CallExpression': {'arguments': 1 },
+      'ArrayExpression': 1,
+      'ObjectExpression': 1,
+      'ImportDeclaration': 1,
+      'offsetTernaryExpressions': true
+    }],
     'no-extra-semi': [
       'error'
     ],

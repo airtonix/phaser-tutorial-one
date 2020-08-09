@@ -1,58 +1,59 @@
 import Phaser from 'phaser'
 
 export class TextButton extends Phaser.GameObjects.Text {
-    constructor (props) {
-        const {
-            scene,
-            x,
-            y,
-            text,
-            style,
-        } = props
-        super(scene, x, y, text, style)
-        this.props = props
+  constructor (props) {
+    const {
+      scene,
+      x,
+      y,
+      text,
+      style,
+    } = props
+    super(scene, x, y, text, style)
+    this.props = props
 
-        this.setInteractive({ useHandCursor: true })
-            .on('pointerover', this.handlePointerOver)
-            .on('pointerout', () => this.enterButtonRestState() )
-            .on('pointerdown', () => this.enterButtonActiveState() )
-            .on('pointerup', this.handlePointerUp)
+    this.setInteractive({ useHandCursor: true })
+      .on('pointerover', this.handlePointerOver)
+      .on('pointerout', () => this.enterButtonRestState() )
+      .on('pointerdown', () => this.enterButtonActiveState() )
+      .on('pointerup', this.handlePointerUp)
 
+    this.setOrigin(0.5, 0.5)
 
+  }
+
+  handlePointerUp () {
+    const {
+      onClick
+    } = this.props
+
+    if (typeof onClick === 'function') {
+      onClick()
     }
 
-    handlePointerUp () {
-        const {
-            onClick
-        } = this.props
+    this.enterButtonHoverState()
+  }
 
-        if (typeof onClick === 'function') {
-            onClick()
-        }
+  handlePointerOver () {
+    const {
+      onHover
+    } = this.props
 
-        this.enterButtonHoverState()
+    if (typeof onHover === 'function') {
+      onHover()
     }
+    this.enterButtonHoverState()
+  }
 
-    handlePointerOver () {
-        const {
-            onHover
-        } = this.props
+  enterButtonHoverState () {
+    this.setStyle({ fill: '#ff0'})
+  }
 
-        if (typeof onHover === 'function') {
-            onHover()
-        }
-        this.enterButtonHoverState()
-    }
+  enterButtonRestState () {
+    this.setStyle({ fill: '#0f0'})
+  }
 
-    enterButtonHoverState () {
-        this.setStyle({ fill: '#ff0'})
-    }
-
-    enterButtonRestState () {
-        this.setStyle({ fill: '#0f0'})
-    }
-
-    enterButtonActiveState () {
-        this.setStyle({ fill: '#0ff' })
-    }
+  enterButtonActiveState () {
+    this.setStyle({ fill: '#0ff' })
+  }
 }
