@@ -1,3 +1,7 @@
-export class NoCharacterError extends Error {}
+export class NoCharacterError extends Error {
+    name = 'NoCharacterError'
+}
 
-export class NoCharactersError extends Error { }
+export class NoCharactersError extends Error {
+    name = 'NoCharactersError'
+}

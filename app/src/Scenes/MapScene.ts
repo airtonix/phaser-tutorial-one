@@ -19,7 +19,6 @@ export class MapScene extends BaseScene {
 
   isInteractive = true
   player: any
-  objectLayers: Record<string, unknown>
   map: Phaser.Tilemaps.Tilemap
   tileset: Phaser.Tilemaps.Tileset
   mapLayers: Phaser.Tilemaps.DynamicTilemapLayer[]
@@ -36,11 +35,10 @@ export class MapScene extends BaseScene {
     this.tileset = this.drawMap(this.map)
     this.mapLayers = this.createMapLayers(this.map)
     this.animatedTiles = this.animateTiles(this.map, this.tileset)
-    // this.objectLayers = this.parseObjectLayers(this.map)
 
-    // this.player = this.createPlayer()
-    // this.setLayersColliable(this.mapLayers)
-    // this.createColliders(this.player, Object.values(this.mapLayers))
+    this.player = this.createPlayer()
+    this.setLayersColliable(this.mapLayers)
+    this.createColliders(this.player, Object.values(this.mapLayers))
 
     // this.stuff = this.createStuff()
     // this.createColliders(this.player, this.stuff.getChildren())
@@ -49,23 +47,19 @@ export class MapScene extends BaseScene {
 
   update (time, delta): void {
     this.animatedTiles.forEach(tile => tile.update(delta))
-    // this.player && this.player.update(time, delta)
+    this.player && this.player.update(time, delta)
     // this.stuff.getChildren().forEach(thing => thing.update(time, delta))
   }
 
   createPlayer (): Phaser.GameObjects.Container {
-    const {
-      Spawn: {
-        props: {
-          depth
-        },
-        objects
-      }
-    } = this.objectLayers
-    const start = objects.find(obj => obj.name === 'PlayerStart')
-
     const player = new PlayerWarrior(this)
-    player.setDepth(depth + 1)
+    const layer = Store.currentZone?.map.objectLayer
+
+    if (!layer) return player
+
+    const start = layer.entities.find(obj => obj.name === 'PlayerStart')
+
+    player.setDepth(layer.depth + 1)
     player.setPosition(
       start.x + start.width / 2,
       start.y + start.height / 2
@@ -145,25 +139,6 @@ export class MapScene extends BaseScene {
       }, {})
 
     return layers
-  }
-
-  parseObjectLayers (map: Phaser.Tilemaps.Tilemap) {
-    const definitions = map.objects
-      .reduce((result, layer) => {
-        return {
-          ...result,
-          [layer.name]: {
-            props: layer.properties.reduce((result, props) => {
-              return {
-                ...result,
-                [props.name]: props.value
-              }
-            }, {}),
-            objects: layer.objects || []
-          }
-        }
-      }, {})
-    return definitions
   }
 
   animateTiles (

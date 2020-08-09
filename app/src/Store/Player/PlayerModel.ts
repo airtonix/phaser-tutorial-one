@@ -19,16 +19,12 @@ export class Player extends Model({
   characters: prop<Character[]>(() => []),
   activeCharacter: prop<Ref<Character> | undefined>(),
 }) {
-  onAttachedToRootStore (): void {
-    const newCharacter = new Character({
-      name: 'Test',
-      type: 'Warrior',
-      hp: 100,
-      icon: ''
-    })
 
-    this.addCharacter(newCharacter)
-    this.setCharacter(newCharacter)
+  startCharacter (character: Character): void {
+    if (character && !this.characters.includes(character)) {
+      this.addCharacter(character)
+    }
+    this.setCharacter(character)
   }
 
   @modelAction

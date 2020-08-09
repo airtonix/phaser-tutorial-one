@@ -1,1 +1,3 @@
-export class NoGameError extends Error {}
+export class NoGameError extends Error {
+    name = 'NoGameError'
+}

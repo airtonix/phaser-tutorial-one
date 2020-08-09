@@ -18,7 +18,10 @@ export class GameScene extends BaseScene {
     this.log('created')
 
     if (!Store.player) {
-      Store.createPlayer()
+      Store.startPlayer(
+        Store.getStartZone()
+      )
+
     }
 
     const currentCharacter = Store.player?.character

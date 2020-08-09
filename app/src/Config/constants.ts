@@ -6,8 +6,9 @@ export const LOG_PREFIX = 'Game'
 
 const UrlTilesetOneExtrudedSpritesheet = '/0x72_DungeonTilesetII_v1.3--extruded.png'
 const UrlTilesetOneSpritesheet = '/0x72_DungeonTilesetII_v1.3.png'
-const UrlTilesetTwoSpritesheet = '/16x16 dungeon ii wall reconfig v04 spritesheet.png'
 const UrlLevelOneTiledTileMap = '/LevelOne.json'
+const UrlLevelTwoTiledTileMap = '/LevelTwo.json'
+const UrlLevelThreeTiledTileMap = '/LevelThree.json'
 const UrlEmotesStyleOneSpritesheet = '/emotes_pixel_style1.png'
 const UrlUiDialogNineSlice = '/interface_bg_tan.png'
 const UrlItemsSpritesheet = '/items_spritesheet_16x16.png'
@@ -61,12 +62,6 @@ export const SpriteSheets = {
     }
   },
 
-  TilesetTwo: {
-    key: 'TilesetTwo',
-    url: UrlTilesetTwoSpritesheet,
-    frameConfig: FrameConfig16x16
-  },
-
   Items: {
     key: 'Items',
     url: UrlItemsSpritesheet,
@@ -114,6 +109,18 @@ export const TiledTileMaps = {
   LevelOne: {
     key: 'LevelOneTiledMap',
     url: UrlLevelOneTiledTileMap,
+    tileset: Images.DungeonTiles.key,
+    tileimage: Images.DungeonTiles.key,
+  },
+  LevelTwo: {
+    key: 'LevelTwoTiledMap',
+    url: UrlLevelTwoTiledTileMap,
+    tileset: Images.DungeonTiles.key,
+    tileimage: Images.DungeonTiles.key,
+  },
+  LevelThree: {
+    key: 'LevelThreeTiledMap',
+    url: UrlLevelThreeTiledTileMap,
     tileset: Images.DungeonTiles.key,
     tileimage: Images.DungeonTiles.key,
   }

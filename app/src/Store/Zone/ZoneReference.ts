@@ -1,7 +1,6 @@
 import {
   detach,
   rootRef,
-  Ref,
 } from 'mobx-keystone'
 
 import { ZONE_MODEL_KEY, Zone } from './ZoneModel'

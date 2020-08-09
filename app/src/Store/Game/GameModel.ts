@@ -8,10 +8,11 @@ import {
 import { computed } from 'mobx'
 
 import { ZoneReference } from '../Zone/ZoneReference'
+import { Character } from '../Character/CharacterModel'
 
 import { Zone } from '~/Store/Zone/ZoneModel'
 import { Player } from '~/Store/Player/PlayerModel'
-import { UnknownZone } from '~/Store/Zone/Exceptions'
+import { UnknownZone, ZoneNotFoundError } from '~/Store/Zone/Exceptions'
 
 export const GAME_MODEL_KEY = 'Game'
 
@@ -24,14 +25,41 @@ export class Game extends Model({
   zone: prop<Ref<Zone> | undefined>(),
   zones: prop<Zone[]>(() => [])
 }) {
+
   @modelAction
-  createPlayer (player: Player = new Player({})): void {
+  startPlayer (zone: Zone): void {
+    const newCharacter = new Character({
+      name: 'Test',
+      type: 'Warrior',
+      hp: 100,
+      icon: '',
+      zone: ZoneReference(zone)
+    })
+    this.createPlayer()
+      .startCharacter(newCharacter)
+
+  }
+
+  @modelAction
+  createPlayer (player: Player = new Player({})): Player {
     this.player = player
+    return player
   }
 
   @modelAction
   addZone (zone: Zone): void {
     this.zones.push(zone)
+  }
+
+  @modelAction
+  addZones (zones: Zone[]): void {
+    this.zones = this.zones.concat(zones)
+  }
+
+  getStartZone (): Zone {
+    return this.zones
+      .find(zone => zone.isStart)
+    || this.zones[0]
   }
 
   @computed
@@ -45,7 +73,7 @@ export class Game extends Model({
   setZone (zone: Zone | undefined): void {
     const zones = this.zones
 
-    if (zone && !zones.includes(zone)) throw new UnknownZone
+    if (zone && !zones.includes(zone)) throw new UnknownZone(zone)
 
     this.zone = zone
       ? ZoneReference(zone)
