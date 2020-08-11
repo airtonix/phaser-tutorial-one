@@ -29,7 +29,8 @@ export class MapScene extends BaseScene {
   create (): void {
     if (!Store.currentZone?.map) throw new NoZoneMapError
     this.createLogger(Store.currentZone.map.key)
-    this.log('create')
+
+    this.log('create', Store.currentZone)
 
     this.map = this.createMap()
     this.tileset = this.drawMap(this.map)
@@ -53,12 +54,16 @@ export class MapScene extends BaseScene {
 
   createPlayer (): Phaser.GameObjects.Container {
     const player = new PlayerWarrior(this)
-    const layer = Store.currentZone?.map.objectLayer
+    const zone = Store.currentZone
+    const layer = zone?.map.objectLayer
 
     if (!layer) return player
 
-    const start = layer.entities.find(obj => obj.name === 'PlayerStart')
+    const start = zone.portals
+      .find(obj => obj.name === 'PlayerStart')
+    if (!start) return player
 
+    this.log('createPlayer.start', start)
     player.setDepth(layer.depth + 1)
     player.setPosition(
       start.x + start.width / 2,

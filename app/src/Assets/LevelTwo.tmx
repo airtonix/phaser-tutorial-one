@@ -70,8 +70,8 @@
   </object>
   <object id="3" name="West" type="Portal" x="48" y="144" width="16" height="16">
    <properties>
-    <property name="TargetPortal" value="South"/>
-    <property name="TargetZone" value="LevelOne"/>
+    <property name="toPortal" value="South"/>
+    <property name="toZone" value="LevelOne"/>
    </properties>
   </object>
  </objectgroup>

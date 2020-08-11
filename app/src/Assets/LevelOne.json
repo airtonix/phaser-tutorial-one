@@ -58,16 +58,10 @@
                 {
                  "height":0,
                  "id":11,
-                 "name":"MahLewts",
+                 "name":"LootChestThing",
                  "point":true,
-                 "properties":[
-                        {
-                         "name":"behaviour",
-                         "type":"string",
-                         "value":"loot"
-                        }],
                  "rotation":0,
-                 "type":"LootChestThing",
+                 "type":"Container",
                  "visible":true,
                  "width":0,
                  "x":200,
@@ -79,7 +73,7 @@
                  "name":"PlayerStart",
                  "point":true,
                  "rotation":0,
-                 "type":"",
+                 "type":"Portal",
                  "visible":true,
                  "width":0,
                  "x":167.666666666667,
@@ -91,12 +85,12 @@
                  "name":"South",
                  "properties":[
                         {
-                         "name":"TargetPortal",
+                         "name":"toPortal",
                          "type":"string",
                          "value":"West"
                         }, 
                         {
-                         "name":"TargetZone",
+                         "name":"toZone",
                          "type":"string",
                          "value":"LevelTwo"
                         }],

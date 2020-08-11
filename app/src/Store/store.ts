@@ -9,7 +9,6 @@ Store.addZones([
   new Zone({
     name: 'LevelOneScene',
     type: ZoneTypes.Dungeon,
-    isStart: true,
     map: new Map(TiledTileMaps.LevelOne)
   }),
   new Zone({

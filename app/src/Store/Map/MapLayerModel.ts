@@ -5,7 +5,7 @@ import {
   Model,
 } from 'mobx-keystone'
 
-import { Entity } from '~/Store/Entity/EntityModel'
+import { TypeOfEntity } from '~/Store/Entity/Factory'
 
 export const MAPLAYER_MODEL_KEY = 'MapLayer'
 
@@ -14,16 +14,17 @@ export class MapLayer extends Model({
   name: prop<string>(),
   depth: prop<number | undefined>(),
   type: prop<string | undefined>(),
-  entities: prop<Entity[]>(() => [])
+  entities: prop<TypeOfEntity[]>(() => [])
 }){
 
   @modelAction
-  addEntities (entities: Entity[]) : void {
+  addEntities (entities: TypeOfEntity[]) : void {
     this.entities = this.entities.concat(entities)
   }
 
   @modelAction
-  addEntity (entity: Entity) : void {
+  addEntity (entity: TypeOfEntity) : void {
     this.entities.push(entity)
   }
+
 }

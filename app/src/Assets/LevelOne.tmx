@@ -24,19 +24,16 @@
   <properties>
    <property name="depth" type="int" value="300"/>
   </properties>
-  <object id="11" name="MahLewts" type="LootChestThing" x="200" y="88">
-   <properties>
-    <property name="behaviour" value="loot"/>
-   </properties>
+  <object id="11" name="LootChestThing" type="Container" x="200" y="88">
    <point/>
   </object>
-  <object id="13" name="PlayerStart" x="167.667" y="104.667">
+  <object id="13" name="PlayerStart" type="Portal" x="167.667" y="104.667">
    <point/>
   </object>
   <object id="14" name="South" type="Portal" x="176" y="160" width="16" height="16">
    <properties>
-    <property name="TargetPortal" value="West"/>
-    <property name="TargetZone" value="LevelTwo"/>
+    <property name="toPortal" value="West"/>
+    <property name="toZone" value="LevelTwo"/>
    </properties>
   </object>
  </objectgroup>

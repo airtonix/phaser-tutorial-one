@@ -9,8 +9,7 @@ import { Logger } from '~/Core/Logger'
 
 import { MapLayer } from './MapLayerModel'
 import { GetLevelData } from './MapApi'
-import { MapLayerMeta } from './MapLayerMeta'
-import { Entity } from '../Entity/EntityModel'
+import { MapLayerFromLevelDataFactory } from './Factory'
 
 const log = Logger(module.id)
 
@@ -36,42 +35,16 @@ export class Map extends Model({
           layers
         } = MapData
         layers.forEach(LayerData => {
-          const layer = this.createMapLayerFromLevelData(LayerData)
+          const layer = MapLayerFromLevelDataFactory(LayerData)
           this.addLayer(layer)
         }, {})
         log('created')
       })
   }
 
-  createMapLayerFromLevelData (levelLayerData: Phaser.Types.Tilemaps.ObjectLayerConfig): MapLayer {
-    const properties = levelLayerData.properties
-      .reduce((result, { name, value }: any) => ({
-        ...result,
-        [name]: value
-      }), {})
-
-    const maplayer = new MapLayer({
-      ...properties,
-      name: levelLayerData.name,
-    })
-
-    if (levelLayerData.objects) {
-      maplayer.addEntities(
-        levelLayerData.objects
-          .map(entity => new Entity(entity))
-      )
-    }
-
-    return maplayer
-  }
-
   @modelAction
   addLayer (layer: MapLayer): void {
     this.layers.push(layer)
-  }
-
-  get objectLayer (): MapLayer | undefined {
-    return this.layers.find(layer => layer.name === 'Entities')
   }
 
 }

@@ -26,8 +26,8 @@
   </properties>
   <object id="16" name="South" type="Portal" x="144" y="160" width="16" height="16">
    <properties>
-    <property name="TargetPortal" value="East"/>
-    <property name="TargetZone" value="LevelTwo"/>
+    <property name="toPortal" value="East"/>
+    <property name="toZone" value="LevelTwo"/>
    </properties>
   </object>
  </objectgroup>

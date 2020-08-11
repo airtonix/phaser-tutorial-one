@@ -13,7 +13,7 @@ export class Entity extends Model({
   type: prop<string>(),
   name: prop<string>(),
   modifiers: prop<Modifier[]>(() => []),
-  entities: prop<Entity[]>(() => []),
+  durability: prop<number>(100),
 }){
-
 }
+

@@ -10,7 +10,7 @@ import { Ref } from 'react';
 import { Entity } from '../Entity/EntityModel';
 import { Zone } from '../Zone/ZoneModel';
 import { Game } from '../Game/GameModel';
-import { UnkonwnZone } from '../Zone/Exceptions';
+import { UnknownZone } from '../Zone/Exceptions';
 import { ZoneReference } from '../Zone/ZoneReference';
 import { NoGameError } from '../Game/Excpetions';
 
@@ -34,7 +34,7 @@ export class Character extends ExtendedModel(Entity, {
     const rootStore = getRootStore<Game>(this)
     if (!rootStore) throw new NoGameError()
 
-    if (zone && !rootStore.zones.includes(zone)) throw new UnkonwnZone
+    if (zone && !rootStore.zones.includes(zone)) throw new UnknownZone(zone)
 
     this.zone = zone
       ? ZoneReference(zone)
