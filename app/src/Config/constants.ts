@@ -105,6 +105,16 @@ export const Nineslices = {
   }
 }
 
+export interface TiledTileMapConfig {
+  key: string,
+  url: string,
+  tileset: string,
+  tileimage: string
+}
+export interface TiledTileMaps {
+  [key: string]: TiledTileMapConfig
+}
+
 export const TiledTileMaps = {
   LevelOne: {
     key: 'LevelOneTiledMap',

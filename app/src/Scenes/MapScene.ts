@@ -1,35 +1,37 @@
 import Phaser from 'phaser'
+import { noop } from 'lodash'
 
 import { Store } from '~/Store'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
 import { PlayerWarrior } from '~/Objects/PlayerWarrior'
-import * as StuffObjectMap from '~/Objects/StuffObjectMap'
-import { Zone } from '~/Store/Zone/ZoneModel'
 import { NoZoneMapError } from '~/Store/Zone/Exceptions'
+import { WritesLogs } from '~/Mixins/WritesLogs'
 
 import { BaseScene } from './BaseScene'
-
 
 interface TileMapHash {
   [key: string]: Phaser.Tilemaps.DynamicTilemapLayer
 }
 
+@WritesLogs
 export class MapScene extends BaseScene {
   static key = 'MapScene'
 
   isInteractive = true
+  countdown = 450
+
   player: any
+  containers: Phaser.GameObjects.Group
+  portals: Phaser.GameObjects.Group
+
   map: Phaser.Tilemaps.Tilemap
   tileset: Phaser.Tilemaps.Tileset
   mapLayers: Phaser.Tilemaps.DynamicTilemapLayer[]
   animatedTiles: AnimatedTile[]
-  stuff: any
-  countdown = 450
 
   create (): void {
     if (!Store.currentZone?.map) throw new NoZoneMapError
     this.createLogger(Store.currentZone.map.key)
-
     this.log('create', Store.currentZone)
 
     this.map = this.createMap()
@@ -41,8 +43,15 @@ export class MapScene extends BaseScene {
     this.setLayersColliable(this.mapLayers)
     this.createColliders(this.player, Object.values(this.mapLayers))
 
-    // this.stuff = this.createStuff()
-    // this.createColliders(this.player, this.stuff.getChildren())
+    if (Store.currentZone?.containers) {
+      this.containers = this.createContainers()
+      this.createColliders(this.player, this.containers.getChildren())
+    }
+
+    if (Store.currentZone?.portals) {
+      this.portals = this.createPortals()
+      this.createOverlaps(this.player, this.portals.getChildren())
+    }
     // this.initCamera()
   }
 
@@ -54,46 +63,28 @@ export class MapScene extends BaseScene {
 
   createPlayer (): Phaser.GameObjects.Container {
     const player = new PlayerWarrior(this)
-    const zone = Store.currentZone
-    const layer = zone?.map.objectLayer
+    const playerCharacter = Store.player?.character
+    if (!playerCharacter) player
 
-    if (!layer) return player
+    const { x, y, depth } = playerCharacter
 
-    const start = zone.portals
-      .find(obj => obj.name === 'PlayerStart')
-    if (!start) return player
+    player.setDepth(depth + 1)
 
-    this.log('createPlayer.start', start)
-    player.setDepth(layer.depth + 1)
-    player.setPosition(
-      start.x + start.width / 2,
-      start.y + start.height / 2
-    )
+    player.setPosition(x, y)
+    this.log('createPlayer', { x, y, depth })
     return player
   }
 
-  createStuff (): Phaser.GameObjects.Group {
-    const {
-      Stuff: {
-        props: { depth },
-        objects
-      }
-    } = this.objectLayers
+  createContainers (): Phaser.GameObjects.Group {
+    const containers = Store.currentZone?.containers
+      .map((container) => container.createGameObject(this))
+    return this.physics.add.group(containers)
+  }
 
-    const stuff = objects
-      .filter(definition => !!definition.type)
-      .map(({ type, x, y, width, height }) => {
-        const ThingClass = StuffObjectMap[type]
-        const thing = new ThingClass(
-          this,
-          x + width / 2,
-          y + height / 2
-        )
-        thing.setDepth(depth)
-        return thing
-      })
-
-    return this.physics.add.group(stuff)
+  createPortals (): Phaser.GameObjects.Group {
+    const portals = Store.currentZone?.portals
+      .map((portal) => portal.createGameObject(this))
+    return this.physics.add.group(portals)
   }
 
   drawMap (map: Phaser.Tilemaps.Tilemap): Phaser.Tilemaps.Tileset {
@@ -136,7 +127,9 @@ export class MapScene extends BaseScene {
         this.log('createMapLayers.layer', name)
         const layer = map.createDynamicLayer(name, this.tileset.name, 0, 0)
         const depth = properties.find(({ name }) => name === 'depth')
-        layer.setDepth(depth.value)
+
+        if (depth) layer.setDepth(depth.value)
+
         return {
           ...result,
           [name]: layer
@@ -200,6 +193,15 @@ export class MapScene extends BaseScene {
     })
   }
 
+  onActorOverlap = (...actors: Phaser.GameObjects.GameObject[]): void => {
+    this.log('onActorOverlap', actors)
+    actors.forEach(actor => {
+      if (typeof actor.emit === 'function') {
+        actor.emit('overlap', { actors })
+      }
+    })
+  }
+
   setLayersColliable (layers): void {
     Object.keys(layers)
       .forEach(layerId => {
@@ -210,12 +212,21 @@ export class MapScene extends BaseScene {
   }
 
   createColliders (actors, collidables) {
-    // if (!Array.isArray(collidables)) return
+    this.log('createColliders')
+    this.physics.add.collider(
+      actors,
+      collidables,
+      this.onActorCollide
+    )
+  }
 
-    collidables.forEach(collidable => {
-      this.log(`createColliders: ${collidable}`)
-      this.physics.add.collider(actors, collidable, this.onActorCollide, null, this)
-    })
+  createOverlaps (actors, collidables) {
+    this.log('createColliders')
+    this.physics.add.overlap(
+      actors,
+      collidables,
+      this.onActorOverlap
+    )
   }
 
   // addColliders() { }

@@ -1,24 +1,33 @@
 import { TiledTileMaps } from '~/Config/constants'
 import { Zone, ZoneTypes } from '~/Store/Zone/ZoneModel'
-import { Map } from '~/Store/Map/MapModel'
 import { Game } from '~/Store/Game/GameModel'
+
+
+const data = [
+  {
+    name: 'LevelOne',
+    type: ZoneTypes.Dungeon,
+    map: TiledTileMaps.LevelOne,
+  },
+  {
+    name: 'LevelTwo',
+    type: ZoneTypes.Dungeon,
+    map: TiledTileMaps.LevelTwo,
+  },
+  {
+    name: 'LevelThree',
+    type: ZoneTypes.Dungeon,
+    map: TiledTileMaps.LevelThree
+  }
+]
 
 export const Store = new Game({})
 
-Store.addZones([
-  new Zone({
-    name: 'LevelOneScene',
-    type: ZoneTypes.Dungeon,
-    map: new Map(TiledTileMaps.LevelOne)
-  }),
-  new Zone({
-    name: 'LevelTwoScene',
-    type: ZoneTypes.Dungeon,
-    map: new Map(TiledTileMaps.LevelTwo)
-  }),
-  new Zone({
-    name: 'LevelThreeScene',
-    type: ZoneTypes.Dungeon,
-    map: new Map(TiledTileMaps.LevelThree)
-  })
-])
+data.forEach(({ name, type, map }) => {
+  const LevelOneZone = new Zone({ name, type })
+  LevelOneZone.addMapFromLevelData(map)
+  Store.addZone(LevelOneZone)
+})
+
+
+window.Store = Store

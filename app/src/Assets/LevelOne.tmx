@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="2020.01.22" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="32" height="32" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="15">
+<map version="1.4" tiledversion="1.4.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="32" height="32" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="16">
  <editorsettings>
   <export target="LevelOne.json" format="json"/>
  </editorsettings>
@@ -30,12 +30,13 @@
   <object id="13" name="PlayerStart" type="Portal" x="167.667" y="104.667">
    <point/>
   </object>
-  <object id="14" name="South" type="Portal" x="176" y="160" width="16" height="16">
+  <object id="14" name="SouthOut" type="Portal" x="176" y="160" width="16" height="16">
    <properties>
-    <property name="toPortal" value="West"/>
+    <property name="toPortal" value="WestIn"/>
     <property name="toZone" value="LevelTwo"/>
    </properties>
   </object>
+  <object id="15" name="SouthIn" type="Portal" x="160" y="160" width="16" height="16"/>
  </objectgroup>
  <layer id="8" name="Overhead" width="32" height="32">
   <properties>

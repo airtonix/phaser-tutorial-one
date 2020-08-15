@@ -3,14 +3,24 @@ import {
   model,
   Ref,
   ExtendedModel,
+  modelAction,
+  findParent,
 } from 'mobx-keystone'
 
-import { Entity } from './EntityModel'
+import { Zone } from '~/Store/Zone/ZoneModel'
+import { ZoneReference } from '~/Store/Zone/ZoneReference'
+import { Game } from '~/Store/Game/GameModel'
+import { PortalWorldEntity } from '~/Objects/PortalWorldEntity'
+
+import { PortalReference } from './PortalEntityReference'
+import { WorldEntity } from './EntityModel'
 
 export const PORTALENTITY_MODEL_KEY = 'PortalEntity'
 
 @model(PORTALENTITY_MODEL_KEY)
-export class Portal extends ExtendedModel(Entity, {
+export class Portal extends ExtendedModel(WorldEntity, {
+  zone: prop<Ref<Zone>>(),
+
   /**
    * Name of the portal this portal sends the player to
    */
@@ -20,15 +30,79 @@ export class Portal extends ExtendedModel(Entity, {
    * Name of the zone this portal sends the player to
    */
   toZone: prop<string | undefined>(),
+
+  /**
+   * Which portal does this portal link to?
+   */
+  linksTo: prop<Ref<Portal> | undefined>()
 }) {
 
   static type = 'Portal'
 
-  getRefId (): string {
-    return `${this.toZone}/${this.toPortal}`
+  static GameObjectClass = PortalWorldEntity
+
+  @modelAction
+  setZone (zone: Zone): void {
+    this.zone = ZoneReference(zone)
   }
 
-  get link () {
-    return
+  @modelAction
+  setLinksTo (portal: Portal): void {
+    this.linksTo = PortalReference(portal)
   }
+
+  get fromZone (): Zone | undefined {
+    return this.zone?.current
+      ? this.zone.current
+      : undefined
+  }
+
+  getRootStore (): Game | undefined {
+    return findParent<Game>(this, parentNode => parentNode instanceof Game)
+  }
+
+  getTargetZone (): Zone | undefined {
+    const gameStore = this.getRootStore()
+    if (!gameStore) return
+
+    const zone = gameStore.zones
+      .find(zone => zone.name == this.toZone)
+
+    return zone
+  }
+
+  getTargetPortal (): Portal | undefined {
+    const zone = this.getTargetZone()
+    if (!zone) return
+
+    const portal = zone.portals.find(portal =>
+      portal.name == this.toPortal
+    )
+    return portal
+  }
+  /**
+   * Return a reference of the portal that this portal linkes to
+   *
+   * @return  {Portal}  Portal Model
+   */
+  get target (): Portal | undefined {
+    if (!this.linksTo || !this.linksTo.isValid) {
+      const portal = this.getTargetPortal()
+      if (!portal) return
+      this.setLinksTo(portal)
+    }
+
+    return this.linksTo.current
+  }
+
+  createGameObject (scene: Phaser.Scene): PortalWorldEntity {
+    const gameobject = new PortalWorldEntity(
+      scene,
+      this.x, this.y, this.width, this.height
+    )
+    gameobject.setDepth(this.depth)
+    gameobject.model = this
+    return gameobject
+  }
+
 }

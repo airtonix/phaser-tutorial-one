@@ -5,7 +5,9 @@ import {
   Ref,
 } from 'mobx-keystone'
 
-import { Entity } from './EntityModel'
+import { LootChestThing } from '~/Objects'
+
+import { WorldEntity } from './EntityModel'
 import { Item } from './ItemEntityModel'
 
 export const CONTAINER_MODEL_KEY = 'Container'
@@ -21,7 +23,7 @@ export enum Sizes {
 }
 
 @model(CONTAINER_MODEL_KEY)
-export class Container extends ExtendedModel(Entity, {
+export class Container extends ExtendedModel(WorldEntity, {
   size: prop<number>(Sizes.normal),
   icon: prop<string | undefined>(),
   items: prop<Item[]>(() => []),
@@ -29,4 +31,15 @@ export class Container extends ExtendedModel(Entity, {
   lockedBy: prop<Ref<Item> | undefined>()
 }){
   static type = 'Container'
+  static GameObjectClass = LootChestThing
+
+  createGameObject (scene: Phaser.Scene) : LootChestThing {
+    const gameobject = new LootChestThing(
+      scene,
+      this.x + this.width / 2,
+      this.y + this.height / 2,
+    )
+    gameobject.setDepth(this.depth)
+    return gameobject
+  }
 }

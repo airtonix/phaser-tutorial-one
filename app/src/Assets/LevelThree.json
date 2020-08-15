@@ -58,15 +58,15 @@
                 {
                  "height":16,
                  "id":16,
-                 "name":"South",
+                 "name":"SouthOut",
                  "properties":[
                         {
-                         "name":"TargetPortal",
+                         "name":"toPortal",
                          "type":"string",
-                         "value":"East"
+                         "value":"EastIn"
                         }, 
                         {
-                         "name":"TargetZone",
+                         "name":"toZone",
                          "type":"string",
                          "value":"LevelTwo"
                         }],
@@ -75,6 +75,17 @@
                  "visible":true,
                  "width":16,
                  "x":144,
+                 "y":160
+                }, 
+                {
+                 "height":16,
+                 "id":17,
+                 "name":"SouthIn",
+                 "rotation":0,
+                 "type":"Portal",
+                 "visible":true,
+                 "width":16,
+                 "x":160,
                  "y":160
                 }],
          "opacity":1,
@@ -110,10 +121,10 @@
          "y":0
         }],
  "nextlayerid":10,
- "nextobjectid":17,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"2020.01.22",
+ "tiledversion":"1.4.1",
  "tileheight":16,
  "tilesets":[
         {
@@ -1313,6 +1324,6 @@
         }],
  "tilewidth":16,
  "type":"map",
- "version":1.2,
+ "version":1.4,
  "width":32
 }

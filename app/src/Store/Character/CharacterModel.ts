@@ -7,7 +7,7 @@ import {
 } from 'mobx-keystone'
 import { Ref } from 'react';
 
-import { Entity } from '../Entity/EntityModel';
+import { Entity, WorldEntity } from '../Entity/EntityModel';
 import { Zone } from '../Zone/ZoneModel';
 import { Game } from '../Game/GameModel';
 import { UnknownZone } from '../Zone/Exceptions';
@@ -17,7 +17,7 @@ import { NoGameError } from '../Game/Excpetions';
 export const CHARACTER_MODEL_KEY = 'Character'
 
 @model(CHARACTER_MODEL_KEY)
-export class Character extends ExtendedModel(Entity, {
+export class Character extends ExtendedModel(WorldEntity, {
   icon: prop<string>(),
   hp: prop<number>(),
   zone: prop<Ref<Zone> | undefined>()
@@ -40,4 +40,5 @@ export class Character extends ExtendedModel(Entity, {
       ? ZoneReference(zone)
       : undefined
   }
+
 }

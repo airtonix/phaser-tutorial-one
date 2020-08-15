@@ -9,10 +9,10 @@ import { computed } from 'mobx'
 
 import { ZoneReference } from '../Zone/ZoneReference'
 import { Character } from '../Character/CharacterModel'
+import { UnknownZone } from '../Zone/Exceptions'
 
 import { Zone } from '~/Store/Zone/ZoneModel'
 import { Player } from '~/Store/Player/PlayerModel'
-import { UnknownZone, ZoneNotFoundError } from '~/Store/Zone/Exceptions'
 
 export const GAME_MODEL_KEY = 'Game'
 
@@ -28,16 +28,20 @@ export class Game extends Model({
 
   @modelAction
   startPlayer (zone: Zone): void {
+    const spawn = zone.portals.find(zone => zone.name === 'PlayerStart')
     const newCharacter = new Character({
+      x: spawn?.x,
+      y: spawn?.y,
+      depth: spawn?.depth,
       name: 'Test',
       type: 'Warrior',
       hp: 100,
       icon: '',
       zone: ZoneReference(zone)
     })
+
     this.createPlayer()
       .startCharacter(newCharacter)
-
   }
 
   @modelAction
