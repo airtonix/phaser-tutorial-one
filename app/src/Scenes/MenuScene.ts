@@ -1,15 +1,13 @@
 import { TextButton } from '~/Objects/TextButton'
-import { PlayerWarrior } from '~/Objects/PlayerWarrior'
-import { Store } from '~/Store'
+import { Warrior } from '~/Objects/CharacterWarrior'
 
 import { BaseScene } from './BaseScene'
 import { GameScene } from './GameScene'
-import { LevelOneScene } from './LevelOneScene'
 
 export class MenuScene extends BaseScene {
   static key = 'MenuScene'
   startButton: TextButton
-  logo: PlayerWarrior
+  logo: Warrior
 
   constructor () {
     super({ key: MenuScene.key })
@@ -21,7 +19,7 @@ export class MenuScene extends BaseScene {
 
     const { width, height } = this.cameras.main
 
-    this.logo = new PlayerWarrior(this)
+    this.logo = new Warrior(this)
     this.logo.setDepth(100)
     this.logo.setPosition(
       width / 2,

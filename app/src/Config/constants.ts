@@ -137,8 +137,8 @@ export const TiledTileMaps = {
 }
 
 export const Animations = {
-  PlayerWarriorMove: {
-    key: 'PlayerWarriorMove',
+  WarriorMove: {
+    key: 'WarriorMove',
     frameRate: 8,
     repeat: -1,
     padding: 1,
@@ -146,8 +146,8 @@ export const Animations = {
     sheet: SpriteSheets.Characters.key,
   },
 
-  PlayerWarriorJump: {
-    key: 'PlayerWarriorJump',
+  WarriorJump: {
+    key: 'WarriorJump',
     frameRate: 8,
     repeat: 0,
     padding: 1,
@@ -155,10 +155,28 @@ export const Animations = {
     sheet: SpriteSheets.Characters.key,
   },
 
-  PlayerWarriorIdle: {
-    key: 'PlayerWarriorIdle',
+  WarriorIdle: {
+    key: 'WarriorIdle',
     sheet: SpriteSheets.Characters.key,
     frames: [ 72, 73, 74, 75 ],
+    margin: 1,
+    frameRate: 4,
+    repeat: -1
+  },
+
+  GoblinMove: {
+    key: 'GoblinMove',
+    frameRate: 8,
+    repeat: -1,
+    padding: 1,
+    frames: [ 59, 60, 61, 62, ],
+    sheet: SpriteSheets.Dungeon.key,
+  },
+
+  GoblinIdle: {
+    key: 'GoblinIdle',
+    sheet: SpriteSheets.Dungeon.key,
+    frames: [ 55, 56, 57, 58, ],
     margin: 1,
     frameRate: 4,
     repeat: -1

@@ -39,6 +39,15 @@ export function CanAnimate<TBase extends Constructor> (Base: TBase) {
         constructor (...props: any[]) {
           super(...props)
           this.log('CanAnimate')
+          if (!this.body) {
+            this.scene.physics.add.existing(this)
+            this.scene.physics.world.enable(this)
+          }
+        }
+
+        update (time, delta) {
+          super.update(time, delta)
+          this.animateMovement()
         }
 
         animate (animation: IAnimationConfig) {

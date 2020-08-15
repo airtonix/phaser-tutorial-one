@@ -6,6 +6,7 @@ import {
   ExtendedModel,
 } from 'mobx-keystone'
 import { Ref } from 'react';
+import { computed } from 'mobx';
 
 import { Entity, WorldEntity } from '../Entity/EntityModel';
 import { Zone } from '../Zone/ZoneModel';
@@ -20,10 +21,11 @@ export const CHARACTER_MODEL_KEY = 'Character'
 export class Character extends ExtendedModel(WorldEntity, {
   icon: prop<string>(),
   hp: prop<number>(),
-  zone: prop<Ref<Zone> | undefined>()
+  zone: prop<Ref<Zone> | undefined>(),
 }) {
 
-  get currentZone (): Zone | undefined {
+  @computed
+  get currentZone (): Zone {
     return this.zone
       ? this.zone.current
       : undefined
@@ -40,5 +42,6 @@ export class Character extends ExtendedModel(WorldEntity, {
       ? ZoneReference(zone)
       : undefined
   }
-
 }
+
+

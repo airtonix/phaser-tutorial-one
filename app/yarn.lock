@@ -5885,6 +5885,10 @@ istanbul-reports@^3.0.2:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
 
+"javascript-astar@github:mikewesthad/javascript-astar":
+  version "0.4.2"
+  resolved "https://codeload.github.com/mikewesthad/javascript-astar/tar.gz/c0304b12861eda334e27f2f15d701c10b296593f"
+
 jest-changed-files@^26.2.0:
   version "26.2.0"
   resolved "https://registry.yarnpkg.com/jest-changed-files/-/jest-changed-files-26.2.0.tgz#b4946201defe0c919a2f3d601e9f98cb21dacc15"
@@ -7039,6 +7043,13 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
+navmesh@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/navmesh/-/navmesh-2.0.3.tgz#697507eaa353ef3caf23964e678ad9319fa0eaa4"
+  integrity sha512-v6PLQokN7JolKEUSqZ/T0uFdSSF2R+PJ5qR5OdMjqEBXX1iP0fGBdn6wau+gu+4xWlaSpe8ub01iOkEcFmg3kQ==
+  dependencies:
+    javascript-astar "github:mikewesthad/javascript-astar"
+
 nice-try@^1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
@@ -7776,6 +7787,13 @@ phaser-component-health@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/phaser-component-health/-/phaser-component-health-2.0.3.tgz#855337b4fbe097bb55a4f687281fcd6096fa8169"
   integrity sha512-wlWQpGZA4L2tzF9kfiMAlB9aLzmbrbmAfYaVUa9yN2Ds2t1C61fXq+ljndolQ77scPORfbOpI+Wu7TwW7EoeIA==
+
+phaser-navmesh@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/phaser-navmesh/-/phaser-navmesh-2.0.5.tgz#8ce6bb63cac93f91b66de2b49000c15f7dc5684a"
+  integrity sha512-VHRd1BW5+8Py/cbf2Vs6Tk8wBtKV6/4wa5ugVBGuzr4iYi/tMc8ridkmqowqd7uDeIcWxGu78P99NKgAyv+oOQ==
+  dependencies:
+    navmesh "^2.0.3"
 
 phaser-tilemap-plus@^0.10.2:
   version "0.10.2"

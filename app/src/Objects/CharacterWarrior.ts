@@ -11,7 +11,7 @@ import { CanMove } from '~/Mixins/CanMove'
 @CanEmote
 @ShouldDisplay
 export class Warrior extends Phaser.GameObjects.Container {
-    key = 'WarriorPlayer'
+    key = 'Warrior'
     width = 16
     height = 32
     speed = 55
@@ -20,16 +20,16 @@ export class Warrior extends Phaser.GameObjects.Container {
     usageDistance = 30
     animations = {
       idle: {
-        default: { anim: Animations.PlayerWarriorIdle }
+        default: { anim: Animations.WarriorIdle }
       },
       moving: {
-        down: {anim: Animations.PlayerWarriorMove },
-        up: {anim: Animations.PlayerWarriorMove },
-        left: {flip: true, anim: Animations.PlayerWarriorMove },
-        right: {flip: false, anim: Animations.PlayerWarriorMove },
+        down: {anim: Animations.WarriorMove },
+        up: {anim: Animations.WarriorMove },
+        left: {flip: true, anim: Animations.WarriorMove },
+        right: {flip: false, anim: Animations.WarriorMove },
       },
       jump: {
-        default: { anim: Animations.PlayerWarriorJump },
+        default: { anim: Animations.WarriorJump },
       }
     }
 }
@@ -37,4 +37,6 @@ export class Warrior extends Phaser.GameObjects.Container {
 @IsPlayerControlled
 @CanMove
 @CanInteract
-export class PlayerWarrior extends Warrior {}
+export class PlayerWarrior extends Warrior {
+  key = 'PlayerWarrior'
+}

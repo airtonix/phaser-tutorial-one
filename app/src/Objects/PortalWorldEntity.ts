@@ -49,7 +49,7 @@ export class PortalWorldEntity extends Phaser.GameObjects.Container {
     )
 
     this.indicator = new Phaser.GameObjects.Graphics(scene)
-    this.drawIndicator()
+    // this.drawIndicator()
 
     this.add([
       this.indicator,
@@ -65,45 +65,35 @@ export class PortalWorldEntity extends Phaser.GameObjects.Container {
   }
 
   update = (): void => {
-    this.drawIndicator({
-      touching: this.body.touching.none
-    })
+    // this.drawIndicator()
   }
 
-  drawIndicator = ({
-    touching = false
-  } = {}) : void => {
+  drawIndicator = () : void => {
     this.indicator.lineStyle(
-      touching
-        ? 2
-        : 1,
-      touching
-        ? 0xffffff
-        : 0x6699ff,
-      touching
-        ? 1
-        : 0.4
+      1, 0x6699ff, 0.4
     )
     this.indicator.strokeRectShape(this.zoneShape)
-
   }
 
   handleOverlap = (...actors: Phaser.GameObjects.GameObject[]): void => {
-    this.teleportActor(...actors)
+    if (this.model?.target) {
+      this.teleportActor()
+    }
   }
 
-  teleportActor = debounce((actor, ...actors) => {
-    const targetPortal = this.model?.target
-    this.log(this.model, `teleporting`, actor)
+  teleportActor = debounce(() => {
+    this.scene.cameras.main.fadeOut(300, 0, 0, 0)
+    this.scene.cameras.main.once(
+      Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
+      (cam, effect) => {
+        const targetPortal = this.model?.target
+        const x = targetPortal.x + targetPortal.width / 2
+        const y = targetPortal.y + targetPortal.height / 2
 
-    if (!targetPortal) return
-
-    const x = targetPortal.x + targetPortal.width / 2
-    const y = targetPortal.y + targetPortal.height / 2
-
-    Store.player?.character?.setDepth(targetPortal.depth)
-    Store.player?.character?.setPosition(x, y)
-    Store.player?.character?.setZone(targetPortal.fromZone)
+        Store.player?.character?.setDepth(targetPortal.depth)
+        Store.player?.character?.setPosition(x, y)
+        Store.player?.character?.setZone(targetPortal.fromZone)
+      })
 
   }, 500, {
     leading: true,

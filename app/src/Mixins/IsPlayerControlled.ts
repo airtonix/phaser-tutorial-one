@@ -15,7 +15,6 @@ export function IsPlayerControlled<TBase extends Constructor> (Base: TBase) {
         isMoving: boolean
         orientation: string
         isIdle: boolean
-        animateMovement: () => void
         joystick: VirtualJoystick
         keyboard: Phaser.Input.Keyboard
 
@@ -57,34 +56,27 @@ export function IsPlayerControlled<TBase extends Constructor> (Base: TBase) {
 
         update (time, delta) {
           super.update(time, delta)
-          this.updateKeysPressed(time, delta, this.keys)
-          this.animateMovement()
+          this.updateKeysPressed(this.keys)
         }
 
-        updateKeysPressed (...args: any[]) {
-          const [time, delta, keys] = args
-          this.beforeMove()
+        updateKeysPressed (keys) {
+          this.isMoving = keys.left.isDown
+            || keys.right.isDown
+            || keys.up.isDown
+            || keys.down.isDown
 
           // Horizontal movement
           if (get(keys, 'left.isDown') && !get(keys, 'right.isDown')) {
             this.orientation = Orientation.Left
-            this.moveToLeft()
           } else if (get(keys, 'right.isDown') && !get(keys, 'left.isDown')) {
             this.orientation = Orientation.Right
-            this.moveToRight()
-          } else {
-
           }
 
           // Vertical movement
           if (get(keys, 'up.isDown') && !get(keys, 'down.isDown')) {
             this.orientation = Orientation.Up
-            this.moveToUp()
           } else if (get(keys, 'down.isDown') && !get(keys, 'up.isDown')) {
             this.orientation = Orientation.Down
-            this.moveToDown()
-          } else {
-
           }
 
           if (get(keys, 'use.isDown')) {
@@ -98,8 +90,6 @@ export function IsPlayerControlled<TBase extends Constructor> (Base: TBase) {
           if (get(keys, 'inventory.isDown')) {
             this.openInventory()
           }
-
-          this.afterMove()
         }
 
         openInventory = debounce(() => {

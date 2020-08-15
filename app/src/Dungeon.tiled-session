@@ -52,27 +52,27 @@
             "scaleInEditor": 1
         },
         "Assets/LevelOne.tmx": {
-            "scale": 6.7706,
-            "selectedLayer": 2,
+            "scale": 4.5948,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 182.11089120609697,
-                "y": 182.70168079638438
+                "x": 167.36310611996169,
+                "y": 113.60668581875163
             }
         },
         "Assets/LevelThree.tmx": {
             "scale": 2.8455,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 181.69038833245477,
-                "y": 134.9499209277807
+                "x": 181.33895624670532,
+                "y": 134.5984888420313
             }
         },
         "Assets/LevelTwo.tmx": {
-            "scale": 2.1909375,
-            "selectedLayer": 2,
+            "scale": 3.5423,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 157.92326344316075,
-                "y": 207.6736556839253
+                "x": 170.51068514806764,
+                "y": 164.5823335121249
             }
         }
     },
