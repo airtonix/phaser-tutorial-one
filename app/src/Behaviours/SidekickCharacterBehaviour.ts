@@ -1,9 +1,28 @@
 export const SidekickCharacterBehaviour = `root {
     selector {
-        repeat until(isPlayerTouchingMe) {
+        selector while(CanSeePlayerCondition) {
             sequence {
-               wait [1000, 2500]
+                condition [IsCloseToPlayerCondition]
+                wait [500]
+                action [CirclePlayerAction]
             }
+            action [MoveTowardsPlayerAction]
+        }
+
+        sequence {
+            condition [IsHungryCondition]
+            condition [CanSeeFoodCondition]
+            action [EatFoodAction]
+        }
+
+        lotto {
+            action [ComplainAction]
+            sequence {
+                action [WanderAction]
+                wait [200, 1000]
+                action [IdelAction]
+            }
+            action [SleepAction]
         }
     }
 }`

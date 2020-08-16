@@ -14,7 +14,7 @@ export function WithBehaviour<TBase extends Constructor> (Base: TBase) {
 
     constructor (...args: any[]) {
       super(...args)
-      this.setBehaviour(this.behaviours.default)
+      this.setBehaviour('default')
     }
 
     public stepBehaviour = throttle(() => {

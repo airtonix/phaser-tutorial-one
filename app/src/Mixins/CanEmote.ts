@@ -1,9 +1,10 @@
-import { get, debounce } from 'lodash'
+import { debounce } from 'lodash'
+
+
+import { Emotes } from '~/Config/constants'
+import { Constructor } from '~/Core/framework'
 
 import { WritesLogs } from './WritesLogs'
-
-import { SpriteSheets, Emotes } from '~/Config/constants'
-import { Constructor } from '~/Core/framework'
 
 
 export interface IEmoteConfig {
@@ -28,52 +29,52 @@ export const EVENT_KEY_SHOW_EMOTE = 'show-emote'
 type EmotiveSprite = Phaser.GameObjects.Sprite
 
 export function CanEmote<TBase extends Constructor> (Base: TBase) {
-    return class CanEmote extends WritesLogs(Base) {
+  return class CanEmote extends WritesLogs(Base) {
         on: Function
         emote: EmotiveSprite
 
         constructor (...args: any[]) {
-            super(...args)
-            this.log('CanEmote')
-            this.emote = this.createEmoteSprite()
-            this.add(this.emote)
+          super(...args)
+          this.log('CanEmote')
+          this.emote = this.createEmoteSprite()
+          this.add(this.emote)
 
-            this.on(EVENT_KEY_SHOW_EMOTE, this.handleShowEmote)
+          this.on(EVENT_KEY_SHOW_EMOTE, this.handleShowEmote)
         }
 
         createEmoteSprite (): EmotiveSprite {
-            const sprite = this.scene.make.sprite({
-                x : 0,
-                y: 0,
-                key: Emotes.Default.sheet,
-            })
-            const { width, height, frames } = Emotes.Default
-            sprite.setFrame(frames.Blank)
-            sprite.setSize(width, height)
-            sprite.setOrigin(0.5, 2)
-            sprite.setVisible(false)
-            return sprite
+          const sprite = this.scene.make.sprite({
+            x : 0,
+            y: 0,
+            key: Emotes.Default.sheet,
+          })
+          const { width, height, frames } = Emotes.Default
+          sprite.setFrame(frames.Blank)
+          sprite.setSize(width, height)
+          sprite.setOrigin(0.5, 2)
+          sprite.setVisible(false)
+          return sprite
         }
 
         handleShowEmote = debounce((event) => {
-            this.log('handleShowEmote', event)
-            const {frame, timeout} = event
-            this.showEmoteFrame(frame, timeout)
+          this.log('handleShowEmote', event)
+          const {frame, timeout} = event
+          this.showEmoteFrame(frame, timeout)
         }, 500)
 
         showEmoteFrame (frame: integer, timeout: integer = 1000): void {
-            this.emote.setFrame(frame)
-            this.emote.setVisible(true)
-            if (!timeout) return
+          this.emote.setFrame(frame)
+          this.emote.setVisible(true)
+          if (!timeout) return
 
-            this.scene.time.addEvent({
-                delay: 800,
-                callbackScope: this,
-                callback: () => {
-                    this.emote.setVisible(false)
-                }
-            })
+          this.scene.time.addEvent({
+            delay: 800,
+            callbackScope: this,
+            callback: () => {
+              this.emote.setVisible(false)
+            }
+          })
         }
 
-    }
+  }
 }

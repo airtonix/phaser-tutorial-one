@@ -48,6 +48,7 @@ export class MapScene extends BaseScene {
     this.sidekick = new SidekickGoblen(this)
     this.sidekick.setDepth(Store.player?.character.depth + 1)
     this.sidekick.setPosition(this.player.x, this.player.y)
+    this.createColliders(this.sidekick, Object.values(this.mapLayers))
 
     if (Store.currentZone?.containers) {
       this.containers = this.createContainers()
