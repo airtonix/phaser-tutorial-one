@@ -8,7 +8,6 @@ import {
 
 import { Modifier } from '../Modifier/ModifierModel'
 
-import { LootChestThing } from '~/Objects'
 import { NotImplementedError } from '~/Core/exceptions'
 
 export const ENTITY_MODEL_KEY = 'Entity'

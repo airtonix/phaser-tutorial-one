@@ -24,7 +24,6 @@ export function WithBehaviour<TBase extends Constructor> (Base: TBase) {
         this.log('behaviour is not a BehaviourTree')
         return
       }
-      this.log('behaviour.step')
       this.behaviour.step()
     }, 200)
 

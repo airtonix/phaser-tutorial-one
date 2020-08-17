@@ -1,3 +1,5 @@
+import { State } from 'mistreevous'
+
 import { Animations, Emotes, Orientation } from '~/Config/constants'
 import { IsPlayerControlled } from '~/Mixins/IsPlayerControlled'
 import { CanInteract } from '~/Mixins/CanInteract'
@@ -8,7 +10,6 @@ import { CanMove } from '~/Mixins/CanMove'
 import { WithBehaviour } from '~/Mixins/WithBehaviour'
 import { SidekickCharacterBehaviour } from '~/Behaviours/SidekickCharacterBehaviour'
 import { getDistance, IPosition, position, directionTo } from '~/Core/distance'
-import { State } from 'mistreevous'
 
 
 @CanAnimate
@@ -49,6 +50,8 @@ export class SidekickGoblen extends Goblin {
   behaviours = {
     default: SidekickCharacterBehaviour
   }
+  visionDistance = 50
+  hearingDistance = 40
 
   get player (): Phaser.GameObjects.Container | undefined {
     return this.scene?.player
@@ -68,77 +71,80 @@ export class SidekickGoblen extends Goblin {
     const distance = getDistance(here, there)
     return distance
   }
+
   /**
    * Can this character see the player?
    * @type Behaviour Condition
    */
   CanSeePlayerCondition (): boolean {
     if (!this.player) return false
-    return this.getDistanceToPlayer() <= 100
+    return this.getDistanceToPlayer() <= this.visionDistance
   }
 
   /**
    * Is this character close to the player?
    * @type Behaviour Condition
    */
-  IsCloseToPlayerCondition (): boolean {
+  IsCanTouchPlayerCondition = (): boolean => {
     if (!this.player) return false
-    return this.getDistanceToPlayer() <= 40
+    return this.getDistanceToPlayer() <= this.usageDistance
   }
 
-  CirclePlayerAction () {
-    this.log('Circling player')
+  CirclePlayerAction = () => {
     return State.SUCCEEDED
   }
 
-  MoveTowardsPlayerAction() {
-    const direction = directionTo(
+  MoveTowardsPlayerAction = () => {
+    const angle = directionTo(
       position(this.player),
       position(this),
     )
-    this.log('Following player', direction)
+    const direction = Phaser.Math.Angle.CounterClockwise(angle)
     return State.SUCCEEDED
   }
 
-  IsHungryCondition () {
-    this.log('am i hungry?')
-    return false
-  }
-
-  CanSeeFoodCondition () {
-    this.log('can I see food')
-    return false
-  }
-
-  EatFoodAction () {
-    this.log('eat food')
-    this.showEmoteFrame(Emotes.Default.frames.Happy)
+  EmoteLoveAction () {
+    this.showEmoteFrame(Emotes.Default.frames.Love)
     return State.SUCCEEDED
   }
 
-  ComplainAction() {
-    this.log('complain')
-    this.showEmoteFrame(Emotes.Default.frames.Sad)
+  EmoteIdeaAction () {
+    this.showEmoteFrame(Emotes.Default.frames.Idea)
     return State.SUCCEEDED
   }
 
-  WanderAction = () => {
-    this.log('wandering')
-    this.orientation = Phaser.Utils.Array
-      .GetRandom(Object.values(Orientation))
-    this.isMoving = true
+  EmoteQueryAction () {
+    this.showEmoteFrame(Emotes.Default.frames.Query)
     return State.SUCCEEDED
   }
 
-  IdelAction = () => {
-    this.log('idle')
+  IdleAction = () => {
     this.isMoving = false
     return State.SUCCEEDED
   }
 
-  SleepAction () {
-    this.log('sleeping')
-    this.showEmoteFrame(Emotes.Default.frames.Tired)
+  WalkLeftAction () {
+    this.orientation === Orientation.Left
+    this.isMoving = true
     return State.SUCCEEDED
   }
+
+  WalkRightAction () {
+    this.orientation === Orientation.Right
+    this.isMoving = true
+    return State.SUCCEEDED
+  }
+
+  WalkUpAction () {
+    this.orientation === Orientation.Up
+    this.isMoving = true
+    return State.SUCCEEDED
+  }
+
+  WalkDownAction () {
+    this.orientation === Orientation.Down
+    this.isMoving = true
+    return State.SUCCEEDED
+  }
+
 }

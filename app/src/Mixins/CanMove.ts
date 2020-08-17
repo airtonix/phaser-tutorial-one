@@ -32,15 +32,19 @@ export function CanMove<TBase extends Constructor> (Base: TBase) {
 
       if (this.isMoving) {
         if (this.orientation === Orientation.Down) {
-          this.moveToDown()
+          this.log('moveToDown', this.speed, this.prevVelocity)
+          this.body.setVelocityY(this.speed)
         } else if (this.orientation === Orientation.Up) {
-          this.moveToUp()
+          this.log('moveToUp', this.speed, this.prevVelocity)
+          this.body.setVelocityY(-this.speed)
         }
 
         if (this.orientation === Orientation.Left) {
-          this.moveToLeft()
+          this.log('moveToLeft', -this.speed, this.prevVelocity)
+          this.body.setVelocityX(-this.speed)
         } else if (this.orientation === Orientation.Right) {
-          this.moveToRight()
+          this.log('moveToRight', this.speed, this.prevVelocity)
+          this.body.setVelocityX(this.speed)
         }
       }
 
@@ -48,27 +52,19 @@ export function CanMove<TBase extends Constructor> (Base: TBase) {
     }
 
     moveToLeft = () => {
-      if (!this.active) return
-      this.log('moveToLeft', -this.speed, this.prevVelocity)
-      this.body.setVelocityX(-this.speed)
+      this.orientation = Orientation.Left
     }
 
     moveToRight = () => {
-      if (!this.active) return
-      this.log('moveToRight', this.speed, this.prevVelocity)
-      this.body.setVelocityX(this.speed)
+      this.orientation = Orientation.Right
     }
 
     moveToDown = () => {
-      if (!this.active) return
-      this.log('moveToDown', this.speed, this.prevVelocity)
-      this.body.setVelocityY(this.speed)
+      this.orientation = Orientation.Down
     }
 
     moveToUp = () => {
-      if (!this.active) return
-      this.log('moveToUp', this.speed, this.prevVelocity)
-      this.body.setVelocityY(-this.speed)
+      this.orientation = Orientation.Up
     }
 
     jump = () => {
@@ -89,6 +85,7 @@ export function CanMove<TBase extends Constructor> (Base: TBase) {
 
     idle = () => {
       if (!this.active) return
+      this.isMoving = false
     }
 
     beforeMove () {

@@ -1,28 +1,30 @@
-export const SidekickCharacterBehaviour = `root {
+export const SidekickCharacterBehaviour = `
+root {
     selector {
-        selector while(CanSeePlayerCondition) {
-            sequence {
-                condition [IsCloseToPlayerCondition]
-                wait [500]
-                action [CirclePlayerAction]
+        sequence while(CanSeePlayerCondition) {
+            action [EmoteLoveAction]
+            repeat while(CanSeePlayerCondition) {
+                wait [200]
             }
-            action [MoveTowardsPlayerAction]
         }
 
-        sequence {
-            condition [IsHungryCondition]
-            condition [CanSeeFoodCondition]
-            action [EatFoodAction]
-        }
-
-        lotto {
-            action [ComplainAction]
-            sequence {
-                action [WanderAction]
-                wait [200, 1000]
-                action [IdelAction]
+        sequence until(CanSeePlayerCondition) {
+            action [EmoteQueryAction]
+            repeat until(CanSeePlayerCondition) {
+                sequence {
+                    wait [200, 500]
+                    lotto {
+                        action [WalkLeftAction]
+                        action [WalkRightAction]
+                        action [WalkDownAction]
+                        action [WalkUpAction]
+                    }
+                    wait [4000, 8500]
+                    action [IdleAction]
+                    wait [10000, 18500]
+                }
             }
-            action [SleepAction]
         }
     }
-}`
+}
+`
