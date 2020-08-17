@@ -1,4 +1,4 @@
-{ "compressionlevel":-1,
+{ "compressionlevel":0,
  "editorsettings":
     {
      "export":
@@ -45,7 +45,7 @@
                  "y":148
                 }, 
                 {
-                 "height":128,
+                 "height":144,
                  "id":7,
                  "name":"",
                  "rotation":0,
@@ -53,7 +53,7 @@
                  "visible":true,
                  "width":88,
                  "x":100,
-                 "y":88
+                 "y":80
                 }, 
                 {
                  "height":8,
@@ -213,7 +213,7 @@
  "nextobjectid":9,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.1",
+ "tiledversion":"2020.01.22",
  "tileheight":16,
  "tilesets":[
         {
@@ -1413,6 +1413,6 @@
         }],
  "tilewidth":16,
  "type":"map",
- "version":1.4,
+ "version":1.2,
  "width":20
 }

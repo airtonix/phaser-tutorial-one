@@ -67,6 +67,17 @@
                  "width":40,
                  "x":148,
                  "y":148
+                }, 
+                {
+                 "height":20,
+                 "id":24,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":8,
+                 "x":164,
+                 "y":64
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -165,10 +176,10 @@
          "y":0
         }],
  "nextlayerid":11,
- "nextobjectid":24,
+ "nextobjectid":25,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.1",
+ "tiledversion":"2020.01.22",
  "tileheight":16,
  "tilesets":[
         {
@@ -1368,6 +1379,6 @@
         }],
  "tilewidth":16,
  "type":"map",
- "version":1.4,
+ "version":1.2,
  "width":32
 }

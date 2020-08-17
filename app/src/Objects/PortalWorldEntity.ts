@@ -1,8 +1,8 @@
 import Phaser from 'phaser'
+import { debounce } from 'lodash'
 
 import { WritesLogs } from '~/Mixins/WritesLogs'
 import { Store } from '~/Store'
-import { debounce } from 'lodash'
 
 @WritesLogs
 export class PortalWorldEntity extends Phaser.GameObjects.Container {
@@ -62,6 +62,13 @@ export class PortalWorldEntity extends Phaser.GameObjects.Container {
     scene.add.existing(this)
 
     this.on('overlap', this.handleOverlap)
+    scene.events.on('update', this.update, this)
+    scene.events.once('shutdown', this.destroy, this)
+  }
+
+  destroy (): void {
+    if (this.scene) this.scene.events.off('update', this.update, this);
+    super.destroy();
   }
 
   update = (): void => {

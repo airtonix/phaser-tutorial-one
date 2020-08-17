@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import PhaserNavMeshPlugin from 'phaser-navmesh'
 
 export const PARENT_DIV_TAG = 'phaser-game'
 
@@ -13,6 +14,17 @@ export default {
 
   width: window.innerWidth / 2,
   height: window.innerHeight / 2,
+
+  plugins: {
+    scene: [
+      {
+        key: 'NavMeshPlugin',
+        plugin: PhaserNavMeshPlugin,
+        mapping: 'navMeshPlugin',
+        start: true
+      }
+    ]
+  },
 
   render: {
     // prevent tile bleeding

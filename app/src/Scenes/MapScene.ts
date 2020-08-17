@@ -2,10 +2,11 @@ import Phaser from 'phaser'
 
 import { Store } from '~/Store'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
-import { PlayerWarrior } from '~/Objects/CharacterWarrior'
 import { NoZoneMapError } from '~/Store/Zone/Exceptions'
 import { WritesLogs } from '~/Mixins/WritesLogs'
-import { SidekickGoblen } from '~/Objects/CharacterGoblin'
+import { PlayerWarrior } from '~/Objects/CharacterWarrior'
+import { SidekickGoblin } from '~/Objects/CharacterGoblin'
+import { Character } from '~/Objects/Character'
 
 import { BaseScene } from './BaseScene'
 
@@ -20,13 +21,15 @@ export class MapScene extends BaseScene {
   isInteractive = true
   countdown = 450
 
-  player: any
+  player: Character
+  sidekick: Character
+
   containers: Phaser.GameObjects.Group
   portals: Phaser.GameObjects.Group
 
   map: Phaser.Tilemaps.Tilemap
   tileset: Phaser.Tilemaps.Tileset
-  mapLayers: Phaser.Tilemaps.DynamicTilemapLayer[]
+  mapLayers: Phaser.Tilemaps.StaticTilemapLayer[]
   animatedTiles: AnimatedTile[]
 
   create (): void {
@@ -41,11 +44,15 @@ export class MapScene extends BaseScene {
     this.mapLayers = this.createMapLayers(this.map)
     this.animatedTiles = this.animateTiles(this.map, this.tileset)
 
+    this.navMesh = this.navMeshPlugin.buildMeshFromTiled(`${Store.currentZone.map.key}Mesh`, this.map.getObjectLayer('NavMesh'), 5)
+    const graphics = this.add.graphics(0, 0).setAlpha(0.5).setDepth(1000);
+    this.navMesh.enableDebug(graphics);
+
     this.player = this.createPlayer()
     this.setLayersColliable(this.mapLayers)
     this.createColliders(this.player, Object.values(this.mapLayers))
 
-    this.sidekick = new SidekickGoblen(this)
+    this.sidekick = new SidekickGoblin(this, this.navMesh)
     this.sidekick.setDepth(Store.player?.character.depth + 1)
     this.sidekick.setPosition(this.player.x, this.player.y)
     this.createColliders(this.sidekick, Object.values(this.mapLayers))
@@ -64,10 +71,6 @@ export class MapScene extends BaseScene {
 
   update (time: number, delta: number): void {
     this.animatedTiles.forEach(tile => tile.update(delta))
-    this.player && this.player.update(time, delta)
-    this.sidekick && this.sidekick.update(time, delta)
-    this.portals.getChildren().forEach(portal => portal.update(time, delta))
-    this.containers.getChildren().forEach(container => container.update(time, delta))
   }
 
   createPlayer (): Phaser.GameObjects.Container {

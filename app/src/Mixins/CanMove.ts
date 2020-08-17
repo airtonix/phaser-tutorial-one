@@ -26,7 +26,9 @@ export function CanMove<TBase extends Constructor> (Base: TBase) {
       }
     }
 
-    update (time, delta) {
+    update (time: integer, delta: integer) {
+      // if (!this.body) return
+
       super.update(time, delta)
       this.beforeMove()
 

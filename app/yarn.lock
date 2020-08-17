@@ -6957,11 +6957,6 @@ mobx-react@^5.4.3:
     hoist-non-react-statics "^3.0.0"
     react-lifecycles-compat "^3.0.2"
 
-mobx-state-tree@^3.14.0:
-  version "3.17.2"
-  resolved "https://registry.yarnpkg.com/mobx-state-tree/-/mobx-state-tree-3.17.2.tgz#130ab4d450fc4dd6e2571b7385af1350c82def37"
-  integrity sha512-X0+xO7yEvBvPmLU2Z6cp81sD0xQaMXgLD4lGZoKSasOhNJSQPyKlu/LFxJTS6Wgw7J3gkWq9MMfQ4pO6wGMVfw==
-
 mobx@^5.9.4:
   version "5.15.4"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-5.15.4.tgz#9da1a84e97ba624622f4e55a0bf3300fb931c2ab"
@@ -7010,11 +7005,6 @@ ms@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
-
-mst-persist@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/mst-persist/-/mst-persist-0.1.3.tgz#ac7203f3ab36085106c4293d4a9cd67dd5613708"
-  integrity sha512-G2IzmTvi2E8zOTTCiMENkli+KmANhpPNlkguOEJp0dioqfdETDQjLO6QKy5hXhDTRIQhu48IlDJeNdyeZ8NIaw==
 
 nan@^2.12.1:
   version "2.14.1"

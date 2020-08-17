@@ -22,7 +22,7 @@ export function position (actor) : IPosition {
   return { x, y }
 }
 
-export function directionTo (fromPosition, toPosition) {
+export function directionTo (fromPosition, toPosition) : integer {
   return Phaser.Math.Angle.Between(
     fromPosition.x,
     fromPosition.y,

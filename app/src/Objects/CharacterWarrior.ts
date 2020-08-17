@@ -32,6 +32,17 @@ export class Warrior extends Phaser.GameObjects.Container {
         default: { anim: Animations.WarriorJump },
       }
     }
+
+    constructor (...args: any[]) {
+      super(...args)
+      this.scene.events.on('update', this.update, this);
+      this.scene.events.once('shutdown', this.destroy, this);
+    }
+
+    destroy () : void {
+      if (this.scene) this.scene.events.off('update', this.update, this);
+      super.destroy();
+    }
 }
 
 @IsPlayerControlled
