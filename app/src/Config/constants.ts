@@ -23,6 +23,7 @@ export const FrameConfig16x16 = {
   frameHeight: 16,
 }
 
+export type TypeofOrientation = keyof typeof Orientation
 export const Orientation = {
   Down: 'down',
   Left: 'left',
