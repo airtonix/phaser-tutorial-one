@@ -1,1 +1,1 @@
-export { LootChestThing } from './LootChestThing'
+export { ContainerChest } from './Containers/ContainerChest'

@@ -52,6 +52,7 @@
     "phaser-navmesh": "^2.0.5",
     "phaser-tilemap-plus": "^0.10.2",
     "phaser3-rex-plugins": "^1.1.21",
+    "polytype": "^0.10.0",
     "postcss-modules": "^3.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -62,7 +63,7 @@
     "tslint": "^5.8.0",
     "tslint-config-standard": "^7.0.0",
     "tslint-eslint-rules": "^4.1.1",
-    "typescript": "^3.9.6"
+    "typescript": "4.x"
   },
   "keywords": [],
   "author": "",

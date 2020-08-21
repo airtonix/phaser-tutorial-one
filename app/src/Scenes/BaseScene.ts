@@ -1,26 +1,22 @@
 import Phaser from 'phaser'
+import { classes } from 'polytype'
 
 import { WritesLogs } from '~/Mixins/WritesLogs'
 
-export interface SceneProps {
-    key: string
-    [x: string]: any
-}
-
-@WritesLogs
-export class BaseScene extends Phaser.Scene {
+export class BaseScene extends classes(
+  Phaser.Scene,
+  WritesLogs
+) {
     isInteractive: boolean
     key: string
-    props: SceneProps
-    log: (...args: any[]) => void
 
-    constructor (props: SceneProps = {}) {
-      super(props)
-      this.key = props.key
-      this.props = props
+    constructor (
+      config: Phaser.Types.Scenes.SettingsConfig
+    ) {
+      super(
+        {super: Phaser.Scene, arguments: [ config ]},
+        {super: WritesLogs, arguments: [ config ]},
+      )
     }
 
-    public create (): void {
-      return
-    }
 }

@@ -1,90 +1,92 @@
-import { get } from 'lodash'
-
-import { Constructor } from '~/Core/framework'
-
-import { WritesLogs } from './WritesLogs'
-
+import { Orientation } from '~/Config/constants'
 
 export interface IAnimationSheetConfig {
     key: string,
-    frameRate: integer,
+    frameRate?: integer,
     repeat: integer,
-    padding: integer,
+    padding?: integer,
     frames: integer[],
     sheet: string,
 }
 
 export interface IAnimationConfig {
-    flip: boolean,
+    flip?: boolean,
     anim: IAnimationSheetConfig
 }
 
 export interface IAnimationGroup {
-    default?: IAnimationConfig
+    default: IAnimationConfig
     [animationVariant: string]: IAnimationConfig
 }
 
 export interface IAnimations {
-    [animationGroup: string]: IAnimationGroup
+  default: IAnimationGroup
+  [animationGroup: string]: IAnimationGroup
 }
 
-export function CanAnimate<TBase extends Constructor> (Base: TBase) {
-  return class CanAnimate extends WritesLogs(Base) {
-        sprite: Phaser.GameObjects.Sprite
-        active = true
-        animations: IAnimations
-        orientation: string
-        isIdle: boolean
+export class CanAnimate extends Phaser.GameObjects.Container {
+  body: Phaser.Physics.Arcade.Body
+  scene: Phaser.Scene
+  sprite: Phaser.GameObjects.Sprite
+  active = true
+  animations: IAnimations
+  orientation: Orientation
+  isIdle: boolean
 
-        constructor (...props: any[]) {
-          super(...props)
-          this.log('CanAnimate')
-          if (!this.body) {
-            this.scene.physics.add.existing(this)
-            this.scene.physics.world.enable(this)
-          }
-        }
+  constructor (
+    scene: Phaser.Scene,
+    x: number,
+    y: number
+  ) {
+    super(scene, x, y)
+    if (!this.body) {
+      this.scene.physics.add.existing(this)
+      this.scene.physics.world.enable(this)
+    }
+  }
 
-        update (time, delta) {
-          super.update(time, delta)
-          this.animateMovement()
-        }
+  update (): void {
+    this.animateMovement()
+  }
 
-        animate (animation: IAnimationConfig) {
-          if(!animation) return
-          if(this.sprite.anims.currentAnim?.key === animation.anim?.key) return
+  animate (animation: IAnimationConfig | undefined): void{
+    if(!animation) return
+    if(this.sprite.anims.currentAnim?.key === animation.anim?.key) return
 
-          this.log('animation', animation)
+    const { flip, anim } = animation
 
-          const { flip, anim } = animation
+    if (typeof flip !== 'undefined') {
+      this.sprite.setFlip(flip, false)
+    }
 
-          if (typeof flip !== 'undefined') {
-            this.sprite.setFlip(flip, false)
-          }
+    if (anim) {
+      const { key } = anim
+      this.sprite.play(key, true, 0)
+    }
+  }
 
-          if (anim) {
-            const { key } = anim
-            this.sprite.play(key, true, 0)
-          }
-        }
+  getAnimation (
+    action: string | false,
+    variant: string
+  ): IAnimationConfig | undefined {
+    if (!action) return
+    if (!this.animations) return
 
-        getAnimation (action: string, variant: string) {
-          if (!this.animations) return
+    const animationAction = this.animations[action]
+      || this.animations.default
 
-          return get(
-            this.animations, [action, variant],
-            get(this.animations, [ action, 'default' ], {})
-          )
-        }
+    const animation = animationAction[variant]
+      || animationAction.default
 
-        animateMovement = () => {
-          const {x,y} = this.body.velocity
-          const action = this.isJumping && 'jump' ||
-                !this.isIdle && 'moving' ||
-                this.isIdle && 'idle'
-          const animation = this.getAnimation(action, this.orientation)
-          this.animate(animation)
-        }
+    return animation
+  }
 
+  animateMovement = (): void => {
+    const action =
+      !this.isIdle && 'moving' ||
+      this.isIdle && 'idle'
+
+    const animation = this.getAnimation(action, this.orientation)
+    this.animate(animation)
   }
 }

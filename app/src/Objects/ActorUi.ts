@@ -1,15 +1,15 @@
 import Phaser from 'phaser'
 
 import { WritesLogs } from '~/Mixins/WritesLogs'
+import { Store } from '~/Store'
 
-import { Warrior } from './CharacterWarrior'
+import { Character } from './Characters/Character'
 
 
-@WritesLogs
 export class ActorUi extends Phaser.GameObjects.Container {
     static key = 'ActorUi'
 
-    avatar: Warrior
+    avatar: Character
     border: Phaser.GameObjects.Graphics
     bg: Phaser.GameObjects.Graphics
 
@@ -31,7 +31,7 @@ export class ActorUi extends Phaser.GameObjects.Container {
       this.bg.fillStyle(0x222222, 1)
       this.bg.fillCircle(0, 0, 16)
 
-      this.avatar = new Warrior(scene)
+      this.avatar = Store.player?.activeCharacter.createGameObject(this)
       this.avatar.setPosition(32, 40)
       this.avatar.setDepth(1)
 

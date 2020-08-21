@@ -1,18 +1,23 @@
-import { WritesLogs } from '~/Mixins/WritesLogs';
+import { classes } from 'polytype'
+import { reaction } from 'mobx';
+
 import { Store } from '~/Store';
 
 import { BaseScene } from './BaseScene';
 import { InterfaceScene } from './InterfaceScene';
 import { MapScene } from './MapScene';
-import { reaction } from 'mobx';
-import { getSnapshot } from 'mobx-keystone';
 
-@WritesLogs
-export class GameScene extends BaseScene {
+export class GameScene
+  extends classes(
+    BaseScene,
+  ) {
+
   static key = 'GameScene'
 
   constructor () {
-    super({ key: GameScene.key })
+    super(
+      { super: BaseScene, arguments: [{ key: GameScene.key }] },
+    )
     this.log('constructed')
   }
 

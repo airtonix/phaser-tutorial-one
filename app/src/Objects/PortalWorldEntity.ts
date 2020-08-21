@@ -1,10 +1,8 @@
 import Phaser from 'phaser'
 import { debounce } from 'lodash'
 
-import { WritesLogs } from '~/Mixins/WritesLogs'
 import { Store } from '~/Store'
 
-@WritesLogs
 export class PortalWorldEntity extends Phaser.GameObjects.Container {
   zone: Phaser.GameObjects.Zone
 

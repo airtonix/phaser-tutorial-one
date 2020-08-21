@@ -1,21 +1,13 @@
-import { Constructor } from '~/Core/framework';
+export class IsImovable extends Phaser.GameObjects.Container {
+  body: Phaser.Physics.Arcade.Body
 
-import { WritesLogs } from './WritesLogs';
-
-
-export function IsImovable<TBase extends Constructor> (Base: TBase) {
-  return class IsImovable extends WritesLogs(Base) {
-        body: {
-            immovable: boolean,
-            moves: boolean
-        }
-
-        constructor (...args: any[]) {
-          super(...args)
-          this.log('IsImovable')
-
-          this.body.immovable = true;
-          this.body.moves = false;
-        }
+  constructor (
+    scene: Phaser.Scene,
+    x: number,
+    y: number
+  ) {
+    super(scene, x, y)
+    this.body.immovable = true;
+    this.body.moves = false;
   }
 }

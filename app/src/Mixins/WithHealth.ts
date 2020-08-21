@@ -1,91 +1,85 @@
 import Health from 'phaser-component-health'
 
-import { CanAnimate, IAnimationConfig } from './CanAnimate'
-import { WritesLogs } from './WritesLogs'
+import { CanAnimate } from './CanAnimate'
 
-import { Constructor } from '~/Core/framework'
 
-export function WithHealth<Tbase extends Constructor<{}>> (Base: Tbase) {
-    return class WithHealth extends CanAnimate(WritesLogs(Base)) {
-        on: CallableFunction
-        behaviour: any
-        active: boolean
-        minHealth: integer = 0
-        maxHealth: integer = 100
-        regenHealthRate: integer = 5
-        isInvincible = false
-        health: Health
-        sprite: Phaser.GameObjects.Sprite
+export class WithHealth extends CanAnimate {
+  active: boolean
+  minHealth: integer = 0
+  maxHealth: integer = 100
+  regenHealthRate: integer = 5
+  isInvincible = false
+  health: typeof Health
+  sprite: Phaser.GameObjects.Sprite
 
-        constructor (...args: any[]) {
-            super(...args)
-            this.log('WithHealth')
-            this.health = this.createHealthManager()
-        }
+  constructor (
+    scene: Phaser.Scene,
+    x: number,
+    y: number
+  ) {
+    super(scene, x, y)
+    this.createHealthManager()
+  }
 
-        createHealthManager () : Health {
-            if (this.isInvincible) return
+  createHealthManager (): void {
+    Health.AddTo(
+      this,
+      this.minHealth,
+      this.isInvincible
+        ? Infinity
+        : this.maxHealth
+    )
 
-            const health = Health.AddTo(
-                this, this.minHealth, this.maxHealth)
+    this.on('die', this.handleDeath)
+    this.on('revive', this.handleRevived)
+    this.on('healthchange', this.handleHealthChanged)
+    this.on('heal', this.handleRecieveHealing)
+    this.on('damage', this.handleRecieveDamage)
+  }
 
-            this.on('die', this.handleDeath)
-            this.on('revive', this.handleRevived)
-            this.on('healthchange', this.handleHealthChanged)
-            this.on('heal', this.handleRecieveHealing)
-            this.on('damage', this.handleRecieveDamage)
+  handleHealthChanged = (...args: any[]): void => {
+    console.log('healthChanged', ...args)
+  }
 
-            return health
-        }
+  handleDeath (): void {
+    if (!this.active) return
 
-        handleDeath () {
-            if(!this.active) return
+    const animation = this.getAnimation('death', this.orientation)
+    const sprite = this.sprite
 
-            this.log('handleDeath')
-            const sprite = this.sprite
+    sprite
+      .setActive(false)
+      .setVisible(false)
 
-            sprite
-                .setActive(false)
-                .setVisible(false)
+    this.animate(animation)
+  }
 
-            const animation: IAnimationConfig = this.animations?.death?.default
-            this.animate(animation)
-        }
+  handleRevived (): void {
+    if (!this.active) return
 
-        handleRevived () {
-            if(!this.active) return
-            const {
-                animations: { revive }
-            } = this.props
-            this.log('handleRevived')
-            const sprite = this.sprite
+    const animation = this.getAnimation('revive', this.orientation)
 
-            sprite.setActive(true)
-            sprite.setVisible(true)
+    const sprite = this.sprite
+    sprite.setActive(true)
+    sprite.setVisible(true)
 
-            this.animate(revive)
-        }
+    this.animate(animation)
+  }
 
-        handleHealthChanged (obj, amount, health, maxHealth) {
-            if(!this.active) return
+  handleRecieveHealing (): void {
+    if (!this.active) return
 
-            this.log('handleHealthChange', { amount, health, maxHealth })
-        }
+    const animation = this.getAnimation('healed', this.orientation)
 
-        handleRecieveHealing () {
-            if(!this.active) return
+    this.animate(animation)
+  }
 
-            this.log('handleRecieveHealing')
-        }
+  handleRecieveDamage (): void {
+    if (!this.active) return
 
-        handleRecieveDamage () {
-            if(!this.active) return
-            const {
-                animations: { damaged }
-            } = this.props
-            this.log('handleRecieveDamage')
-            this.animate(damaged)
-        }
+    const animation = this.getAnimation('damaged', this.orientation)
 
-    }
+    this.animate(animation)
+  }
+
 }

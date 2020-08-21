@@ -1,21 +1,25 @@
 import Phaser from 'phaser'
+import PhaserNavmeshPlugin, { PhaserNavmesh } from 'phaser-navmesh'
+import { classes } from 'polytype'
 
 import { Store } from '~/Store'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
 import { NoZoneMapError } from '~/Store/Zone/Exceptions'
-import { WritesLogs } from '~/Mixins/WritesLogs'
-import { PlayerWarrior } from '~/Objects/CharacterWarrior'
-import { SidekickGoblin } from '~/Objects/CharacterGoblin'
-import { Character } from '~/Objects/Character'
+import { Warrior } from '~/Objects/Characters/CharacterWarrior'
+import { SidekickGoblin } from '~/Objects/Characters/CharacterGoblin'
+import { Character } from '~/Objects/Characters/Character'
+import { NoMapError } from '~/Store/Map/Exceptions'
+import { PlayerController } from '~/Core/PlayerController'
 
 import { BaseScene } from './BaseScene'
 
-interface TileMapHash {
+interface TileMapLayerHash {
   [key: string]: Phaser.Tilemaps.DynamicTilemapLayer
 }
 
-@WritesLogs
-export class MapScene extends BaseScene {
+export class MapScene extends classes(
+  BaseScene,
+) {
   static key = 'MapScene'
 
   isInteractive = true
@@ -23,38 +27,43 @@ export class MapScene extends BaseScene {
 
   player: Character
   sidekick: Character
+  controller: PlayerController
 
   containers: Phaser.GameObjects.Group
   portals: Phaser.GameObjects.Group
 
   map: Phaser.Tilemaps.Tilemap
-  tileset: Phaser.Tilemaps.Tileset
-  mapLayers: Phaser.Tilemaps.StaticTilemapLayer[]
+  navMesh: PhaserNavmesh
+  navMeshPlugin: PhaserNavmeshPlugin
+  tileset: Phaser.Tilemaps.Tileset | undefined
+  mapLayers: TileMapLayerHash
   animatedTiles: AnimatedTile[]
+
+  constructor () {
+    super(
+      { super: BaseScene, arguments: [{ key: MapScene.key }] },
+    )
+    this.log('constructed')
+  }
 
   create (): void {
     this.cameras.main.fadeIn(200, 0, 0, 0)
-
     if (!Store.currentZone?.map) throw new NoZoneMapError
-    this.createLogger(Store.currentZone.map.key)
+
     this.log('create', Store.currentZone)
 
     this.map = this.createMap()
     this.tileset = this.drawMap(this.map)
     this.mapLayers = this.createMapLayers(this.map)
     this.animatedTiles = this.animateTiles(this.map, this.tileset)
-
-    this.navMesh = this.navMeshPlugin.buildMeshFromTiled(`${Store.currentZone.map.key}Mesh`, this.map.getObjectLayer('NavMesh'), 5)
-    const graphics = this.add.graphics(0, 0).setAlpha(0.5).setDepth(1000);
-    this.navMesh.enableDebug(graphics);
+    this.navMesh = this.createNavMesh()
 
     this.player = this.createPlayer()
+    this.controller = new PlayerController(this, this.player)
     this.setLayersColliable(this.mapLayers)
     this.createColliders(this.player, Object.values(this.mapLayers))
 
-    this.sidekick = new SidekickGoblin(this, this.navMesh)
-    this.sidekick.setDepth(Store.player?.character.depth + 1)
-    this.sidekick.setPosition(this.player.x, this.player.y)
+    this.sidekick = this.createPlayerSidekick()
     this.createColliders(this.sidekick, Object.values(this.mapLayers))
 
     if (Store.currentZone?.containers) {
@@ -69,22 +78,47 @@ export class MapScene extends BaseScene {
     // this.initCamera()
   }
 
-  update (time: number, delta: number): void {
+  update (
+    time: number,
+    delta: number
+  ): void {
     this.animatedTiles.forEach(tile => tile.update(delta))
   }
 
-  createPlayer (): Phaser.GameObjects.Container {
-    const player = new PlayerWarrior(this)
+  createPlayer (): Character {
+    const player = new Warrior(
+      [this]
+    )
     const playerCharacter = Store.player?.character
-    if (!playerCharacter) player
+    if (!playerCharacter) return player
 
-    const { x, y, depth } = playerCharacter
+    const {
+      x,
+      y,
+      depth
+    } = playerCharacter
 
     player.setDepth(depth + 1)
-
     player.setPosition(x, y)
     this.log('createPlayer', { x, y, depth })
+
     return player
+  }
+
+  createPlayerSidekick (): Character {
+    const sidekick = new SidekickGoblin(
+      this,
+      this.navMesh
+    )
+
+    const {
+      depth, x, y
+    } = this.player
+
+    sidekick.setDepth(depth + 1)
+    sidekick.setPosition(x, y)
+
+    return sidekick
   }
 
   createContainers (): Phaser.GameObjects.Group {
@@ -99,47 +133,102 @@ export class MapScene extends BaseScene {
     return this.physics.add.group(portals)
   }
 
-  drawMap (map: Phaser.Tilemaps.Tilemap): Phaser.Tilemaps.Tileset {
+  createNavMesh (): PhaserNavmesh {
+    const map = Store.currentZone?.map
+
+    if (!map) {
+      throw new NoMapError()
+    }
+
+    const navMesh = this.navMeshPlugin
+      .buildMeshFromTiled(
+        `${map.key}Mesh`,
+        this.map.getObjectLayer('NavMesh'),
+        5
+      )
+
+    const graphics = this.add
+      .graphics({ x: 0, y: 0 })
+      .setAlpha(0.25)
+      .setDepth(1000);
+
+    navMesh.enableDebug(graphics);
+
+    return navMesh
+  }
+
+  drawMap (
+    tilemap: Phaser.Tilemaps.Tilemap
+  ): Phaser.Tilemaps.Tileset | undefined {
+    const map = Store.currentZone?.map
+
+    if (!map) {
+      throw new NoMapError()
+    }
+
     const {
       tileset: currentTileSet,
       tileimage: curentTileImage
-    } = Store.currentZone?.map
+    } = map
 
-    const tileset = map.addTilesetImage(
+    const tileset = tilemap.addTilesetImage(
       currentTileSet,
       curentTileImage
     )
+
     this.log('drawMap.done')
+
     return tileset
   }
 
   createMap (): Phaser.Tilemaps.Tilemap {
     this.log('createMap')
-    const {
-      key
-    } = Store.currentZone.map
 
-    const map = this.make.tilemap({ key })
+    const map = Store.currentZone?.map
+
+    if (!map) {
+      throw new NoMapError()
+    }
+
+    const tilemap = this.make.tilemap({ key: map.key })
 
     const {
       widthInPixels,
       heightInPixels
-    } = map
+    } = tilemap
 
     this.physics.world.setBounds(0, 0, widthInPixels, heightInPixels)
     this.log('createMap.done')
 
-    return map
+    return tilemap
   }
 
-  createMapLayers (map: Phaser.Tilemaps.Tilemap): TileMapHash {
+  createMapLayers (
+    tilemap: Phaser.Tilemaps.Tilemap
+  ): TileMapLayerHash {
     this.log('createMapLayers')
+
+    const map = Store.currentZone?.map
+    const tileSetName = this.tileset?.name
+
+    if (!map || !tileSetName) {
+      throw new NoMapError()
+    }
+
     const layers = map.layers
-      .reduce((result, { name, properties }) => {
-        const depth = properties.find(({ name }) => name === 'depth')
-        this.log('createMapLayers.layer', name, depth?.value)
-        const layer = map.createDynamicLayer(name, this.tileset.name, 0, 0)
-        if (depth) layer.setDepth(depth.value)
+      .reduce((result, {
+        name,
+        depth,
+      }) => {
+        this.log('createMapLayers.layer', name, depth)
+
+        const layer = tilemap.createDynamicLayer(
+          name,
+          tileSetName,
+          0, 0
+        )
+
+        if (depth) layer.setDepth(depth)
 
         return {
           ...result,
@@ -152,9 +241,12 @@ export class MapScene extends BaseScene {
 
   animateTiles (
     map: Phaser.Tilemaps.Tilemap,
-    tileset: Phaser.Tilemaps.Tileset
+    tileset: Phaser.Tilemaps.Tileset | undefined
   ): AnimatedTile[] {
+    if (!tileset) throw new NoMapError()
+
     const tileData = tileset.tileData
+
     // create a list of tileIds that have animation data
     const tileIds = Object.keys(tileData)
       .filter(tileId => tileData[tileId].animation)
@@ -163,27 +255,44 @@ export class MapScene extends BaseScene {
     // get a flat list of tiles that are:
     // - from DynamicTilemapLayers only
     // - are in the above list of tileids
-    const tilesNeedingAnimation = map.layers
+    const dynamicLayers = Array.from(map.layers)
       .filter(layer => layer &&
         layer.tilemapLayer &&
-        layer.tilemapLayer.type === 'DynamicTilemapLayer')
-      .reduce((result, layer) => {
+        layer.tilemapLayer.type === 'DynamicTilemapLayer'
+      )
+
+    const tileDataRows = dynamicLayers
+      .reduce((
+        result: Phaser.Tilemaps.Tile[][],
+        layer: Phaser.Tilemaps.LayerData
+      ) => {
         return [
           ...result,
           ...layer.data
         ]
       }, [])
-      .reduce((result, tileRow) => {
+
+    const tilesNeedingAnimation = tileDataRows
+      .reduce((
+        result: Phaser.Tilemaps.Tile[],
+        tiles: Phaser.Tilemaps.Tile[]
+      ) => {
         return [
           ...result,
-          ...tileRow
+          ...tiles
         ]
       }, [])
-      .filter(tile => tileIds.includes(tile.index - tileset.firstgid))
+      .filter((
+        tile: Phaser.Tilemaps.Tile
+      ) =>
+        tileIds.includes(tile.index - tileset.firstgid)
+      )
 
     // create a animted
     const animatedTiles = tilesNeedingAnimation
-      .map(tile => {
+      .map((
+        tile: Phaser.Tilemaps.Tile
+      ) => {
         const tileId = tile.index - tileset.firstgid
         return new AnimatedTile(
           tile,
@@ -195,7 +304,9 @@ export class MapScene extends BaseScene {
     return animatedTiles
   }
 
-  onActorCollide = (...actors: Phaser.GameObjects.GameObject[]): void => {
+  onActorCollide = (
+    ...actors: Phaser.GameObjects.GameObject[]
+  ): void => {
     this.log('onActorCollide', actors)
     actors.forEach(actor => {
       if (typeof actor.emit === 'function') {
@@ -204,7 +315,9 @@ export class MapScene extends BaseScene {
     })
   }
 
-  onActorOverlap = (...actors: Phaser.GameObjects.GameObject[]): void => {
+  onActorOverlap = (
+    ...actors: Phaser.GameObjects.GameObject[]
+  ): void => {
     actors.forEach(actor => {
       if (typeof actor.emit === 'function') {
         actor.emit('overlap', { actors })
@@ -212,7 +325,9 @@ export class MapScene extends BaseScene {
     })
   }
 
-  setLayersColliable (layers: Phaser.Tilemaps.DynamicTilemapLayer): void {
+  setLayersColliable (
+    layers: TileMapLayerHash
+  ): void {
     Object.keys(layers)
       .forEach(layerId => {
         this.log(`setLayersCollidable: ${layerId}`)
@@ -221,7 +336,10 @@ export class MapScene extends BaseScene {
       })
   }
 
-  createColliders (actors, collidables) {
+  createColliders (
+    actors: Character,
+    collidables: Phaser.GameObjects.GameObject[]
+  ): void {
     this.log('createColliders')
     this.physics.add.collider(
       actors,
@@ -230,7 +348,10 @@ export class MapScene extends BaseScene {
     )
   }
 
-  createOverlaps (actors, collidables) {
+  createOverlaps (
+    actors: Character,
+    collidables: Phaser.GameObjects.GameObject[]
+  ): void {
     this.log('createColliders')
     this.physics.add.overlap(
       actors,
@@ -239,8 +360,7 @@ export class MapScene extends BaseScene {
     )
   }
 
-  // addColliders() { }
-  initCamera () {
+  initCamera (): void {
     const {
       widthInPixels,
       heightInPixels

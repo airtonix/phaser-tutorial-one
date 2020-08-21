@@ -1,25 +1,29 @@
+import { classes } from 'polytype'
 
 import { ContainerDialog } from '~/Objects/ContainerDialog'
-import { WritesLogs } from '~/Mixins/WritesLogs'
 import { ActorUi } from '~/Objects/ActorUi'
 import { EVENT_KEY_INVENTORY_SHOW_DIALOG, EVENT_KEY_INVENTORY_HIDE_DIALOG } from '~/Mixins/ContainsItems'
-import { EVENT_KEY_OPEN_PLAYER_INVENTORY } from '~/Mixins/IsPlayerControlled'
+import { EVENT_KEY_OPEN_PLAYER_INVENTORY } from '~/Core/PlayerController'
 import { Store } from '~/Store'
 
 import { BaseScene } from './BaseScene'
 
-@WritesLogs
-export class InterfaceScene extends BaseScene {
+export class InterfaceScene
+  extends classes(
+    BaseScene,
+  ) {
     static key = 'InterfaceScene'
 
-    log: (...args: any[]) => string
     gamebar: Phaser.GameObjects.Graphics
     player: ActorUi
     playerInventory: ContainerDialog
     containerInventory: ContainerDialog
 
     constructor () {
-      super({ key: InterfaceScene.key })
+      super(
+        { super: BaseScene, arguments: [{ key: InterfaceScene.key }] },
+      )
+      this.log('constructed')
     }
 
     create (): void {
@@ -44,7 +48,7 @@ export class InterfaceScene extends BaseScene {
           bottom: 'bottom-26'
         },
         items: Store.player
-          ? Store.player.character?.entities
+          ? Store.player.character?.inventory
           : []
       })
 
@@ -72,8 +76,8 @@ export class InterfaceScene extends BaseScene {
 
       this.game.events
         .on(EVENT_KEY_INVENTORY_SHOW_DIALOG,
-          ({ contents }) => {
-            this.containerInventory.open({ contents })
+          () => {
+            this.containerInventory.open()
             this.playerInventory.open()
           })
       this.game.events
@@ -84,7 +88,7 @@ export class InterfaceScene extends BaseScene {
           })
     }
 
-    togglePlayerInventory = () => {
+    togglePlayerInventory = (): void => {
       this.playerInventory.toggle()
     }
 

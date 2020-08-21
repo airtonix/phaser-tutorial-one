@@ -23,11 +23,11 @@ export const FrameConfig16x16 = {
   frameHeight: 16,
 }
 
-export const Orientation = {
-  Down: 'down',
-  Left: 'left',
-  Right: 'right',
-  Up: 'up',
+export enum Orientation {
+  Down = 'down',
+  Left = 'left',
+  Right = 'right',
+  Up = 'up',
 }
 
 export const SpriteSheets = {

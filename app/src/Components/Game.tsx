@@ -2,26 +2,39 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from 'react'
 import Phaser from 'phaser'
+import { classes } from 'polytype'
 
 import config, { PARENT_DIV_TAG } from '~/Config/phaser.config'
 import { PreloaderScene } from '~/Scenes/PreloaderScene'
 import { MenuScene } from '~/Scenes/MenuScene'
 import { GameScene } from '~/Scenes/GameScene'
-import { LevelOneScene } from '~/Scenes/LevelOneScene'
 import { InterfaceScene } from '~/Scenes/InterfaceScene'
 import { MapScene } from '~/Scenes/MapScene'
+import { WritesLogs } from '~/Mixins/WritesLogs'
 
-import classes from './Game.css'
+import css from './Game.css'
 
-class PhaserGame extends Phaser.Game {
+const PolyBase = classes(
+  Phaser.Game,
+  WritesLogs,
+)
+const PolyBaseWrapper = function (...args: any[]) {
+  return new PolyBase(...args)
+} as unknown as typeof PolyBase
+
+class PhaserGame extends PolyBaseWrapper {
 
   constructor () {
-    super(config)
+    super(
+      [config],
+      [{ key: 'Game' }]
+    )
     this.scene.add(PreloaderScene.key, PreloaderScene)
     this.scene.add(MenuScene.key, MenuScene)
     this.scene.add(GameScene.key, GameScene)
     this.scene.add(InterfaceScene.key, InterfaceScene)
     this.scene.add(MapScene.key, MapScene)
+    this.log('Starting')
     this.scene.start(PreloaderScene.key)
   }
 }
@@ -40,7 +53,7 @@ export class Game extends Component {
     render (): React.ReactNode {
       return (
         <div
-          className={classes.block}
+          className={css.block}
           id={PARENT_DIV_TAG}
         />
       )

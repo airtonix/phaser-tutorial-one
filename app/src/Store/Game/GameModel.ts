@@ -10,9 +10,12 @@ import { computed } from 'mobx'
 import { ZoneReference } from '../Zone/ZoneReference'
 import { Character } from '../Character/CharacterModel'
 import { UnknownZone } from '../Zone/Exceptions'
+import { Zone, ZoneTypes } from '../Zone/ZoneModel'
+import { Player } from '../Player/PlayerModel'
 
-import { Zone } from '~/Store/Zone/ZoneModel'
-import { Player } from '~/Store/Player/PlayerModel'
+import { TiledTileMaps } from '~/Config/constants'
+
+import { Library } from './LibraryModel'
 
 export const GAME_MODEL_KEY = 'Game'
 
@@ -22,9 +25,35 @@ export const GAME_MODEL_KEY = 'Game'
 @model(GAME_MODEL_KEY)
 export class Game extends Model({
   player: prop<Player | undefined>(),
+  library: prop<Library | undefined>(),
   zone: prop<Ref<Zone> | undefined>(),
   zones: prop<Zone[]>(() => [])
 }) {
+
+  onInit (): void {
+    this.library = new Library({ classes: [] })
+
+    const levelOne = new Zone({
+      name: 'LevelOne',
+      type: ZoneTypes.Dungeon,
+    })
+    levelOne.addMapFromLevelData(TiledTileMaps.LevelOne)
+    this.addZone(levelOne)
+
+    const levelTwo = new Zone({
+      name: 'LevelTwo',
+      type: ZoneTypes.Dungeon,
+    })
+    levelOne.addMapFromLevelData(TiledTileMaps.LevelTwo)
+    this.addZone(levelTwo)
+
+    const levelThree = new Zone({
+      name: 'LevelThree',
+      type: ZoneTypes.Dungeon,
+    })
+    levelOne.addMapFromLevelData(TiledTileMaps.LevelThree)
+    this.addZone(levelThree)
+  }
 
   @modelAction
   startPlayer (zone: Zone): void {

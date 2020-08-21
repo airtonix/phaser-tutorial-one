@@ -30,7 +30,7 @@
   <properties>
    <property name="depth" type="int" value="300"/>
   </properties>
-  <object id="11" name="LootChestThing" type="Container" x="200" y="88">
+  <object id="11" name="ContainerChest" type="Container" x="200" y="88">
    <point/>
   </object>
   <object id="13" name="PlayerStart" type="Portal" x="167.667" y="104.667">
