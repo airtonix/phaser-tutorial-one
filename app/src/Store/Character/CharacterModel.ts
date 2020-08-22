@@ -8,12 +8,12 @@ import {
 import { Ref } from 'react'
 import { computed } from 'mobx'
 
-import { Entity, WorldEntity } from '../Entity/EntityModel'
+import { WorldEntity } from '../Entity/EntityModel'
 import { Zone } from '../Zone/ZoneModel'
 import { Game } from '../Game/GameModel'
 import { UnknownZone } from '../Zone/Exceptions'
 import { ZoneReference } from '../Zone/ZoneReference'
-import { NoGameError } from '../Game/Excpetions'
+import { NoGameError } from '../Game/Exceptions'
 import { Item } from '../Entity/ItemEntityModel'
 
 import { Character as CharacterGameObjectClass } from '~/Objects/Characters/Character'
@@ -44,6 +44,14 @@ export class Character extends ExtendedModel(WorldEntity, {
     return this.class
       ? this.class.current
       : undefined
+  }
+
+  @modelAction
+  teleportTo (zone: Zone, entity: WorldEntity): void {
+    this.setZone(zone)
+    const { x, y } = entity
+    this.setPosition(x, y)
+    this.setDepth(entity.depth + 1)
   }
 
   @modelAction

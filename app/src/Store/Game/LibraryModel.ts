@@ -4,7 +4,7 @@ import {
   Model,
 } from 'mobx-keystone'
 
-import { CharacterClass } from '../Character/CharacterClass'
+import { CharacterClass, CHARACTER_CLASSES } from '../Character/CharacterClass'
 
 export const LIBRARY_MODEL_KEY = 'Library'
 
@@ -20,7 +20,7 @@ export class Library extends Model({
   // effects,
 }) {
   onInit (): void {
-    this.classes = CharacterClass.classes
+    this.classes = Object.keys(CHARACTER_CLASSES)
       .map(name => new CharacterClass({ name }))
   }
 }

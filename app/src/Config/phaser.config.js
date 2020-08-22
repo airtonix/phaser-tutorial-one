@@ -12,8 +12,8 @@ export default {
 
   parent: PARENT_DIV_TAG,
 
-  width: window.innerWidth / 2,
-  height: window.innerHeight / 2,
+  width: window.innerWidth,
+  height: window.innerHeight,
 
   plugins: {
     scene: [
@@ -33,9 +33,9 @@ export default {
     pixelArt: true,
   },
 
-  scale: {
-    zoom: Phaser.Scale.ZOOM_2X
-  },
+  // scale: {
+  //   zoom: Phaser.Scale.ZOOM_2X
+  // },
 
   physics: {
     default: 'arcade',

@@ -8,14 +8,15 @@ import {
 import { computed } from 'mobx'
 
 import { ZoneReference } from '../Zone/ZoneReference'
-import { Character } from '../Character/CharacterModel'
 import { UnknownZone } from '../Zone/Exceptions'
 import { Zone, ZoneTypes } from '../Zone/ZoneModel'
 import { Player } from '../Player/PlayerModel'
+import { NoPlayerError } from '../Player/Exceptions'
 
 import { TiledTileMaps } from '~/Config/constants'
 
 import { Library } from './LibraryModel'
+import { NoSpawnPositionError } from './Exceptions'
 
 export const GAME_MODEL_KEY = 'Game'
 
@@ -58,19 +59,10 @@ export class Game extends Model({
   @modelAction
   startPlayer (zone: Zone): void {
     const spawn = zone.portals.find(zone => zone.name === 'PlayerStart')
-    const newCharacter = new Character({
-      x: spawn?.x,
-      y: spawn?.y,
-      depth: spawn?.depth,
-      name: 'Test',
-      type: 'Warrior',
-      hp: 100,
-      icon: '',
-      zone: ZoneReference(zone)
-    })
-
-    this.createPlayer()
-      .startCharacter(newCharacter)
+    if (!spawn) throw new NoSpawnPositionError()
+    if (!this.player?.character) throw new NoPlayerError()
+    this.player.character
+      .teleportTo(zone, spawn)
   }
 
   @modelAction

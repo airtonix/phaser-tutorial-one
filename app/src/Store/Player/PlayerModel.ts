@@ -8,6 +8,8 @@ import {
 
 import { } from 'mobx'
 
+import { CharacterClass } from '../Character/CharacterClass'
+
 import { CharacterReference } from '~/Store/Character/CharacterReference'
 import { Character } from '~/Store/Character/CharacterModel'
 import { NoCharacterError, NoCharactersError } from '~/Store/Player/Exceptions'
@@ -25,6 +27,14 @@ export class Player extends Model({
       this.addCharacter(character)
     }
     this.setCharacter(character)
+  }
+
+  @modelAction
+  createCharacterFromClass (characterClass: CharacterClass) : Character {
+    const newCharacter = characterClass.createCharacter()
+    if (!newCharacter) throw new NoCharacterError(`${characterClass.$modelType} didn't result in a character model`)
+    this.addCharacter(newCharacter)
+    return newCharacter
   }
 
   @modelAction

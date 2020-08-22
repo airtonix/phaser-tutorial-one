@@ -2,22 +2,18 @@ import { Buttons, Label, RoundRectangle } from 'phaser3-rex-plugins/templates/ui
 
 import { Logger } from '~/Core/Logger'
 import { Warrior } from '~/Objects/Characters/CharacterWarrior'
-
-import { GameScene } from './GameScene'
-import { Character } from '~/Objects/Characters/Character'
 import { COLOURS, BitmapFonts } from '~/Config/constants'
+import { Button, IButtonConfig } from '~/Objects/Ui/Button'
+
+import { NewGameMenuScene } from './NameGameMenuScene'
 
 const log = Logger(module.id)
 
-
-
 enum EnumButtonType {
-  NewGame
-}
-
-interface IButtonConfig {
-  type: EnumButtonType,
-  label: string
+  NewGame,
+  LoadGame,
+  Options,
+  Quit
 }
 
 export class MenuScene extends Phaser.Scene {
@@ -32,35 +28,40 @@ export class MenuScene extends Phaser.Scene {
 
   create (): void {
     log('create')
-    // this.logo = this.createLogo()
     this.menu = this.createMenu()
     log('created')
   }
 
-  createLogo (): Character {
-    const { width, height } = this.sys.cameras.main
-
-    const logo = new Warrior([this])
-    logo.setDepth(100)
-    logo.setPosition(
-      width / 2,
-      height / 2
-    )
-    return logo
-  }
-
   createMenu (): Buttons {
+    const newGameButton = new Button(this, {
+      label: 'New Game',
+      onClick: () => {
+        this.scene.start(NewGameMenuScene.key)
+      }
+    })
+
+    const loadGameButton = new Button(this, { label: 'Load Game' })
+    loadGameButton.setData('type', EnumButtonType.LoadGame)
+
+    const optionsButton = new Button(this, { label: 'Options' })
+    loadGameButton.setData('type', EnumButtonType.Options)
+
+    const quitButton = new Button(this, { label: 'Quit' })
+    loadGameButton.setData('type', EnumButtonType.Quit)
 
     const menu = new Buttons(this, {
       x: this.cameras.main.width / 2,
       y: this.cameras.main.height / 2,
       orientation: 'y',
       buttons: [
-        this.createMenuButton({
-          type: EnumButtonType.NewGame,
-          label: 'New Game'
-        })
-      ]
+        newGameButton,
+        loadGameButton,
+        optionsButton,
+        quitButton
+      ],
+      space: {
+        item: 4
+      }
     })
     menu.on('button.click', this.handleButtonClick, this)
     menu.on('button.over', this.handleButtonOver, this)
@@ -71,68 +72,15 @@ export class MenuScene extends Phaser.Scene {
     return menu
   }
 
-  createMenuButton (config: IButtonConfig): Label {
-    const {
-      type,
-      label
-    } = config
-    const background = new RoundRectangle(
-      this, 0, 0, 0, 0, 4, COLOURS.Grey.Dark
-    )
-    const text = new Phaser.GameObjects.BitmapText(
-      this, 0, 0,
-      BitmapFonts.BlackSixteenbfZXFont.key,
-      label
-    )
-
-    this.add.existing(background)
-    this.add.existing(text)
-
-    const button = new Label(this, {
-      height: 24,
-      background,
-      text,
-      space: {
-        left: 8,
-        right: 8
-      },
-      align: 'center'
-    })
-
-    button.setData('theme.normal.bg', COLOURS.Grey.Dark)
-    button.setData('theme.hover.bg', COLOURS.Grey.Light)
-    button.setData('theme.click.bg', COLOURS.White.Default)
-
-    this.add.existing(button)
-    button.type = type
-    return button
+  handleButtonOver = (button: Label): void  => {
+    button.handleOver()
   }
 
-  update (): void {
-    // this.logo.active = false
-    // this.logo.update()
+  handleButtonOut = (button: Label): void  => {
+    button.handleOut()
   }
 
-  handleButtonOver = (button, groupName, index, pointer, event) => {
-    log('handleButtonOver', button, groupName)
-    button.childrenMap.background.setFillStyle(
-      button.getData('theme.hover.bg')
-    )
-  }
-
-  handleButtonOut = (button, groupName, index, pointer, event) => {
-    log('handleButtonOut', button, groupName)
-    button.childrenMap.background.setFillStyle(
-      button.getData('theme.normal.bg')
-    )
-  }
-
-  handleButtonClick = (button, groupName, index, pointer, event): void => {
-    log('handleButtonClick', button.type, groupName)
-    switch (button.type) {
-      case EnumButtonType.NewGame:
-        this.scene.start(GameScene.key)
-        break;
-    }
+  handleButtonClick = (button: Label): void => {
+    button.handleClick()
   }
 }

@@ -53,10 +53,10 @@
         },
         "Assets/LevelOne.tmx": {
             "scale": 4.5948,
-            "selectedLayer": 1,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 167.36310611996169,
-                "y": 113.60668581875163
+                "x": 255.94149908592323,
+                "y": 255.9414990859232
             }
         },
         "Assets/LevelThree.tmx": {
