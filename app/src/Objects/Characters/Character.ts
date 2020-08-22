@@ -11,20 +11,17 @@ export class Character
     CanEmote,
     ShouldDisplay
   ) {
-  constructor (scene: Phaser.Scene) {
+
+  constructor (
+    scene: Phaser.Scene,
+    x = 0,
+    y = 0
+  ) {
     super(
-      {super: Phaser.GameObjects.Container, arguments: [ scene ]}
+      {super: Phaser.GameObjects.Container, arguments: [ scene, x, y ]},
+      {super: CanAnimate, arguments: [ scene, x, y ]},
+      {super: CanEmote, arguments: [ scene ]},
+      {super: ShouldDisplay, arguments: [ scene, x, y ]}
     )
-  }
-
-  init (): void {
-    super.init()
-    this.scene.events.on('update', this.update, this);
-    this.scene.events.once('shutdown', this.destroy, this);
-  }
-
-  destroy () : void {
-    if (this.scene) this.scene.events.off('update', this.update, this);
-    super.destroy();
   }
 }

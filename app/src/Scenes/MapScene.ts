@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import PhaserNavmeshPlugin, { PhaserNavmesh } from 'phaser-navmesh'
-import { classes } from 'polytype'
 
+import { Logger } from '~/Core/Logger'
 import { Store } from '~/Store'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
 import { NoZoneMapError } from '~/Store/Zone/Exceptions'
@@ -11,15 +11,12 @@ import { Character } from '~/Objects/Characters/Character'
 import { NoMapError } from '~/Store/Map/Exceptions'
 import { PlayerController } from '~/Core/PlayerController'
 
-import { BaseScene } from './BaseScene'
-
 interface TileMapLayerHash {
   [key: string]: Phaser.Tilemaps.DynamicTilemapLayer
 }
+const log = Logger(module.id)
 
-export class MapScene extends classes(
-  BaseScene,
-) {
+export class MapScene extends Phaser.Scene {
   static key = 'MapScene'
 
   isInteractive = true
@@ -40,17 +37,15 @@ export class MapScene extends classes(
   animatedTiles: AnimatedTile[]
 
   constructor () {
-    super(
-      { super: BaseScene, arguments: [{ key: MapScene.key }] },
-    )
-    this.log('constructed')
+    super({ key: MapScene.key })
+    log('constructed')
   }
 
   create (): void {
     this.cameras.main.fadeIn(200, 0, 0, 0)
     if (!Store.currentZone?.map) throw new NoZoneMapError
 
-    this.log('create', Store.currentZone)
+    log('create', Store.currentZone)
 
     this.map = this.createMap()
     this.tileset = this.drawMap(this.map)
@@ -86,9 +81,7 @@ export class MapScene extends classes(
   }
 
   createPlayer (): Character {
-    const player = new Warrior(
-      [this]
-    )
+    const player = new Warrior(this)
     const playerCharacter = Store.player?.character
     if (!playerCharacter) return player
 
@@ -100,7 +93,7 @@ export class MapScene extends classes(
 
     player.setDepth(depth + 1)
     player.setPosition(x, y)
-    this.log('createPlayer', { x, y, depth })
+    log('createPlayer', { x, y, depth })
 
     return player
   }
@@ -176,13 +169,13 @@ export class MapScene extends classes(
       curentTileImage
     )
 
-    this.log('drawMap.done')
+    log('drawMap.done')
 
     return tileset
   }
 
   createMap (): Phaser.Tilemaps.Tilemap {
-    this.log('createMap')
+    log('createMap')
 
     const map = Store.currentZone?.map
 
@@ -198,7 +191,7 @@ export class MapScene extends classes(
     } = tilemap
 
     this.physics.world.setBounds(0, 0, widthInPixels, heightInPixels)
-    this.log('createMap.done')
+    log('createMap.done')
 
     return tilemap
   }
@@ -206,7 +199,7 @@ export class MapScene extends classes(
   createMapLayers (
     tilemap: Phaser.Tilemaps.Tilemap
   ): TileMapLayerHash {
-    this.log('createMapLayers')
+    log('createMapLayers')
 
     const map = Store.currentZone?.map
     const tileSetName = this.tileset?.name
@@ -220,7 +213,7 @@ export class MapScene extends classes(
         name,
         depth,
       }) => {
-        this.log('createMapLayers.layer', name, depth)
+        log('createMapLayers.layer', name, depth)
 
         const layer = tilemap.createDynamicLayer(
           name,
@@ -228,7 +221,7 @@ export class MapScene extends classes(
           0, 0
         )
 
-        if (depth) layer.setDepth(depth)
+        if (layer && depth) layer.setDepth(depth)
 
         return {
           ...result,
@@ -307,7 +300,7 @@ export class MapScene extends classes(
   onActorCollide = (
     ...actors: Phaser.GameObjects.GameObject[]
   ): void => {
-    this.log('onActorCollide', actors)
+    log('onActorCollide', actors)
     actors.forEach(actor => {
       if (typeof actor.emit === 'function') {
         actor.emit('collide', { actors })
@@ -330,7 +323,7 @@ export class MapScene extends classes(
   ): void {
     Object.keys(layers)
       .forEach(layerId => {
-        this.log(`setLayersCollidable: ${layerId}`)
+        log(`setLayersCollidable: ${layerId}`)
         const layer = layers[layerId]
         layer.setCollisionByProperty({ collides: true })
       })
@@ -340,7 +333,7 @@ export class MapScene extends classes(
     actors: Character,
     collidables: Phaser.GameObjects.GameObject[]
   ): void {
-    this.log('createColliders')
+    log('createColliders')
     this.physics.add.collider(
       actors,
       collidables,
@@ -352,7 +345,7 @@ export class MapScene extends classes(
     actors: Character,
     collidables: Phaser.GameObjects.GameObject[]
   ): void {
-    this.log('createColliders')
+    log('createColliders')
     this.physics.add.overlap(
       actors,
       collidables,
@@ -365,7 +358,7 @@ export class MapScene extends classes(
       widthInPixels,
       heightInPixels
     } = this.map
-    this.log('initCamera', { widthInPixels, heightInPixels })
+    log('initCamera', { widthInPixels, heightInPixels })
     const mainCamera = this.cameras.main
     mainCamera.setRoundPixels(true)
     mainCamera.setBounds(0, 0, widthInPixels, heightInPixels)

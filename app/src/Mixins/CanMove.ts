@@ -13,8 +13,8 @@ export class CanMove extends Phaser.GameObjects.Container {
 
   constructor (
     scene: Phaser.Scene,
-    x: number,
-    y: number
+    x = 0,
+    y = 0
   ) {
     super(scene, x, y)
     if (!this.body) {

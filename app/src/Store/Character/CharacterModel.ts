@@ -14,12 +14,12 @@ import { Game } from '../Game/GameModel'
 import { UnknownZone } from '../Zone/Exceptions'
 import { ZoneReference } from '../Zone/ZoneReference'
 import { NoGameError } from '../Game/Excpetions'
+import { Item } from '../Entity/ItemEntityModel'
 
 import { Character as CharacterGameObjectClass } from '~/Objects/Characters/Character'
 
 import { NoCharacterClassError } from './Exceptions'
 import { CharacterClass } from './CharacterClass'
-import { Item } from '../Entity/ItemEntityModel'
 
 export const CHARACTER_MODEL_KEY = 'Character'
 

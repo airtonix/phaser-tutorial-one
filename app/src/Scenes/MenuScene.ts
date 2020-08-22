@@ -1,61 +1,138 @@
-import { classes } from 'polytype'
+import { Buttons, Label, RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components'
 
-import { TextButton } from '~/Objects/TextButton'
+import { Logger } from '~/Core/Logger'
 import { Warrior } from '~/Objects/Characters/CharacterWarrior'
 
-import { BaseScene } from './BaseScene'
 import { GameScene } from './GameScene'
+import { Character } from '~/Objects/Characters/Character'
+import { COLOURS, BitmapFonts } from '~/Config/constants'
 
-export class MenuScene
-  extends classes(
-    BaseScene,
-  ) {
+const log = Logger(module.id)
 
+
+
+enum EnumButtonType {
+  NewGame
+}
+
+interface IButtonConfig {
+  type: EnumButtonType,
+  label: string
+}
+
+export class MenuScene extends Phaser.Scene {
   static key = 'MenuScene'
-  startButton: TextButton
   logo: Warrior
+  menu: Buttons
 
   constructor () {
-    super(
-      { super: BaseScene, arguments: [{ key: MenuScene.key }] },
-    )
-    this.log('constructed')
+    super({ key: MenuScene.key })
+    log('constructed')
   }
 
   create (): void {
-    super.create()
-    this.log('create')
+    log('create')
+    // this.logo = this.createLogo()
+    this.menu = this.createMenu()
+    log('created')
+  }
 
-    const { width, height } = this.cameras.main
+  createLogo (): Character {
+    const { width, height } = this.sys.cameras.main
 
-    this.logo = new Warrior([
-      this
-    ])
-    this.logo.setDepth(100)
-    this.logo.setPosition(
+    const logo = new Warrior([this])
+    logo.setDepth(100)
+    logo.setPosition(
       width / 2,
       height / 2
     )
+    return logo
+  }
 
+  createMenu (): Buttons {
 
-    this.startButton = new TextButton({
-      scene: this,
-      x: width / 2,
-      y: (height / 2) + this.logo.height,
-      text: 'Start',
-      style: { fill: '#ffffff' },
-      onClick: this.handleStartButtonClick
+    const menu = new Buttons(this, {
+      x: this.cameras.main.width / 2,
+      y: this.cameras.main.height / 2,
+      orientation: 'y',
+      buttons: [
+        this.createMenuButton({
+          type: EnumButtonType.NewGame,
+          label: 'New Game'
+        })
+      ]
     })
-    this.add.existing(this.startButton)
+    menu.on('button.click', this.handleButtonClick, this)
+    menu.on('button.over', this.handleButtonOver, this)
+    menu.on('button.out', this.handleButtonOut, this)
+    menu.layout()
+    this.add.existing(menu)
+
+    return menu
+  }
+
+  createMenuButton (config: IButtonConfig): Label {
+    const {
+      type,
+      label
+    } = config
+    const background = new RoundRectangle(
+      this, 0, 0, 0, 0, 4, COLOURS.Grey.Dark
+    )
+    const text = new Phaser.GameObjects.BitmapText(
+      this, 0, 0,
+      BitmapFonts.BlackSixteenbfZXFont.key,
+      label
+    )
+
+    this.add.existing(background)
+    this.add.existing(text)
+
+    const button = new Label(this, {
+      height: 24,
+      background,
+      text,
+      space: {
+        left: 8,
+        right: 8
+      },
+      align: 'center'
+    })
+
+    button.setData('theme.normal.bg', COLOURS.Grey.Dark)
+    button.setData('theme.hover.bg', COLOURS.Grey.Light)
+    button.setData('theme.click.bg', COLOURS.White.Default)
+
+    this.add.existing(button)
+    button.type = type
+    return button
   }
 
   update (): void {
-    this.logo.active = false
-    this.logo.update()
+    // this.logo.active = false
+    // this.logo.update()
   }
 
-  handleStartButtonClick = (): void => {
-    this.log('handleStartButtonClick')
-    this.scene.start(GameScene.key)
+  handleButtonOver = (button, groupName, index, pointer, event) => {
+    log('handleButtonOver', button, groupName)
+    button.childrenMap.background.setFillStyle(
+      button.getData('theme.hover.bg')
+    )
+  }
+
+  handleButtonOut = (button, groupName, index, pointer, event) => {
+    log('handleButtonOut', button, groupName)
+    button.childrenMap.background.setFillStyle(
+      button.getData('theme.normal.bg')
+    )
+  }
+
+  handleButtonClick = (button, groupName, index, pointer, event): void => {
+    log('handleButtonClick', button.type, groupName)
+    switch (button.type) {
+      case EnumButtonType.NewGame:
+        this.scene.start(GameScene.key)
+        break;
+    }
   }
 }

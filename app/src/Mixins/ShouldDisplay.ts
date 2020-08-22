@@ -47,14 +47,13 @@ export class ShouldDisplay extends Phaser.GameObjects.Container {
   }
 
   createSprite (): Phaser.GameObjects.Sprite {
-    const idleAnimationGroup = this.animations.idle
-    const idleAnimationGroupOrientation = idleAnimationGroup[this.orientation]
-    const idleAnimation = idleAnimationGroupOrientation
-      ? idleAnimationGroupOrientation
-      : idleAnimationGroup.default
+    const animation = this.getAnimation(
+      'idle',
+      this.orientation
+    )
 
-    const { sheet } = idleAnimation.anim
-    const frame = idleAnimation.anim.frames[0]
+    const { sheet } = animation.anim
+    const frame = animation.anim.frames[0]
 
     const sprite = this.scene.make.sprite({
       x: 0,

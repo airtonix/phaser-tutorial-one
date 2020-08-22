@@ -28,24 +28,25 @@ export const EVENT_KEY_SHOW_EMOTE = 'show-emote'
 
 type EmotiveSprite = Phaser.GameObjects.Sprite
 
-export class CanEmote {
+export class CanEmote extends Phaser.GameObjects.Container {
   scene: Phaser.Scene
-  on: CallableFunction
-  add: CallableFunction
   emote: EmotiveSprite
 
-  constructor () {
+  constructor (
+    scene: Phaser.Scene
+  ) {
+    super(scene)
+
+    this.scene = scene
     this.emote = this.createEmoteSprite()
     this.add(this.emote)
     this.on(EVENT_KEY_SHOW_EMOTE, this.handleShowEmote)
   }
 
   createEmoteSprite (): EmotiveSprite {
-    const sprite = this.scene.make.sprite({
-      x: 0,
-      y: 0,
-      key: Emotes.Default.sheet,
-    })
+    const sprite = new Phaser.GameObjects.Sprite(
+      this.scene, 0, 0, Emotes.Default.sheet
+    )
     const { width, height, frames } = Emotes.Default
     sprite.setFrame(frames.Blank)
     sprite.setSize(width, height)

@@ -30,6 +30,17 @@ export enum Orientation {
   Up = 'up',
 }
 
+export const COLOURS = {
+  Grey: {
+    Light: 0x999999,
+    Default: 0x666666,
+    Dark: 0x222222
+  },
+  White: {
+    Default: 0xffffff
+  }
+}
+
 export const SpriteSheets = {
   Dungeon: {
     key: 'DungeonSpriteSheet',

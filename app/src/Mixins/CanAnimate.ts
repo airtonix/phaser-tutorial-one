@@ -1,4 +1,5 @@
 import { Orientation } from '~/Config/constants'
+import { NotImplementedError } from '~/Core/exceptions'
 
 export interface IAnimationSheetConfig {
     key: string,
@@ -67,18 +68,26 @@ export class CanAnimate extends Phaser.GameObjects.Container {
 
   getAnimation (
     action: string | false,
-    variant: string
+    variant = 'default'
   ): IAnimationConfig | undefined {
     if (!action) return
-    if (!this.animations) return
+    try {
+      const animations = this.getAnimations()
 
-    const animationAction = this.animations[action]
-      || this.animations.default
+      const animationAction = animations[action]
+        || animations.default
 
-    const animation = animationAction[variant]
-      || animationAction.default
+      const animation = animationAction[variant]
+        || animationAction.default
 
-    return animation
+      return animation
+    } catch (err) {
+      return
+    }
+  }
+
+  getAnimations (): IAnimations {
+    throw new NotImplementedError()
   }
 
   animateMovement = (): void => {

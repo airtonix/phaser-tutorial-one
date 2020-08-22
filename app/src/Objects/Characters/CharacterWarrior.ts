@@ -20,22 +20,37 @@ export class Warrior
     footprintHeight = 8
     footprintWidth = 12
     usageDistance = 30
-    animations: IAnimations = {
-      default: {
-        default: { anim: Animations.WarriorIdle }
-      },
-      idle: {
-        default: { anim: Animations.WarriorIdle }
-      },
-      moving: {
-        default: { anim: Animations.WarriorMove },
-        down: {anim: Animations.WarriorMove },
-        up: {anim: Animations.WarriorMove },
-        left: {flip: true, anim: Animations.WarriorMove },
-        right: {flip: false, anim: Animations.WarriorMove },
-      },
-      jump: {
-        default: { anim: Animations.WarriorJump },
+
+    constructor (
+      scene: Phaser.Scene,
+      x = 0,
+      y = 0
+    ) {
+      super(
+        { super: Character, arguments: [ scene, x, y ] },
+        { super: CanMove, arguments: [ scene, x, y ] },
+        { super: CanInteract, arguments: [] },
+      )
+    }
+
+    getAnimations (): IAnimations {
+      return {
+        default: {
+          default: { anim: Animations.WarriorIdle }
+        },
+        idle: {
+          default: { anim: Animations.WarriorIdle }
+        },
+        moving: {
+          default: { anim: Animations.WarriorMove },
+          down: {anim: Animations.WarriorMove },
+          up: {anim: Animations.WarriorMove },
+          left: {flip: true, anim: Animations.WarriorMove },
+          right: {flip: false, anim: Animations.WarriorMove },
+        },
+        jump: {
+          default: { anim: Animations.WarriorJump },
+        }
       }
     }
 }

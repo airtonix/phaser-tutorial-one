@@ -6454,6 +6454,19 @@ junk@^1.0.1:
   resolved "https://registry.yarnpkg.com/junk/-/junk-1.0.3.tgz#87be63488649cbdca6f53ab39bec9ccd2347f592"
   integrity sha1-h75jSIZJy9ym9Tqzm+yczSNH9ZI=
 
+kaop-ts@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/kaop-ts/-/kaop-ts-4.3.0.tgz#fe7d9f97c294fdc4c77e7fd996de51ad78c64f24"
+  integrity sha512-EZs/SMF75azZkKCA9l4GCaGDf46vLd1s849j15Mi2UKxeVZQl22/3WUe4mz2c0tbaN0flsoV1Pk+ZFAdD9JZGw==
+  dependencies:
+    kaop "^4.4.1"
+    reflect-metadata "^0.1.12"
+
+kaop@^4.4.1:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/kaop/-/kaop-4.4.2.tgz#53ece2b5f535c5879fe4dd4a8940d4e1f3510d6d"
+  integrity sha512-Z7iOYSNxC9VlurHGdzxVGCOUkSomgPndeon/HTYUgH6DEWikKxx44n1V1c8HIxjWzNmaQI2Oe9xn8+aBbRAPzw==
+
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-3.2.2.tgz#31ea21a734bab9bbb0f32466d893aea51e4a3c64"
@@ -8664,7 +8677,7 @@ recursive-copy@2.0.10:
     promise "^7.0.1"
     slash "^1.0.0"
 
-reflect-metadata@^0.1.13:
+reflect-metadata@^0.1.12, reflect-metadata@^0.1.13:
   version "0.1.13"
   resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
   integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==

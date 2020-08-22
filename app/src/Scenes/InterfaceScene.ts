@@ -1,34 +1,27 @@
-import { classes } from 'polytype'
-
-import { ContainerDialog } from '~/Objects/ContainerDialog'
-import { ActorUi } from '~/Objects/ActorUi'
+import { Logger } from '~/Core/Logger'
+import { ContainerDialog } from '~/Objects/Ui/ContainerDialog'
+// import { ActorUi } from '~/Objects/Ui/ActorUi'
 import { EVENT_KEY_INVENTORY_SHOW_DIALOG, EVENT_KEY_INVENTORY_HIDE_DIALOG } from '~/Mixins/ContainsItems'
 import { EVENT_KEY_OPEN_PLAYER_INVENTORY } from '~/Core/PlayerController'
 import { Store } from '~/Store'
 
-import { BaseScene } from './BaseScene'
+const log = Logger(module.id)
 
-export class InterfaceScene
-  extends classes(
-    BaseScene,
-  ) {
+export class InterfaceScene extends Phaser.Scene {
     static key = 'InterfaceScene'
 
     gamebar: Phaser.GameObjects.Graphics
-    player: ActorUi
+    // player: ActorUi
     playerInventory: ContainerDialog
     containerInventory: ContainerDialog
 
     constructor () {
-      super(
-        { super: BaseScene, arguments: [{ key: InterfaceScene.key }] },
-      )
-      this.log('constructed')
+      super({ key: InterfaceScene.key })
+      log('constructed')
     }
 
     create (): void {
-      super.create()
-      this.log('creating')
+      log('creating')
       const y = Number(this.game.config.height) - 22
       const w = Number(this.game.config.width)
 
@@ -37,7 +30,7 @@ export class InterfaceScene
         0x333333,
       )
 
-      this.log('Player', Store.player)
+      log('Player', Store.player)
       this.playerInventory = new ContainerDialog(this, {
         key: 'PlayerInventory',
         direction: ContainerDialog.DIRECTIONS.DIRECTION_VERTICAL,
@@ -63,12 +56,11 @@ export class InterfaceScene
         }
       })
 
-
-      this.player = new ActorUi(this, {
-        x: 0,
-        y: Number(this.game.config.height) - 52,
-        onClick: this.playerInventory.toggle
-      })
+      // this.playerAvatar = new ActorUi(this, {
+      //   x: 0,
+      //   y: Number(this.game.config.height) - 52,
+      //   onClick: this.playerInventory.toggle
+      // })
 
       this.game.events
         .on(EVENT_KEY_OPEN_PLAYER_INVENTORY,
@@ -80,6 +72,7 @@ export class InterfaceScene
             this.containerInventory.open()
             this.playerInventory.open()
           })
+
       this.game.events
         .on(EVENT_KEY_INVENTORY_HIDE_DIALOG,
           () => {
@@ -111,6 +104,6 @@ export class InterfaceScene
     }
 
     update (): void {
-      this.player.update()
+      // this.player.update()
     }
 }

@@ -1,28 +1,24 @@
-import { classes } from 'polytype'
 import { reaction } from 'mobx';
 
+import { Logger } from '~/Core/Logger'
 import { Store } from '~/Store';
 
-import { BaseScene } from './BaseScene';
 import { InterfaceScene } from './InterfaceScene';
 import { MapScene } from './MapScene';
 
-export class GameScene
-  extends classes(
-    BaseScene,
-  ) {
+const log = Logger(module.id)
+
+export class GameScene extends Phaser.Scene {
 
   static key = 'GameScene'
 
   constructor () {
-    super(
-      { super: BaseScene, arguments: [{ key: GameScene.key }] },
-    )
-    this.log('constructed')
+    super({ key: GameScene.key })
+    log('constructed')
   }
 
   create (): void {
-    this.log('created')
+    log('created')
 
     if (!Store.player) {
       const startZone = Store.getStartZone()
@@ -36,7 +32,7 @@ export class GameScene
       () => Store.player?.character?.currentZone,
       (zone) => {
         if (!zone) return
-        this.log('Launching', zone.name)
+        log('Launching', zone.name)
         Store.setZone(zone)
         this.scene.launch(MapScene.key)
       },

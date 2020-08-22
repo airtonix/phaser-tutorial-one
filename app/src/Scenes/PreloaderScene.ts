@@ -1,5 +1,6 @@
-import { classes } from 'polytype'
+import { NumberBar, RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components';
 
+import { Logger } from '~/Core/Logger'
 import {
   SpriteSheets,
   Images,
@@ -8,147 +9,99 @@ import {
   BitmapFonts,
 } from '~/Config/constants'
 
-import { BaseScene } from './BaseScene'
 import { MenuScene } from './MenuScene'
-
-interface IProgressUiConfig {
-    width: number
-    height: number
-    centerX: number
-    centerY: number
-    boxWidth: number
-    boxHeight: number
-    boxPadding: number
-}
 
 interface IAssetCollection {
     [key: string]: any
 }
 
-export class PreloaderScene extends BaseScene {
+const log = Logger(module.id)
+
+export class PreloaderScene extends Phaser.Scene {
     static key = 'PreloaderScene'
 
-    WHITE = 0xffffff
-    GREY = 0x666666
-    DARKGREY = 0x222222
+    static COLOR_WHITE = 0xffffff
+    static COLOR_GREY = 0x666666
+    static COLOR_DARKGREY = 0x222222
 
-    box: Phaser.GameObjects.Graphics
-    bar: Phaser.GameObjects.Graphics
-    config: IProgressUiConfig
-    percent: Phaser.GameObjects.Text
-    header: Phaser.GameObjects.Text
-    asset: Phaser.GameObjects.Text
-    assetPercent: Phaser.GameObjects.Text
+    bar: NumberBar
 
     constructor () {
       super({ key: PreloaderScene.key })
-      this.log('constructed')
+    }
+
+    createUiProgressBar (): NumberBar {
+      const background = new RoundRectangle(this, 0, 0, 0, 0, 6, PreloaderScene.COLOR_DARKGREY)
+      const track = new RoundRectangle(this, 0, 0, 0, 0, 4, PreloaderScene.COLOR_GREY)
+      const indicator = new RoundRectangle(this, 0, 0, 0, 0, 4, PreloaderScene.COLOR_DARKGREY)
+
+      this.add.existing(background)
+      this.add.existing(track)
+      this.add.existing(indicator)
+
+      const bar = new NumberBar(this, {
+        x: this.cameras.main.width / 2,
+        y: this.cameras.main.height / 2,
+        width: 100,
+
+        background,
+        slider: {
+          track,
+          indicator,
+
+          space: {
+            left: 4,
+            right: 4,
+            top: 2,
+            bottom: 2,
+            slider: 2,
+          },
+        }
+      })
+      bar.layout()
+      this.add.existing(bar)
+      bar.setValue(50)
+      return bar
     }
 
     handleProgress = (value: number): void => {
-      this.bar.clear()
-      this.bar.fillStyle(this.WHITE, 0.4)
-      this.bar.fillRect(
-        this.config.centerX - ((this.config.boxWidth - this.config.boxPadding) / 2),
-        this.config.centerY - ((this.config.boxHeight - this.config.boxPadding) / 2),
-        (this.config.boxWidth - (this.config.boxPadding)) * value,
-        this.config.boxHeight - (this.config.boxPadding)
+      const percentage = value * 100
+      this.bar.setValue(percentage, 0, 100)
+      log('progress', value)
+    }
+
+    process (
+      name: string,
+      group: IAssetCollection,
+      loaderFn: CallableFunction
+    ): void {
+      if (!group) return
+
+      Object.keys(group)
+        .forEach(key => {
+          const definition = group[key]
+          definition.key = definition.key || key
+          loaderFn(definition)
+          log(`queue ${name}:${key}`)
+        })
+    }
+
+    prepare (): void {
+      this.process(
+        'animations',
+        Animations,
+        ({ frames, sheet, ...animation }) => this.anims.create({
+          ...animation,
+          frames: this.anims.generateFrameNumbers(sheet, { frames })
+        })
       )
-      const percentage = value * 100
-      this.percent.setText(`${percentage}%`)
-      this.log('progress', value)
-    }
-
-    handleFileProgress = (file: Phaser.Loader.File, value: number): void => {
-      const percentage = value * 100
-      this.log('fileProgress', file.key, percentage)
-      this.asset.setText(`> ${file.key}`)
-      this.assetPercent.setText(`${percentage}%`)
-    }
-
-    handleComplete = (): void => {
-      this.bar.destroy()
-      this.box.destroy()
-      this.header.destroy()
-      this.percent.destroy()
-      this.asset.destroy()
-      this.assetPercent.destroy()
-    }
-
-    generateLayoutConfig = (): IProgressUiConfig => {
-      const config = {
-        centerX: 0,
-        centerY: 0,
-        width: this.sys.cameras.main.width,
-        height: this.sys.cameras.main.height,
-        boxWidth: 320,
-        boxHeight: 50,
-        boxPadding: 16,
-      }
-      config.centerX = (config.width / 2)
-      config.centerY = (config.height / 2)
-      return config
-    }
-
-    render (): void {
-      this.box = this.sys.add.graphics()
-      this.box.fillStyle(this.WHITE, 0.2)
-      this.box.fillRect(
-        this.config.centerX - (this.config.boxWidth / 2) ,
-        this.config.centerY - (this.config.boxHeight / 2),
-        this.config.boxWidth, this.config.boxHeight)
-
-      this.bar = this.sys.add.graphics()
-      this.header = this.make.text({
-        x: this.config.centerX,
-        y: this.config.centerY - this.config.boxHeight,
-        text: 'Loading...',
-        style: {
-          font: '20px monospace',
-          fill: '#ffffff'
-        }
-      })
-      this.header.setOrigin(0.5, 0.5)
-      this.percent = this.make.text({
-        x: this.config.centerX,
-        y: this.config.centerY,
-        text: '0%',
-        style: {
-          font: '18px monospace',
-          fill: '#ffffff'
-        },
-      })
-      this.percent.setOrigin(0.5, 0.5)
-      this.asset = this.make.text({
-        x: this.config.centerX - this.config.boxWidth / 2,
-        y: this.config.centerY + this.config.boxHeight,
-        text: '',
-        style: {
-          font: '18px monospace',
-          fill: '#ffffff'
-        },
-      })
-      this.asset.setOrigin(0, 0.5)
-      this.assetPercent = this.make.text({
-        x: this.config.centerX + this.config.boxWidth / 2,
-        y: this.config.centerY + this.config.boxHeight,
-        text: '',
-        style: {
-          font: '18px monospace',
-          fill: '#ffffff'
-        },
-      })
-      this.assetPercent.setOrigin(1, 0.5)
-
-      this.load.on('fileprogress', this.handleFileProgress)
-      this.load.on('progress', this.handleProgress)
-      this.load.on('complete', this.handleComplete)
     }
 
     preload (): void {
-      this.log('loading')
-      this.config = this.generateLayoutConfig()
-      this.render()
+      log('loading')
+
+      this.bar = this.createUiProgressBar()
+      this.load.on('progress', this.handleProgress)
 
       this.process(
         'sprites',
@@ -172,35 +125,13 @@ export class PreloaderScene extends BaseScene {
       )
     }
 
-    process (
-      name: string,
-      group: IAssetCollection,
-      loaderFn: CallableFunction
-    ): void {
-      if (!group) return
-      Object.keys(group)
-        .forEach(key => {
-          this.log(`queue ${name}:${key}`)
-          const definition = group[key]
-          definition.key = definition.key || key
-          loaderFn(definition)
-        })
-    }
-
-    prepare (): void {
-      this.process(
-        'animations',
-        Animations,
-        ({ frames, sheet, ...animation }) => this.anims.create({
-          ...animation,
-          frames: this.anims.generateFrameNumbers(sheet, { frames })
-        })
-      )
-    }
-
     create (): void {
       this.prepare()
-      this.log('Starting game')
+      log('Starting game')
       this.scene.start(MenuScene.key)
+    }
+
+    update () {
+      this.bar.update()
     }
 }
