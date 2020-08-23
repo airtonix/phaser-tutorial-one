@@ -10,7 +10,10 @@ export const CHARACTERWARRIOR_MODEL_KEY = 'CharacterWarrior'
 export class CharacterWarrior extends ExtendedModel(Character, {
 }) {
 
-  createGameObject (scene: Phaser.Scene, x: number, y: number): Warrior {
-    return new Warrior(scene, x, y)
+  createGameObject (scene: Phaser.Scene): Warrior {
+    const gameobject = new Warrior(scene)
+    gameobject.setPosition(this.x, this.y)
+    gameobject.setDepth(this.depth + 1)
+    return gameobject
   }
 }

@@ -16,9 +16,6 @@ import { ZoneReference } from '../Zone/ZoneReference'
 import { NoGameError } from '../Game/Exceptions'
 import { Item } from '../Entity/ItemEntityModel'
 
-import { Character as CharacterGameObjectClass } from '~/Objects/Characters/Character'
-
-import { NoCharacterClassError } from './Exceptions'
 import { CharacterClass } from './CharacterClassModel'
 
 export const CHARACTER_MODEL_KEY = 'Character'

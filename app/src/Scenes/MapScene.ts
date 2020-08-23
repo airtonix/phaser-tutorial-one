@@ -5,12 +5,10 @@ import { Logger } from '~/Core/Logger'
 import { Store } from '~/Store'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
 import { NoZoneMapError } from '~/Store/Zone/Exceptions'
-import { Warrior } from '~/Objects/Characters/CharacterWarrior'
-import { SidekickGoblin } from '~/Objects/Characters/CharacterGoblin'
+// import { SidekickGoblin } from '~/Objects/Characters/CharacterGoblin'
 import { Character } from '~/Objects/Characters/Character'
 import { NoMapError } from '~/Store/Map/Exceptions'
-import { PlayerController } from '~/Core/PlayerController'
-import { reaction } from 'mobx'
+import { Controllable } from '~/Mixins/Controllable'
 
 interface TileMapLayerHash {
   [key: string]: Phaser.Tilemaps.DynamicTilemapLayer
@@ -25,7 +23,6 @@ export class MapScene extends Phaser.Scene {
 
   player: Character
   sidekick: Character
-  controller: PlayerController
 
   containers: Phaser.GameObjects.Group
   portals: Phaser.GameObjects.Group
@@ -55,7 +52,6 @@ export class MapScene extends Phaser.Scene {
     this.navMesh = this.createNavMesh()
 
     this.player = this.createPlayer()
-    this.controller = new PlayerController(this, this.player)
 
     // this.setLayersColliable(this.mapLayers)
     // this.createColliders(this.player, Object.values(this.mapLayers))
@@ -82,22 +78,14 @@ export class MapScene extends Phaser.Scene {
     this.animatedTiles.forEach(tile => tile.update(delta))
   }
 
-  createPlayer (): Character {
+  createPlayer (): Character | undefined {
     const playerCharacter = Store.player?.character
+    if (!playerCharacter) return
 
-    const {
-      x,
-      y,
-      depth
-    } = playerCharacter
-
-    const player = playerCharacter?.createGameObject(this, x, y)
-
-
-    player.setDepth(depth + 1)
-    player.setPosition(x, y)
-    log('createPlayer', { x, y, depth })
-
+    const player = playerCharacter.createGameObject(this)
+    player.setController(
+      new Controllable(this, player)
+    )
     window.Player = player
     return player
   }

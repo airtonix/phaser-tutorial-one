@@ -36,8 +36,6 @@ export class CanEmote extends Phaser.GameObjects.Container {
     scene: Phaser.Scene
   ) {
     super(scene)
-
-    this.scene = scene
     this.emote = this.createEmoteSprite()
     this.add(this.emote)
     this.on(EVENT_KEY_SHOW_EMOTE, this.handleShowEmote)

@@ -23,6 +23,13 @@ export const FrameConfig16x16 = {
   frameHeight: 16,
 }
 
+export interface IOrientation {
+  Left: boolean
+  Right: boolean
+  Up: boolean
+  Down: boolean
+}
+
 export enum Orientation {
   Down = 'down',
   Left = 'left',

@@ -1,9 +1,8 @@
 import { debounce } from 'lodash'
 
-import { Orientation } from '~/Config/constants'
-import { Character } from '~/Objects/Characters/Character'
+import { Logger } from '../Core/Logger'
 
-import { Logger } from './Logger'
+import { Character } from '~/Objects/Characters/Character'
 
 const log = Logger(module.id)
 
@@ -22,7 +21,7 @@ export interface IControls {
 
 export const EVENT_KEY_OPEN_PLAYER_INVENTORY = 'event-player-inventory-open'
 
-export class PlayerController {
+export class Controllable {
   orientation: string
   isIdle: boolean
   keys: Phaser.Types.Input.InputConfiguration
@@ -31,14 +30,14 @@ export class PlayerController {
 
   constructor (
     private scene: Phaser.Scene,
-    private actor: Character
+    private entity: Character
   ) {
     this.scene = scene
-    this.createController()
-    scene.events.on('update', this.readInputs)
+    this.init()
+    scene.events.on('update', this.update)
   }
 
-  createController = (): void => {
+  init = (): void => {
     this.controls = this.scene.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,
       left: Phaser.Input.Keyboard.KeyCodes.A,
@@ -50,41 +49,25 @@ export class PlayerController {
     })
   }
 
-  get isMoving (): boolean {
-    const controls = this.controls as IControls
 
-    return controls.left.isDown
-    || controls.right.isDown
-    || controls.up.isDown
-    || controls.down.isDown
-  }
-
-  readInputs = (): void  => {
+  update = (): void  => {
     const controls = this.controls as IControls
     if (!controls) return
-    if (this.isMoving) log(controls)
 
-    // Horizontal movement
-    if (controls.left.isDown) {
-      this.actor.orientation = Orientation.Left
-    } else if (controls.right.isDown) {
-      this.actor.orientation = Orientation.Right
+    this.entity.movement.moving = {
+      Left: controls.left.isDown,
+      Right: controls.right.isDown,
+      Up: controls.up.isDown,
+      Down: controls.down.isDown
     }
 
-    // Vertical movement
-    if (controls.up.isDown) {
-      this.actor.orientation = Orientation.Up
-    } else if (controls.down.isDown) {
-      this.actor.orientation = Orientation.Down
-    }
+    // if (controls.use.isDown) {
+    //   this.entity.use()
+    // }
 
-    if (controls.use.isDown) {
-      this.actor.use()
-    }
-
-    if (controls.inventory.isDown) {
-      this.openInventory()
-    }
+    // if (controls.inventory.isDown) {
+    //   this.openInventory()
+    // }
   }
 
   openInventory = debounce(() => {
