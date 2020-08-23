@@ -10,6 +10,7 @@ import { SidekickGoblin } from '~/Objects/Characters/CharacterGoblin'
 import { Character } from '~/Objects/Characters/Character'
 import { NoMapError } from '~/Store/Map/Exceptions'
 import { PlayerController } from '~/Core/PlayerController'
+import { reaction } from 'mobx'
 
 interface TileMapLayerHash {
   [key: string]: Phaser.Tilemaps.DynamicTilemapLayer
@@ -83,7 +84,6 @@ export class MapScene extends Phaser.Scene {
 
   createPlayer (): Character {
     const playerCharacter = Store.player?.character
-    const player = playerCharacter?.createGameObject(this)
 
     const {
       x,
@@ -91,10 +91,14 @@ export class MapScene extends Phaser.Scene {
       depth
     } = playerCharacter
 
+    const player = playerCharacter?.createGameObject(this, x, y)
+
+
     player.setDepth(depth + 1)
     player.setPosition(x, y)
     log('createPlayer', { x, y, depth })
 
+    window.Player = player
     return player
   }
 

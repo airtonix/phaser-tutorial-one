@@ -69,6 +69,7 @@ export class NewGameMenuScene extends Phaser.Scene {
     const player = Store.createPlayer()
     const character = player.createCharacterFromClass(klass)
     player.setCharacter(character)
+    Store.startPlayer(Store.getStartZone())
     this.scene.start(GameScene.key)
   }
 }

@@ -9,6 +9,8 @@ import {
 import { Modifier } from '../Modifier/ModifierModel'
 
 import { NotImplementedError } from '~/Core/exceptions'
+import { computed } from 'mobx'
+import { IPosition } from '~/Core/distance'
 
 export const ENTITY_MODEL_KEY = 'Entity'
 
@@ -44,7 +46,15 @@ export class WorldEntity extends ExtendedModel(Entity, {
     this.y = y
   }
 
-  createGameObject (scene: Phaser.Scene) : Phaser.GameObjects.GameObject {
+  @computed
+  get position (): IPosition {
+    return {
+      x: this.x,
+      y: this.y
+    }
+  }
+
+  createGameObject (scene: Phaser.Scene, x: number, y: number) : Phaser.GameObjects.GameObject {
     throw new NotImplementedError(`createGameobject type: ${this.$modelType}`)
   }
 }

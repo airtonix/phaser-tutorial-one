@@ -17,10 +17,13 @@ export class CanMove extends Phaser.GameObjects.Container {
     y = 0
   ) {
     super(scene, x, y)
+
     if (!this.body) {
       this.scene.physics.add.existing(this)
       this.scene.physics.world.enable(this)
     }
+
+    scene.events.on('update', this.update)
   }
 
   go (direction: Orientation): void {
@@ -42,10 +45,10 @@ export class CanMove extends Phaser.GameObjects.Container {
     }
   }
 
-  update (
+  update = (
     time: integer,
     delta: integer
-  ): void {
+  ): void => {
     // if (!this.body) return
 
     super.update(time, delta)

@@ -1,8 +1,9 @@
 import { Label, Sizer, RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components'
 import ButtonBehaviour from 'phaser3-rex-plugins/plugins/button'
+import { merge, get } from 'lodash'
 
 import { COLOURS, BitmapFonts } from '~/Config/constants'
-import { merge, get } from 'lodash'
+import { Logger } from '~/Core/Logger'
 
 export interface IButtonThemeConfig {
   bg: number
@@ -23,6 +24,8 @@ export interface IButtonConfig {
   onClick?: CallableFunction
 }
 
+const log = Logger(module.id)
+
 export class Button extends Label {
   setData: CallableFunction
   getData: CallableFunction
@@ -34,6 +37,12 @@ export class Button extends Label {
   behaviour: ButtonBehaviour
 
   static DEFAULT_THEME = {
+    normal: { bg: COLOURS.Grey.Dark, fg: COLOURS.White.Default },
+    hover: { bg: COLOURS.Grey.Light, fg: COLOURS.White.Default },
+    click: { bg: COLOURS.White.Default, fg: COLOURS.White.Default }
+  }
+
+  static PRIMARY_THEME = {
     normal: { bg: COLOURS.Grey.Dark, fg: COLOURS.White.Default },
     hover: { bg: COLOURS.Grey.Light, fg: COLOURS.White.Default },
     click: { bg: COLOURS.White.Default, fg: COLOURS.White.Default }
@@ -70,6 +79,10 @@ export class Button extends Label {
       Button.DEFAULT_THEME,
       config.theme || {}
     )
+
+    const text = this.getElement('text')
+    log(text)
+    // text.setCharacterTint(COLOURS.White.Default)
 
     this.behaviour = new ButtonBehaviour(this)
     this.behaviour.on('click', this.handleClick)

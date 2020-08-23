@@ -11,7 +11,7 @@ import { ZoneReference } from '../Zone/ZoneReference'
 import { UnknownZone } from '../Zone/Exceptions'
 import { Zone, ZoneTypes } from '../Zone/ZoneModel'
 import { Player } from '../Player/PlayerModel'
-import { NoPlayerError } from '../Player/Exceptions'
+import { NoPlayerError, NoCharacterError } from '../Player/Exceptions'
 
 import { TiledTileMaps } from '~/Config/constants'
 
@@ -33,34 +33,27 @@ export class Game extends Model({
 
   onInit (): void {
     this.library = new Library({ classes: [] })
+    this.addZones(
+      this.createZone('LevelOne', ZoneTypes.Dungeon),
+      this.createZone('LevelTwo', ZoneTypes.Dungeon),
+      this.createZone('LevelThree', ZoneTypes.Dungeon)
+    )
+  }
 
-    const levelOne = new Zone({
-      name: 'LevelOne',
-      type: ZoneTypes.Dungeon,
+  createZone (name: string, type: ZoneTypes): Zone {
+    const zone = new Zone({
+      name,
+      type,
     })
-    levelOne.addMapFromLevelData(TiledTileMaps.LevelOne)
-    this.addZone(levelOne)
-
-    const levelTwo = new Zone({
-      name: 'LevelTwo',
-      type: ZoneTypes.Dungeon,
-    })
-    levelOne.addMapFromLevelData(TiledTileMaps.LevelTwo)
-    this.addZone(levelTwo)
-
-    const levelThree = new Zone({
-      name: 'LevelThree',
-      type: ZoneTypes.Dungeon,
-    })
-    levelOne.addMapFromLevelData(TiledTileMaps.LevelThree)
-    this.addZone(levelThree)
+    zone.addMapFromLevelData(TiledTileMaps[name])
+    return zone
   }
 
   @modelAction
   startPlayer (zone: Zone): void {
     const spawn = zone.portals.find(zone => zone.name === 'PlayerStart')
     if (!spawn) throw new NoSpawnPositionError()
-    if (!this.player?.character) throw new NoPlayerError()
+    if (!this.player?.character) throw new NoCharacterError()
     this.player.character
       .teleportTo(zone, spawn)
   }
@@ -77,7 +70,7 @@ export class Game extends Model({
   }
 
   @modelAction
-  addZones (zones: Zone[]): void {
+  addZones (...zones: Zone[]): void {
     this.zones = this.zones.concat(zones)
   }
 

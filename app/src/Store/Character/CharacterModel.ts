@@ -49,8 +49,7 @@ export class Character extends ExtendedModel(WorldEntity, {
   @modelAction
   teleportTo (zone: Zone, entity: WorldEntity): void {
     this.setZone(zone)
-    const { x, y } = entity
-    this.setPosition(x, y)
+    this.setPosition(entity.x, entity.y)
     this.setDepth(entity.depth + 1)
   }
 

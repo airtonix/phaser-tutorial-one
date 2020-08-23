@@ -10,7 +10,7 @@ export const CHARACTERGOBLIN_MODEL_KEY = 'CharacterGoblin'
 export class CharacterGoblin extends ExtendedModel(Character, {
 }) {
 
-  createGameObject (scene: Phaser.Scene): Goblin {
-    return new Goblin(scene)
+  createGameObject (scene: Phaser.Scene, x: number, y: number): Goblin {
+    return new Goblin(scene, x, y)
   }
 }
