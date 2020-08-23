@@ -24,7 +24,7 @@ export class CanInteract {
 
   constructor () {
     this.interactables = []
-    this.on('collide', throttle(this.handleCollide, 500))
+    // this.on('collide', throttle(this.handleCollide, 500))
   }
 
   handleCollide = (event: CollisionEvent): void => {

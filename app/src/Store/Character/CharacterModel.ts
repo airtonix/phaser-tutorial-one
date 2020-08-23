@@ -19,7 +19,7 @@ import { Item } from '../Entity/ItemEntityModel'
 import { Character as CharacterGameObjectClass } from '~/Objects/Characters/Character'
 
 import { NoCharacterClassError } from './Exceptions'
-import { CharacterClass } from './CharacterClass'
+import { CharacterClass } from './CharacterClassModel'
 
 export const CHARACTER_MODEL_KEY = 'Character'
 
@@ -66,11 +66,6 @@ export class Character extends ExtendedModel(WorldEntity, {
       : undefined
   }
 
-  createGameObject (scene: Phaser.Scene) : CharacterGameObjectClass {
-    if (!this.class.current) throw new NoCharacterClassError()
-    const classMeta = this.class.current
-    return classMeta.createGameObject(scene)
-  }
 }
 
 

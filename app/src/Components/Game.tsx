@@ -6,10 +6,10 @@ import config, { PARENT_DIV_TAG } from '~/Config/phaser.config'
 import { PreloaderScene } from '~/Scenes/PreloaderScene'
 import { MenuScene } from '~/Scenes/MenuScene'
 import { WritesLogs } from '~/Mixins/WritesLogs'
-import { NewGameMenuScene } from '~/Scenes/NameGameMenuScene'
+import { NewGameMenuScene } from '~/Scenes/NewGameMenuScene'
 import { GameScene } from '~/Scenes/GameScene'
 import { InterfaceScene } from '~/Scenes/InterfaceScene'
-// import { MapScene } from '~/Scenes/MapScene'
+import { MapScene } from '~/Scenes/MapScene'
 
 import css from './Game.css'
 
@@ -32,7 +32,7 @@ class PhaserGame extends PolyBaseWrapper {
     this.scene.add(NewGameMenuScene.key, NewGameMenuScene)
     this.scene.add(GameScene.key, GameScene)
     this.scene.add(InterfaceScene.key, InterfaceScene)
-    // this.scene.add(MapScene.key, MapScene)
+    this.scene.add(MapScene.key, MapScene)
     this.log('Starting')
     this.scene.start(PreloaderScene.key)
   }

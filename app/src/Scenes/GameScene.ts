@@ -4,7 +4,7 @@ import { Logger } from '~/Core/Logger'
 import { Store } from '~/Store';
 
 import { InterfaceScene } from './InterfaceScene';
-// import { MapScene } from './MapScene';
+import { MapScene } from './MapScene';
 
 const log = Logger(module.id)
 
@@ -32,7 +32,7 @@ export class GameScene extends Phaser.Scene {
         if (!zone) return
         log('Launching', zone.name)
         Store.setZone(zone)
-        // this.scene.launch(MapScene.key)
+        this.scene.launch(MapScene.key)
       },
       {
         // also run the reaction the first time

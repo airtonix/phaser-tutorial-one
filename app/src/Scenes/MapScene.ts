@@ -54,23 +54,23 @@ export class MapScene extends Phaser.Scene {
     this.navMesh = this.createNavMesh()
 
     this.player = this.createPlayer()
-    this.controller = new PlayerController(this, this.player)
-    this.setLayersColliable(this.mapLayers)
-    this.createColliders(this.player, Object.values(this.mapLayers))
+    // this.controller = new PlayerController(this, this.player)
+    // this.setLayersColliable(this.mapLayers)
+    // this.createColliders(this.player, Object.values(this.mapLayers))
 
-    this.sidekick = this.createPlayerSidekick()
-    this.createColliders(this.sidekick, Object.values(this.mapLayers))
+    // this.sidekick = this.createPlayerSidekick()
+    // this.createColliders(this.sidekick, Object.values(this.mapLayers))
 
-    if (Store.currentZone?.containers) {
-      this.containers = this.createContainers()
-      this.createColliders(this.player, this.containers.getChildren())
-    }
+    // if (Store.currentZone?.containers) {
+    //   this.containers = this.createContainers()
+    //   this.createColliders(this.player, this.containers.getChildren())
+    // }
 
-    if (Store.currentZone?.portals) {
-      this.portals = this.createPortals()
-      this.createOverlaps(this.player, this.portals.getChildren())
-    }
-    // this.initCamera()
+    // if (Store.currentZone?.portals) {
+    //   this.portals = this.createPortals()
+    //   this.createOverlaps(this.player, this.portals.getChildren())
+    // }
+    // // this.initCamera()
   }
 
   update (
@@ -81,8 +81,8 @@ export class MapScene extends Phaser.Scene {
   }
 
   createPlayer (): Character {
-    const player = new Warrior(this)
     const playerCharacter = Store.player?.character
+    const player = playerCharacter?.createGameObject(this)
     if (!playerCharacter) return player
 
     const {

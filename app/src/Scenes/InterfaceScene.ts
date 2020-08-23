@@ -1,9 +1,15 @@
+import { Sizer, RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components'
+
 import { Logger } from '~/Core/Logger'
 import { ContainerDialog } from '~/Objects/Ui/ContainerDialog'
 // import { ActorUi } from '~/Objects/Ui/ActorUi'
 import { EVENT_KEY_INVENTORY_SHOW_DIALOG, EVENT_KEY_INVENTORY_HIDE_DIALOG } from '~/Mixins/ContainsItems'
 import { EVENT_KEY_OPEN_PLAYER_INVENTORY } from '~/Core/PlayerController'
 import { Store } from '~/Store'
+import { COLOURS } from '~/Config/constants'
+import { Button } from '~/Objects/Ui/Button'
+
+import { MenuScene } from './MenuScene'
 
 const log = Logger(module.id)
 
@@ -22,13 +28,18 @@ export class InterfaceScene extends Phaser.Scene {
 
   create (): void {
     log('creating')
-    const y = Number(this.game.config.height) - 22
+    const y = Number(this.game.config.height) - 21
     const w = Number(this.game.config.width)
 
-    this.gamebar = this.createBg(
-      0, y, w, 22,
-      0x333333,
-    )
+    this.gamebar = this.createBg( w / 2, y, w, 40, COLOURS.Grey.Dark)
+    this.menuButton = new Button(this, {
+      label: 'menu',
+      onClick: () => {
+        this.scene.start(MenuScene.key)
+      }
+    })
+    this.gamebar.add(this.menuButton)
+    this.gamebar.layout()
 
     // log('Player', Store.player)
     // this.playerInventory = new ContainerDialog(this, {
@@ -83,7 +94,6 @@ export class InterfaceScene extends Phaser.Scene {
 
   togglePlayerInventory = (): void => {
     this.playerInventory.toggle()
-    Phaser.Display.Color.IntegerToColor
   }
 
   createBg (
@@ -93,15 +103,19 @@ export class InterfaceScene extends Phaser.Scene {
     height: integer,
     bgColor: integer
   ): Phaser.GameObjects.Graphics {
-    const bg = new Sizer()
-    bg.fillStyle(bgColor, 1)
-    bg.lineStyle(2, 0x999999, 0.5)
-    bg.strokeRect(0, 0, width, 2)
-    bg.fillRect(0, 0, width, height)
-
-    this.add.existing(bg)
-
-    return bg
+    const bar = new Sizer(this, {
+      x, y, width, height,
+      orientation: 'x'
+    })
+    const background = new RoundRectangle(
+      this, 0, 0, 0, 0, 0, bgColor
+    )
+    bar.addBackground(background)
+    this.add.existing(background)
+    this.add.existing(bar)
+    bar.layout()
+    log('bar.created')
+    return bar
   }
 
   update (): void {

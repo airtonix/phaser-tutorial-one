@@ -4,9 +4,12 @@ import {
   Model,
 } from 'mobx-keystone'
 
+import { Character as CharacterGameObject } from '~/Objects/Characters/Character'
+
 import { CharacterGoblin } from './CharacterGoblinModel'
 import { CharacterWarrior } from './CharacterWarriorModel'
 import { Character } from './CharacterModel'
+import { CharacterClassReference } from './CharacterClassReference'
 
 export const CHARACTER_CLASSES = {
   goblin: CharacterGoblin,
@@ -24,7 +27,9 @@ export class CharacterClass extends Model({
   createCharacter (): Character {
     const CharacterClassModel = CHARACTER_CLASSES[this.name]
     return new CharacterClassModel({
-      type: this.name
+      type: this.name,
+      class: CharacterClassReference(this)
     })
   }
+
 }

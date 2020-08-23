@@ -1,4 +1,5 @@
 import { Label, Sizer, RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components'
+import ButtonBehaviour from 'phaser3-rex-plugins/plugins/button'
 
 import { COLOURS, BitmapFonts } from '~/Config/constants'
 import { merge, get } from 'lodash'
@@ -30,6 +31,13 @@ export class Button extends Label {
     [key: string]: any
   }
   config: IButtonConfig
+  behaviour: ButtonBehaviour
+
+  static DEFAULT_THEME = {
+    normal: { bg: COLOURS.Grey.Dark, fg: COLOURS.White.Default },
+    hover: { bg: COLOURS.Grey.Light, fg: COLOURS.White.Default },
+    click: { bg: COLOURS.White.Default, fg: COLOURS.White.Default }
+  }
 
   constructor (
     scene: Phaser.Scene,
@@ -58,38 +66,34 @@ export class Button extends Label {
     scene.add.existing(this.childrenMap.text)
     scene.add.existing(this)
 
-    this.setData('data', config.data)
+    this.theme = merge(
+      Button.DEFAULT_THEME,
+      config.theme || {}
+    )
 
-    this.setData('theme', merge(
-      config.theme,
-      {
-        normal: { bg: COLOURS.Grey.Dark },
-        hover: { bg: COLOURS.Grey.Light },
-        click: { bg: COLOURS.White.Default }
-      }
-    ))
+    this.behaviour = new ButtonBehaviour(this)
+    this.behaviour.on('click', this.handleClick)
+    this.on('pointerover', this.handleOver)
+    this.on('pointerout', this.handleOut)
 
   }
 
-  handleOver (): void {
-    const theme = this.getData('theme')
-    const color = get(theme, 'hover.bg')
+  handleOver = (): void => {
+    const color = get(this.theme, 'hover.bg')
     this.childrenMap.background.setFillStyle(color)
   }
 
-  handleOut (): void {
-    const theme = this.getData('theme')
-    const color = get(theme, 'normal.bg')
+  handleOut = (): void => {
+    const color = get(this.theme, 'normal.bg')
     this.childrenMap.background.setFillStyle(color)
   }
 
-  handleClick (): void {
-    const theme = this.getData('theme')
-    const color = get(theme, 'click.bg')
-    this.childrenMap.background.setFillStyle(color)
+  handleClick = (buttonBehaviour, ...args: any[]): void => {
+    const color = get(this.theme, 'click.bg')
+    const onClick = get(this.config, 'onClick')
+    if (typeof onClick !== 'function') return
 
-    if (typeof this.config.onClick === 'function') {
-      this.config.onClick()
-    }
+    this.childrenMap.background.setFillStyle(color)
+    onClick(this, ...args)
   }
 }

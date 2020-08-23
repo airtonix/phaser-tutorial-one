@@ -4,7 +4,7 @@ import {
   Model,
 } from 'mobx-keystone'
 
-import { CharacterClass, CHARACTER_CLASSES } from '../Character/CharacterClass'
+import { CharacterClass, CHARACTER_CLASSES } from '../Character/CharacterClassModel'
 
 export const LIBRARY_MODEL_KEY = 'Library'
 

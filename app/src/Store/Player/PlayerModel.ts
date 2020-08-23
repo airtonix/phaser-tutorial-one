@@ -8,7 +8,7 @@ import {
 
 import { } from 'mobx'
 
-import { CharacterClass } from '../Character/CharacterClass'
+import { CharacterClass } from '../Character/CharacterClassModel'
 
 import { CharacterReference } from '~/Store/Character/CharacterReference'
 import { Character } from '~/Store/Character/CharacterModel'

@@ -47,9 +47,6 @@ export class Warrior
           up: {anim: Animations.WarriorMove },
           left: {flip: true, anim: Animations.WarriorMove },
           right: {flip: false, anim: Animations.WarriorMove },
-        },
-        jump: {
-          default: { anim: Animations.WarriorJump },
         }
       }
     }

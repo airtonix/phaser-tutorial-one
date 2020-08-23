@@ -27,20 +27,35 @@ export class Goblin
   footprintHeight = 8
   footprintWidth = 12
   usageDistance = 30
-  animations: IAnimations = {
-    default: {
-      default: { anim: Animations.GoblinIdle }
-    },
-    idle: {
-      default: { anim: Animations.GoblinIdle }
-    },
-    moving: {
-      default: { anim: Animations.GoblinMove },
-      down: { anim: Animations.GoblinMove },
-      up: { anim: Animations.GoblinMove },
-      left: { flip: true, anim: Animations.GoblinMove },
-      right: { flip: false, anim: Animations.GoblinMove },
-    },
+
+  constructor (
+    scene: Phaser.Scene,
+    x = 0,
+    y = 0
+  ) {
+    super(
+      { super: Character, arguments: [ scene, x, y ] },
+      { super: CanMove, arguments: [ scene, x, y ] },
+      { super: CanInteract, arguments: [] },
+    )
+  }
+
+  getAnimations (): IAnimations {
+    return {
+      default: {
+        default: { anim: Animations.GoblinIdle }
+      },
+      idle: {
+        default: { anim: Animations.GoblinIdle }
+      },
+      moving: {
+        default: { anim: Animations.GoblinMove },
+        down: { anim: Animations.GoblinMove },
+        up: { anim: Animations.GoblinMove },
+        left: { flip: true, anim: Animations.GoblinMove },
+        right: { flip: false, anim: Animations.GoblinMove },
+      },
+    }
   }
 }
 
