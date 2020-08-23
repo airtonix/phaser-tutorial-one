@@ -54,7 +54,8 @@ export class MapScene extends Phaser.Scene {
     this.navMesh = this.createNavMesh()
 
     this.player = this.createPlayer()
-    // this.controller = new PlayerController(this, this.player)
+    this.controller = new PlayerController(this, this.player)
+
     // this.setLayersColliable(this.mapLayers)
     // this.createColliders(this.player, Object.values(this.mapLayers))
 
@@ -83,7 +84,6 @@ export class MapScene extends Phaser.Scene {
   createPlayer (): Character {
     const playerCharacter = Store.player?.character
     const player = playerCharacter?.createGameObject(this)
-    if (!playerCharacter) return player
 
     const {
       x,

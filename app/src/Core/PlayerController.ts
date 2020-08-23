@@ -3,7 +3,9 @@ import { debounce } from 'lodash'
 import { Orientation } from '~/Config/constants'
 import { Character } from '~/Objects/Characters/Character'
 
+import { Logger } from './Logger'
 
+const log = Logger(module.id)
 
 export interface IControlKey {
   isDown: boolean
@@ -31,8 +33,9 @@ export class PlayerController {
     private scene: Phaser.Scene,
     private actor: Character
   ) {
+    this.scene = scene
     this.createController()
-    this.scene.on('update', this.update)
+    scene.events.on('update', this.readInputs)
   }
 
   createController = (): void => {
@@ -56,34 +59,30 @@ export class PlayerController {
     || controls.down.isDown
   }
 
-  update (): void {
+  readInputs = (): void  => {
     const controls = this.controls as IControls
-
-    const {
-      left, right,
-      up, down,
-      use, inventory
-    } = controls
+    if (!controls) return
+    if (this.isMoving) log(controls)
 
     // Horizontal movement
-    if (left.isDown) {
-      this.orientation = Orientation.Left
-    } else if (right.isDown) {
-      this.orientation = Orientation.Right
+    if (controls.left.isDown) {
+      this.actor.orientation = Orientation.Left
+    } else if (controls.right.isDown) {
+      this.actor.orientation = Orientation.Right
     }
 
     // Vertical movement
-    if (up.isDown) {
-      this.orientation = Orientation.Up
-    } else if (down.isDown) {
-      this.orientation = Orientation.Down
+    if (controls.up.isDown) {
+      this.actor.orientation = Orientation.Up
+    } else if (controls.down.isDown) {
+      this.actor.orientation = Orientation.Down
     }
 
-    if (use.isDown) {
+    if (controls.use.isDown) {
       this.actor.use()
     }
 
-    if (inventory.isDown) {
+    if (controls.inventory.isDown) {
       this.openInventory()
     }
   }
