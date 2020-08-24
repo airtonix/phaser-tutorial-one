@@ -1,58 +1,63 @@
-import { BaseScene } from './BaseScene'
-import { TextButton } from '~/Objects/TextButton'
-import { PlayerWarrior } from '~/Objects/PlayerWarrior'
-import { LevelOneScene } from '~/Scenes/LevelOneScene'
+import { Buttons } from 'phaser3-rex-plugins/templates/ui/ui-components'
 
-export class MenuScene extends BaseScene {
-    static key = 'Menu'
+import { Logger } from '~/Core/Logger'
+import { Button } from '~/Objects/Ui/Button'
 
-    constructor () {
-        super({
-            key: MenuScene.key
-        })
-        this.log('constructed')
-    }
+import { NewGameMenuScene } from './NewGameMenuScene'
 
-    create () {
-        super.create()
-        this.log('create')
+const log = Logger(module.id)
 
-        const { width, height } = this.cameras.main
+export class MenuScene extends Phaser.Scene {
+  static key = 'MenuScene'
+  menu: Buttons
 
-        this.logo = new PlayerWarrior({
-            scene: this,
-            width: 16,
-            height: 32,
-            x: (width / 2) - 16,
-            y: (height / 2) - 32
-        })
-        this.logo.sprite.setDisplaySize(
-            this.logo.sprite.width * 8,
-            this.logo.sprite.height * 4
-        )
+  constructor () {
+    super({ key: MenuScene.key })
+    log('constructed')
+  }
 
-        this.startButton = new TextButton({
-            scene: this,
-            x: width / 2,
-            y: height / 2,
-            text: 'Start',
-            style: { fill: '#ffffff' },
-            onClick: this.handleStartButtonClick
-        })
-        this.add.existing(this.startButton)
-    }
+  create (): void {
+    log('create')
+    this.menu = this.createMenu()
+    log('created')
+  }
 
-    update () {
-        this.logo.meander()
-    }
+  createMenu (): Buttons {
+    const newGameButton = new Button(this, {
+      label: 'New Game',
+      onClick: () => {
+        this.scene.start(NewGameMenuScene.key)
+      }
+    })
 
-    handleStartButtonClick = () => {
-        // this.logo.destroy()
-        const scenes = [
-            LevelOneScene.key,
-        ]
-        this.log('handleStartButtonClick', { scenes })
-        scenes.forEach(key => this.scene.start(key))
-        // this.scene.launch('Interface')
-    }
+    const loadGameButton = new Button(this, {
+      label: 'Load Game'
+    })
+    const optionsButton = new Button(this, {
+      label: 'Options'
+    })
+    const quitButton = new Button(this, {
+      label: 'Quit'
+    })
+
+    const menu = new Buttons(this, {
+      x: this.cameras.main.width / 2,
+      y: this.cameras.main.height / 2,
+      orientation: 'y',
+      buttons: [
+        newGameButton,
+        loadGameButton,
+        optionsButton,
+        quitButton
+      ],
+      space: {
+        item: 4
+      }
+    })
+    menu.layout()
+    this.add.existing(menu)
+
+    return menu
+  }
+
 }

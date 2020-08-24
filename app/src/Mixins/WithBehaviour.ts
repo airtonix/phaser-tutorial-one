@@ -1,33 +1,39 @@
-import { get, throttle } from 'lodash'
+import { throttle } from 'lodash'
 import { BehaviourTree } from 'mistreevous'
-import { Constructor } from "~/Base";
-import { WritesLogs } from './WritesLogs';
 
-export function WithBehaviour<TBase extends Constructor>(Base: TBase) {
-    return class WithBehaviour extends WritesLogs(Base) {
-        behaviour: BehaviourTree
-        behaviours: object
+export type IBehaviourDefinition = string
 
-        public stepBehaviour = throttle(() => {
-            if (!this.behaviour) return
+export interface IBehaviours {
+  default: IBehaviourDefinition,
+  [key: string]: IBehaviourDefinition
+}
 
-            if (!(this.behaviour instanceof BehaviourTree)) {
-                this.log('behaviour is not a BehaviourTree')
-                return
-            }
-            this.log('behaviour.step')
-            this.behaviour.step()
-        }, 200)
+export class WithBehaviour {
+  behaviour: BehaviourTree
+  behaviours: IBehaviours
 
-        public setBehaviour (behaviourName) {
-            this.log('setBehaviour', behaviourName)
-            const behaviour = get(this.behaviours, behaviourName, {})
-            this.behaviour = new BehaviourTree(behaviour, this)
-            this.behaviour.step()
-        }
+  constructor () {
+    this.setBehaviour('default')
+  }
 
-        public update (time, delta) {
-            this.stepBehaviour()
-        }
+  public stepBehaviour = throttle(() => {
+    if (!this.behaviour) return
+
+    if (!(this.behaviour instanceof BehaviourTree)) {
+      return
     }
+    this.behaviour.step()
+  }, 200)
+
+  public setBehaviour (behaviourName: string): void {
+    const behaviourDefinition: IBehaviourDefinition = this.behaviours[behaviourName]
+    if (!behaviourDefinition) return
+
+    this.behaviour = new BehaviourTree(behaviourDefinition, this)
+    this.behaviour.step()
+  }
+
+  public update (): void {
+    this.stepBehaviour()
+  }
 }

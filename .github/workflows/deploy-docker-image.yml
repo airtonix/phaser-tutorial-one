@@ -35,12 +35,14 @@ jobs:
 
       - name: Publish image
         run: >-
-          tusk ci:docker:publish
+          tusk docker:publish
           --appname=app
           --tag=$CI_SETTINGS__APP_DOCKER_REPO:builder;
-          tusk ci:docker:publish
+          tusk docker:publish
           --appname=app
           --tag=$CI_SETTINGS__APP_DOCKER_REPO:latest;
-          tusk ci:docker:publish
+          tusk docker:publish
           --appname=app
           --tag=$CI_SETTINGS__APP_DOCKER_REPO:$GITHUB_SHA;
+
+  ghpages:

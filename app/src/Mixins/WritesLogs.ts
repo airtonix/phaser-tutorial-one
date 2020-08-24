@@ -1,20 +1,15 @@
-import debug from 'debug'
-import { LOG_PREFIX } from '~/constants'
-import { Constructor } from '~/Base'
+import { uniqueId } from 'lodash'
 
-export function WritesLogs<TBase extends Constructor>(Base: TBase) {
-    return class extends Base {
-        key: string
-        logger: Function
+import { Logger } from '~/Core/Logger'
 
-        constructor (...args: any[]) {
-            super(...args)
-            this.logger = debug(`${LOG_PREFIX}.${this.key}`)
-            this.logger(`WritesLogs`)
-        }
+export class WritesLogs {
+  key: string
+  log: typeof console.log
 
-        log (...messages) {
-            this.logger(...messages)
-        }
-    }
+  constructor (
+    config: Phaser.Types.Scenes.SettingsConfig
+  ) {
+    this.log = Logger(config.key || uniqueId())
+    this.log('WritesLogs')
+  }
 }

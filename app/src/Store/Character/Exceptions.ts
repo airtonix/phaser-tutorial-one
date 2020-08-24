@@ -1,0 +1,1 @@
+export class NoCharacterClassError extends Error {}
