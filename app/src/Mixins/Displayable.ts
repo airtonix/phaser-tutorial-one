@@ -49,6 +49,7 @@ export class DisplayableEntity {
       this.shadow,
       this.sprite,
     ])
+    this.scene.add.existing(this.sprite)
   }
 
   /**
@@ -82,7 +83,7 @@ export class DisplayableEntity {
     } = animation || {}
 
     const sprite = new Phaser.GameObjects.Sprite(
-      this.entity.scene,
+      this.scene,
       0, 0,
       sheet,
       frame
@@ -107,7 +108,8 @@ export class DisplayableEntity {
 
   animate (animation: IAnimationConfig | undefined): void{
     if(!animation) return
-    if(this.sprite.anims.currentAnim?.key === animation.anim?.key) return
+
+    if(this.sprite.anims && this.sprite.anims.currentAnim?.key === animation.anim?.key) return
     log('animate', animation)
 
     const { flip, anim } = animation
