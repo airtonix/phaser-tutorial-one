@@ -6,7 +6,7 @@ options:
 
   docker_registry:
     environment: DOCKER_REPO
-    default: airtonix
+    default: docker.pkg.github.com/airtonix/phaser-tutorial-one_app
 
 tasks:
 
