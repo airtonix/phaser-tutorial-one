@@ -49,6 +49,7 @@ export class DisplayableEntity {
       this.shadow,
       this.sprite,
     ])
+
     this.scene.add.existing(this.sprite)
   }
 

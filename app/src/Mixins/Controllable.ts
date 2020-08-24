@@ -1,4 +1,4 @@
-import { debounce } from 'lodash'
+import { debounce, set } from 'lodash'
 
 import { Logger } from '../Core/Logger'
 
@@ -54,12 +54,12 @@ export class Controllable {
     const controls = this.controls as IControls
     if (!controls) return
 
-    this.entity.movement.moving = {
+    set(this.entity, 'moving', {
       Left: controls.left.isDown,
       Right: controls.right.isDown,
       Up: controls.up.isDown,
       Down: controls.down.isDown
-    }
+    })
 
     // if (controls.use.isDown) {
     //   this.entity.use()

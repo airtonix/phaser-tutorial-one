@@ -1,7 +1,9 @@
 import { DisplayableEntity, IAnimations } from '~/Mixins/Displayable'
 import { Orientation } from '~/Config/constants'
 import { Controllable } from '~/Mixins/Controllable'
+import { Logs, LogsAll, logsBefore, logsPropertyBefore } from '~/Core/Logger'
 
+@Logs
 export class WorldEntity extends Phaser.GameObjects.Container {
   key: string
   spriteWidth = 16
@@ -11,6 +13,7 @@ export class WorldEntity extends Phaser.GameObjects.Container {
   orientation: Orientation = Orientation.Right
   animations: IAnimations
   action = 'idle'
+  actions: string[]
   renderer: DisplayableEntity
   controller?: Controllable
 
@@ -19,6 +22,8 @@ export class WorldEntity extends Phaser.GameObjects.Container {
       this.footprintWidth,
       this.footprintHeight
     )
+
+    this.actions = Object.keys(this.animations)
 
     this.renderer = new DisplayableEntity(
       this,
@@ -32,11 +37,16 @@ export class WorldEntity extends Phaser.GameObjects.Container {
     this.scene.events.on('update', () => {
       this.renderer.animateAction(this.action)
     })
-
     this.scene.add.existing(this)
   }
 
   setController (controller: Controllable): void {
     this.controller = controller
+  }
+
+  setAction (action: string): void {
+    this.action = this.actions.includes(action)
+      ? action
+      : 'default'
   }
 }
