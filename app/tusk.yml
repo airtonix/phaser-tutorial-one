@@ -24,10 +24,11 @@ tasks:
 
   build:
     run:
+      - set-environment:
+          PARCEL_AUTOINSTALL: false
       - >-
-        npx tsc
-        --project
-        .
+        npx parcel build
+        ./src/index.html
 
   lint:
     run:

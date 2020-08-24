@@ -43,9 +43,11 @@ FROM base as prod
 COPY --from=install /build/node_modules /app/node_modules
 
 COPY ./tusk.yml \
-     ./ava.config.js \
-     ./tsconfig.json \
-     ./tslint.json \
+     ./.browserslistrc \
+     ./.eslintrc.js \
+     ./cssnano.config.js \
+     ./jest.config.js \
+     ./postcss.config.js \
      ./tsconfig.json \
      ./src \
      ./tools \

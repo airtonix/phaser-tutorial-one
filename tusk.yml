@@ -78,17 +78,24 @@ tasks:
     run:
     - command: docker pull ${repo}:builder || true
     - command: >-
-        docker build ./${source}
+        docker build
         --cache-from ${repo}:builder
         --file ./${source}/Dockerfile
         --tag ${repo}:builder
+        --target install
+        ./${source}
     - command: docker pull ${repo}:latest || true
     - command: >-
-        docker build ./${source}
+        docker build
+        --build-arg COMMIT=${version}
         --cache-from ${repo}:builder
         --cache-from ${repo}:latest
         --file ./${source}/Dockerfile
-        --tag ${project_name}
+        --tag ${project_name}:latest
+        --target prod
+        ./${source}
+    - when: publishbuilder
+      command: docker push ${repo}:builder
 
   docker:run:
     options:
