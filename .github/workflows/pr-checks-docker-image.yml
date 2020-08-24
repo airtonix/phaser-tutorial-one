@@ -22,7 +22,7 @@ jobs:
       - name: Build ci image
         run: >-
           tusk docker:build
-          --appname=app
+          --source=app
           --repo=$CI_SETTINGS__APP_DOCKER_REPO
       - name: Run tests
         run: tusk ci:test
