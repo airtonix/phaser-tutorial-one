@@ -26,6 +26,8 @@ jobs:
           -b ~/bin $CI_SETTINGS__TUSK_VERSION
 
       - uses: actions/checkout@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build ci image
         run: >-
