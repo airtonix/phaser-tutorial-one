@@ -34,11 +34,11 @@ tasks:
   dev:test:
     run:
       - task:
-          name: docker:tusk
+          name: docker:run
           options:
             stage: local
             service: app
-            command: test:watch
+            command: tusk test:watch
 
   dev:shell:
     run:
@@ -55,20 +55,20 @@ tasks:
   ci:app:test:
     run:
       - task:
-          name: docker:tusk
+          name: docker:run
           options:
             service: app
             stage: ci
-            command: test
+            command: tusk test
 
   ci:app:lint:
     run:
       - task:
-          name: docker:tusk
+          name: docker:run
           options:
             service: app
             stage: ci
-            command: lint
+            command: tusk lint
 
   #
   # Docker
@@ -149,22 +149,6 @@ tasks:
         -f docker-compose.yml
         -f docker-compose--${stage}.yml
         up ${services}
-
-  docker:tusk:
-    options:
-      service:
-        usage: docker-compose service name
-      command:
-        usage: command to run
-      stage:
-        default: local
-    run:
-      - task:
-          name: docker:run
-          options:
-            service: ${service}
-            command: ${command}
-            stage: ${stage}
 
   docker:templates:
     run:
