@@ -25,4 +25,6 @@ jobs:
           --source=app
           --repo=$CI_SETTINGS__APP_DOCKER_REPO
       - name: Run tests
-        run: tusk ci:test
+        run: >-
+          tusk ci:app:test
+          tusk ci:app:lint

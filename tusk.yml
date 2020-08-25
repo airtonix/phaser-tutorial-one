@@ -52,7 +52,7 @@ tasks:
   #
   # CI
   #
-  ci:test:
+  ci:app:test:
     run:
       - task:
           name: docker:tusk
@@ -60,6 +60,15 @@ tasks:
             service: app
             stage: ci
             command: test
+
+  ci:app:lint:
+    run:
+      - task:
+          name: docker:tusk
+          options:
+            service: app
+            stage: ci
+            command: lint
 
   #
   # Docker
@@ -183,9 +192,6 @@ tasks:
         -e version=${version}
         supinf/envsubst
         /tmp/${infile} > ./${outfile}
-
-
-
 
   docker:publish:
     options:
