@@ -9,7 +9,7 @@ options:
     default: docker.pkg.github.com/airtonix/phaser-tutorial-ones
 
   version:
-    environment: GITHASH
+    usage: Version
     default:
       command: git rev-parse --short HEAD
 
@@ -82,6 +82,8 @@ tasks:
         usage: Docker repository to use
         type: string
         default: ${docker_registry}/${project_name}
+      tag:
+        usage: if provided, image will get tagged with this
     run:
     - command: docker pull ${repo}:builder || true
     - command: >-
@@ -98,12 +100,12 @@ tasks:
         --cache-from ${repo}:builder
         --cache-from ${repo}:latest
         --file ./${source}/Dockerfile
-        --tag ${repo}:latest
-        --tag ${repo}:${version}
+        --tag ${repo}
         --target prod
         ./${source}
-    - when: publishbuilder
-      command: docker push ${repo}:builder
+    - when:
+        command: echo tag
+      command: docker tag ${repo} ${repo}:${tag}
 
   docker:run:
     options:
@@ -163,6 +165,7 @@ tasks:
 
   docker:templates:
     run:
+      - command: echo "inserting ${version}"
       - task:
           name: docker:template
           options:
@@ -195,12 +198,12 @@ tasks:
 
   docker:publish:
     options:
-      repo:
-        usage: Docker repository to use
+      image:
+        usage: docker image to tag
         type: string
         default: ${docker_registry}/${project_name}
       tag:
         usage: New docker tag
     run:
-      - docker tag ${repo} ${tag}
-      - docker push ${repo}:builder
+      - docker tag ${image} ${tag}
+      - docker push ${tag}

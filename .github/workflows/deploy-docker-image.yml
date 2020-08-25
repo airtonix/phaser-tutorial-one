@@ -34,9 +34,20 @@ jobs:
       - name: Build ci image
         run: >-
           tusk ci:docker:build
-          --appname=app
-          --repo=$CI_SETTINGS__APP_DOCKER_REPO
-          --version=$GITHUB_SHA
+          --source=app
+          --repo=$CI_SETTINGS__APP_DOCKER_REPO/app
+
+      - name: Publish image
+        run: >-
+          tusk docker:publish
+          --image=$CI_SETTINGS__APP_DOCKER_REPO/app
+          --tag=$CI_SETTINGS__APP_DOCKER_REPO/app:builder;
+          tusk docker:publish
+          --image=$CI_SETTINGS__APP_DOCKER_REPO/app
+          --tag=$CI_SETTINGS__APP_DOCKER_REPO/app:$GITHUB_SHA;
+          tusk docker:publish
+          --image=$CI_SETTINGS__APP_DOCKER_REPO/app
+          --tag=$CI_SETTINGS__APP_DOCKER_REPO/app:latest;
 
       - name: Rewrite Templates
         run: >-
@@ -46,17 +57,5 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Update docker-compose files
-
-      - name: Publish image
-        run: >-
-          tusk docker:publish
-          --appname=app
-          --tag=$CI_SETTINGS__APP_DOCKER_REPO:builder;
-          tusk docker:publish
-          --appname=app
-          --tag=$CI_SETTINGS__APP_DOCKER_REPO:latest;
-          tusk docker:publish
-          --appname=app
-          --tag=$CI_SETTINGS__APP_DOCKER_REPO:$GITHUB_SHA;
 
   ghpages:

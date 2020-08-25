@@ -23,7 +23,12 @@ jobs:
         run: >-
           tusk docker:build
           --source=app
-          --repo=$CI_SETTINGS__APP_DOCKER_REPO
+          --repo=$CI_SETTINGS__APP_DOCKER_REPO/app
+          --tag=$GITHUB_SHA
+      - name: Template docker-compose
+        run: >-
+          tusk docker:templates
+          --version=$GITHUB_SHA
       - name: Run tests
         run: >-
           tusk ci:app:test
