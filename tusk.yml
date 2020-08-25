@@ -81,10 +81,9 @@ tasks:
       repo:
         usage: Docker repository to use
         type: string
-        default: ${docker_registry}/${project_name}
+        default: ${docker_registry}/${project_name}/${source}
       tag:
         usage: if provided, image will get tagged with this
-        type: string
     run:
       - command: docker pull ${repo}:builder || true
       - command: >-
@@ -105,7 +104,7 @@ tasks:
           --target prod
           ./${source}
       - when:
-          command: test -z "${tag}"
+          command: test "${tag}"
         command: >-
           docker tag
           ${repo}
