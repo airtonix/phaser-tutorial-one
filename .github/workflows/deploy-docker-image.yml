@@ -17,8 +17,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-
       - name: Local bin path
         run: echo "::add-path::~/bin"
 
@@ -27,9 +25,7 @@ jobs:
           curl -sL https://git.io/tusk | sh -s --
           -b ~/bin $CI_SETTINGS__TUSK_VERSION
 
-      - name: Install envsub
-        run: >-
-          npm install -g envsub
+      - uses: actions/checkout@v1
 
       - name: Build ci image
         run: >-
