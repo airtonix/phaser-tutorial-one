@@ -8,6 +8,11 @@ options:
     environment: DOCKER_REPO
     default: docker.pkg.github.com/airtonix/phaser-tutorial-ones
 
+  version:
+    environment: GITHASH
+    default:
+      command: git rev-parse --short HEAD
+
 tasks:
 
   dev:
@@ -47,14 +52,6 @@ tasks:
   #
   # CI
   #
-  ci:setup:
-    run:
-      - task:
-          name: docker:build
-          options:
-            appname: app
-            repo: airtonix/${project_name}
-
   ci:test:
     run:
       - task:
@@ -71,6 +68,7 @@ tasks:
     options:
       source:
         usage: Directory to use
+        default: app
       repo:
         usage: Docker repository to use
         type: string
@@ -91,7 +89,8 @@ tasks:
         --cache-from ${repo}:builder
         --cache-from ${repo}:latest
         --file ./${source}/Dockerfile
-        --tag ${project_name}:latest
+        --tag ${repo}:latest
+        --tag ${repo}:${version}
         --target prod
         ./${source}
     - when: publishbuilder
@@ -105,12 +104,24 @@ tasks:
         default: local
       command:
         usage: command to run
-    run: >-
-      docker-compose
-      -f docker-compose.yml
-      -f docker-compose--${stage}.yml
-      run --rm
-      ${service} ${command}
+    run:
+      - when:
+          exists:
+            - docker-compose--${stage}.yml
+        command: >-
+          docker-compose
+          -f docker-compose.yml
+          -f docker-compose--${stage}.yml
+          run --rm
+          ${service} ${command}
+      - when:
+          not-exists:
+            - docker-compose--${stage}.yml
+        command: >-
+          docker-compose
+          -f docker-compose.yml
+          run --rm
+          ${service} ${command}
 
   docker:up:
     options:
@@ -140,6 +151,41 @@ tasks:
             service: ${service}
             command: ${command}
             stage: ${stage}
+
+  docker:templates:
+    run:
+      - task:
+          name: docker:template
+          options:
+            infile: tools/docker/docker-compose.yml
+            outfile: docker-compose.yml
+      - task:
+          name: docker:template
+          options:
+            infile: tools/docker/docker-compose--ci.yml
+            outfile: docker-compose--ci.yml
+      - task:
+          name: docker:template
+          options:
+            infile: tools/docker/docker-compose--local.yml
+            outfile: docker-compose--local.yml
+
+  docker:template:
+    options:
+      infile:
+        usage: input file
+      outfile:
+        usage: output file
+    run:
+      - >-
+        docker run --rm -it
+        -v "$(pwd):/tmp"
+        -e version=${version}
+        supinf/envsubst
+        /tmp/${infile} > ./${outfile}
+
+
+
 
   docker:publish:
     options:

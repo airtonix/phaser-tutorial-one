@@ -27,11 +27,25 @@ jobs:
           curl -sL https://git.io/tusk | sh -s --
           -b ~/bin $CI_SETTINGS__TUSK_VERSION
 
+      - name: Install envsub
+        run: >-
+          npm install -g envsub
+
       - name: Build ci image
         run: >-
           tusk ci:docker:build
           --appname=app
           --repo=$CI_SETTINGS__APP_DOCKER_REPO
+          --version=$GITHUB_SHA
+
+      - name: Rewrite Templates
+        run: >-
+          tusk docker:compose-templates
+          --version=$GITHUB_SHA
+
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update docker-compose files
 
       - name: Publish image
         run: >-
