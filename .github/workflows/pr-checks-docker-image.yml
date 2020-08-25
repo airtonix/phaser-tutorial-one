@@ -1,6 +1,17 @@
 name: PR Checks
 
-on: [push, pull_request]
+on:
+  push:
+    # Publish `develop` as Docker `latest` image.
+    branches:
+      - develop
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
 
 env:
   CI_SETTINGS__TUSK_VERSION: v0.5.1
@@ -8,9 +19,11 @@ env:
 
 jobs:
 
-  check:
+  test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v1
+
       - name: Local bin path
         run: echo "::add-path::~/bin"
 
@@ -18,8 +31,6 @@ jobs:
         run: >-
           curl -sL https://git.io/tusk | sh -s --
           -b ~/bin $CI_SETTINGS__TUSK_VERSION
-
-      - uses: actions/checkout@v1
 
       - name: Build ci image
         run: >-
