@@ -50,7 +50,7 @@ jobs:
 
       - name: Rewrite Templates
         run: >-
-          tusk docker:compose-templates
+          tusk docker:templates
           --version=$GITHUB_SHA
 
       - uses: stefanzweifel/git-auto-commit-action@v4
