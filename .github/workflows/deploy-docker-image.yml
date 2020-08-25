@@ -33,6 +33,9 @@ jobs:
           --source=app
           --repo=$CI_SETTINGS__APP_DOCKER_REPO/app
 
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
       - name: Publish image
         run: >-
           tusk docker:publish
