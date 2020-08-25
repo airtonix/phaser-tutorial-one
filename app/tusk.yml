@@ -38,6 +38,15 @@ tasks:
         --ext .ts
         --cache
 
+  lint:fix:
+    run:
+      - >-
+        npx eslint
+        ./src
+        --ext .ts
+        --cache
+        --fix
+
   test:
     run:
       - >-

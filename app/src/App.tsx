@@ -2,9 +2,10 @@ import * as React from 'react'
 
 import '~/Store'
 
+import { Game } from '~/Components/Game'
+
 import classes from './App.module.css'
 
-import { Game } from '~/Components/Game'
 
 
 export class App extends React.Component {

@@ -45,6 +45,8 @@
 		"usernamehw.errorlens",
 		"henry-li.vscode-import-formatter",
 		"dbaeumer.vscode-eslint",
-		"hbenl.vscode-test-explorer"
+		"hbenl.vscode-test-explorer",
+		"achil.vscode-javascript-repl",
+		"orta.vscode-jest"
 	]
 }

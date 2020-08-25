@@ -18,10 +18,6 @@ const UrlWhiteSixteenbfZXFont = '/white_16bfZX.fnt'
 const UrlWhiteSixteenbfZXPng = '/white_16bfZX_0.png'
 
 
-export const FrameConfig16x16 = {
-  frameWidth: 16,
-  frameHeight: 16,
-}
 
 export interface IOrientation {
   Left: boolean
@@ -48,7 +44,32 @@ export const COLOURS = {
   }
 }
 
-export const SpriteSheets = {
+export interface IAsset {
+  key: string,
+  url: string
+}
+
+export interface ISpriteSheetFrameConfig  {
+  frameWidth: number,
+  frameHeight: number,
+  spacing?: number,
+  margin?: number
+}
+
+export interface ISpriteSheetConfig extends IAsset {
+  frameConfig: ISpriteSheetFrameConfig
+}
+
+export const FrameConfig16x16:ISpriteSheetFrameConfig = {
+  frameWidth: 16,
+  frameHeight: 16,
+}
+
+export interface ISpriteSheetConfigMap {
+  [key: string]: ISpriteSheetConfig
+}
+
+export const SpriteSheets:ISpriteSheetConfigMap = {
   Dungeon: {
     key: 'DungeonSpriteSheet',
     url: UrlTilesetOneSpritesheet,
@@ -87,7 +108,11 @@ export const SpriteSheets = {
   }
 }
 
-export const Images = {
+export interface IImageCollectionMap {
+  [key: string]: IAsset
+}
+
+export const Images:IImageCollectionMap = {
   DungeonTiles: {
     key: 'Dungeon',
     url: UrlTilesetOneSpritesheet
@@ -98,7 +123,17 @@ export const Images = {
   },
 }
 
-export const BitmapFonts = {
+export interface IBitmapFont {
+  key: string,
+  png: string,
+  fnt: string
+}
+
+export interface IBitmapFontMap {
+  [key: string]: IBitmapFont
+}
+
+export const BitmapFonts:IBitmapFontMap = {
   WhiteSixteenbfZXFont: {
     key: 'WhiteSixteenbfZXFont',
     png: UrlWhiteSixteenbfZXPng,
@@ -111,21 +146,31 @@ export const BitmapFonts = {
   }
 }
 
-export const Nineslices = {
+export interface INineslice {
+  key: string,
+  startX: number,
+  startY: number,
+  width: number,
+  height: number,
+  cornerOffset: number,
+  border: number
+}
+export interface INinesliceMap {
+  [key: string]: INineslice
+}
+export const Nineslices:INinesliceMap = {
   Dialog: {
+    key: Images.UiDialogBg.key,
     startX: 0,
     startY: 0,
     width: 48,
     height: 48,
-    key: Images.UiDialogBg.key,
     cornerOffset: 16,
     border: 2
   }
 }
 
-export interface ITiledTileMapConfig {
-  key: string,
-  url: string,
+export interface ITiledTileMapConfig extends IAsset {
   tileset: string,
   tileimage: string
 }
@@ -154,7 +199,23 @@ export const TiledTileMaps: ITiledTileMaps = {
   }
 }
 
-export const Animations = {
+
+export interface IAnimationSheetConfig {
+  key: string,
+  sheet: string,
+  frames: number[],
+  repeat?: number,
+  frameRate?: number,
+  padding?: number,
+  margin?: number,
+  spacing?: number,
+}
+
+export interface IAnimationSheetConfigMap {
+  [key: string]: IAnimationSheetConfig
+}
+
+export const Animations:IAnimationSheetConfigMap = {
   WarriorMove: {
     key: 'WarriorMove',
     frameRate: 8,
@@ -251,7 +312,20 @@ export const Animations = {
 
 }
 
-export const Emotes = {
+export interface IEmoteConfig {
+  width: number,
+  height: number,
+  sheet: string,
+  frames: {
+    [emoteName: string]: number
+  }
+}
+
+export interface IEmoteConfigMap {
+  [key: string]: IEmoteConfig
+}
+
+export const Emotes:IEmoteConfigMap = {
   Default: {
     width: 16,
     height: 16,
@@ -291,7 +365,22 @@ export const Emotes = {
   }
 }
 
-export const ItemIcons = {
+
+export interface IIconConfig {
+  sheet: ISpriteSheetConfig,
+  frame: number
+}
+
+export interface IIconCollectionConfig {
+  sheet: ISpriteSheetConfig,
+  frames: number[]
+}
+
+export interface IIconConfigMap {
+  [key: string]: IIconCollectionConfig
+}
+
+export const ItemIcons: IIconConfigMap = {
   armour: {
     sheet: SpriteSheets.Items,
     frames: range(0, 4)

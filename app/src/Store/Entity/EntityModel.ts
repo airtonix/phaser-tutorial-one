@@ -5,11 +5,11 @@ import {
   modelAction,
   ExtendedModel
 } from 'mobx-keystone'
+import { computed } from 'mobx'
 
 import { Modifier } from '../Modifier/ModifierModel'
 
 import { NotImplementedError } from '~/Core/exceptions'
-import { computed } from 'mobx'
 import { IPosition } from '~/Core/distance'
 import { Character } from '~/Objects/Characters/Character'
 

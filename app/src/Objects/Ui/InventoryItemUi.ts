@@ -1,102 +1,117 @@
-import { BitmapFonts, ItemIcons } from '~/Config/constants'
-import { WritesLogs } from '~/Mixins/WritesLogs'
+import { BitmapFonts, ItemIcons, IIconConfig } from '~/Config/constants'
+import { Logs } from '~/Core/Logger'
 
 export interface InventoryItemModel {
     id: string
     count: number
-    icon: {
-        sheet: {
-            key: string
-            frame: number,
-            frames: number[]
-        }
-    }
+    icon: IIconConfig,
     name: string
 }
 
-export class InventoryItemUi extends WritesLogs(Phaser.GameObjects.Container) {
+export interface IIconInventoryConfig {
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+}
 
+@Logs
+export class InventoryItemUi extends Phaser.GameObjects.Container {
+
+    log: CallableFunction
     qty: Phaser.GameObjects.BitmapText
     bg: Phaser.GameObjects.Graphics
     icon: Phaser.GameObjects.Sprite
-    item: InventoryItemModel
 
-    constructor (scene, options, item) {
-        super(scene, options.x, options.y)
-        this.item = item
-        this.createLogger(`InventoryItem: ${item.id}`)
-        const {
-            x, y, w, h
-        } = options
-        const {
-            count,
-            icon
-        } = item || {}
+    constructor (
+      public scene: Phaser.Scene,
+      public options: IIconInventoryConfig,
+      public item: InventoryItemModel
+    ) {
+      super(scene, options.x, options.y)
+      this.item = item
 
-        this.setSize(w, h)
-        this.bg = new Phaser.GameObjects.Graphics(
-            this.scene,
-            { x: 0, y: 0}
+      const {
+        x, y, w, h
+      } = options
+      const {
+        count,
+        icon
+      } = item || {}
+
+      this.setSize(w, h)
+      this.bg = new Phaser.GameObjects.Graphics(
+        this.scene,
+        { x: 0, y: 0}
+      )
+      this.bg.fillStyle(0x000000, 0.2)
+      this.bg.fillRect(0, 0, w, h)
+      this.add(this.bg)
+
+      this.icon = new Phaser.GameObjects.Sprite(
+        this.scene,
+        w / 2, h / 2,
+        icon.sheet.key,
+        icon.frame
+      )
+      this.add(this.icon)
+
+      if (count > 1) {
+        this.qty = this.createText(
+          w - (Number(count).toString().length * 8),
+          h - 10,
+          count.toString()
         )
-        this.bg.fillStyle(0x000000, 0.2)
-        this.bg.fillRect(0, 0, w, h)
-        this.add(this.bg)
+        this.add(this.qty)
+      }
 
-        this.icon = new Phaser.GameObjects.Sprite(
-            this.scene,
-            w / 2, h / 2,
-            icon.sheet.key,
-            icon.frame
-        )
-        this.add(this.icon)
+      this.setInteractive({ useHandCursor: true })
+        .on('pointerover', this.handlePointerOver)
+        .on('pointerout', this.handleButtonRestState)
+        .on('pointerdown', this.handleButtonActiveState)
+        .on('pointerup', this.handlePointerUp)
 
-        if (count > 1) {
-            this.qty = this.createText(
-                w - (Number(count).toString().length * 8),
-                h - 10,
-                count
-            )
-            this.add(this.qty)
-        }
-
-        this.setInteractive({ useHandCursor: true })
-            .on('pointerover', this.handlePointerOver)
-            .on('pointerout', this.handleButtonRestState)
-            .on('pointerdown', this.handleButtonActiveState)
-            .on('pointerup', this.handlePointerUp)
-
-        this.setDepth(2000)
+      this.setDepth(2000)
     }
 
-    createIcon (x: integer, y: integer, icon) {
-        const sprite = new Phaser.GameObjects.Sprite(
-            this.scene,
-            x, y,
-            icon.sheet.key, icon.frame
-        )
-        return sprite
+    createIcon (
+      x: number,
+      y: number,
+      icon: IIconConfig
+    ): Phaser.GameObjects.Sprite {
+      const sprite = new Phaser.GameObjects.Sprite(
+        this.scene,
+        x, y,
+        icon.sheet.key,
+        icon.frame
+      )
+      return sprite
     }
 
-    createText (x: integer, y: integer, text: string) {
-        const content = new Phaser.GameObjects.BitmapText(
-            this.scene, x, y,
-            BitmapFonts.BlackSixteenbfZXFont.key,
-            text
-        )
-        content.setAlpha(0.7)
-        return content
+    createText (
+      x: integer,
+      y: integer,
+      text: string
+    ): Phaser.GameObjects.BitmapText {
+      const content = new Phaser.GameObjects.BitmapText(
+        this.scene, x, y,
+        BitmapFonts.BlackSixteenbfZXFont.key,
+        text
+      )
+      content.setAlpha(0.7)
+      return content
     }
 
-    handleButtonActiveState = () => {
-        this.log('handleButtonActiveState')
+    handleButtonActiveState = (): void => {
+      this.log('handleButtonActiveState')
     }
-    handleButtonRestState = () => {
-        this.log('handleButtonRestState')
+    handleButtonRestState = (): void => {
+      this.log('handleButtonRestState')
     }
-    handlePointerOver = () => {
-        this.log('handlePointerOver')
+    handlePointerOver = (): void => {
+      this.log('handlePointerOver')
     }
-    handlePointerUp = () => {
-        this.log('handlePointerUp')
+    handlePointerUp = (): void => {
+      this.log('handlePointerUp')
     }
 }

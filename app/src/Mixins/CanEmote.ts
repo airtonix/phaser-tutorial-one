@@ -1,11 +1,6 @@
 import { debounce } from 'lodash'
 
-
 import { Emotes } from '~/Config/constants'
-import { Constructor } from '~/Core/framework'
-
-import { WritesLogs } from './WritesLogs'
-
 
 export interface IEmoteConfig {
   width: integer

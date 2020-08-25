@@ -8,10 +8,10 @@ export class OutlinePipeline extends Phaser.Renderer.WebGL.Pipelines.TextureTint
     * @param {Phaser.Game} game - the controller of the game instance
     */
     constructor (game) {
-        super({
-            game: game,
-            renderer: game.renderer,
-            fragShader: `
+      super({
+        game: game,
+        renderer: game.renderer,
+        fragShader: `
       precision mediump float;
 
       uniform sampler2D uMainSampler;
@@ -55,6 +55,6 @@ export class OutlinePipeline extends Phaser.Renderer.WebGL.Pipelines.TextureTint
         gl_FragColor = color;
       }
     `
-        })
+      })
     }
 }

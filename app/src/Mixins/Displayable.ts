@@ -1,32 +1,23 @@
 import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
 import { WorldEntity } from '~/Objects/WorldEntity'
-import { Orientation } from '~/Config/constants'
+import { Orientation, IAnimationSheetConfig } from '~/Config/constants'
 import { Logger } from '~/Core/Logger'
 
 const log = Logger(module.id)
 
-export interface IAnimationSheetConfig {
-  key: string,
-  frameRate?: integer,
-  repeat: integer,
-  padding?: integer,
-  frames: integer[],
-  sheet: string,
-}
-
-export interface IAnimationConfig {
+export interface ICharacterAnimationConfig {
   flip?: boolean,
   anim: IAnimationSheetConfig
 }
 
-export interface IAnimationGroup {
-  default: IAnimationConfig
-  [animationVariant: string]: IAnimationConfig
+export interface ICharacterActionAnimationMap {
+  default: ICharacterAnimationConfig
+  [actionVariant: string]: ICharacterAnimationConfig
 }
 
-export interface IAnimations {
-default: IAnimationGroup
-[animationGroup: string]: IAnimationGroup
+export interface ICharacterAnimationMap {
+  default: ICharacterActionAnimationMap
+  [action: string]: ICharacterActionAnimationMap
 }
 
 export class DisplayableEntity {
@@ -40,7 +31,7 @@ export class DisplayableEntity {
     public width: number,
     public height: number,
     public orientation: string = Orientation.Right,
-    public animations: IAnimations
+    public animations: ICharacterAnimationMap
   ) {
     this.sprite = this.createSprite()
     this.shadow = this.createShadowSprite()
@@ -101,13 +92,13 @@ export class DisplayableEntity {
   createShadowSprite (
     color = 0x000000,
   ): Phaser.GameObjects.Graphics {
-    const shadow = new Phaser.GameObjects.Graphics(this.entity.scene)
+    const shadow = new Phaser.GameObjects.Graphics(this.scene)
     shadow.fillStyle(color, 0.4)
     shadow.fillEllipse(0, 0, this.width / 1.6, 4)
     return shadow
   }
 
-  animate (animation: IAnimationConfig | undefined): void{
+  animate (animation: ICharacterAnimationConfig | undefined): void{
     if(!animation) return
 
     if(this.sprite.anims && this.sprite.anims.currentAnim?.key === animation.anim?.key) return
@@ -128,7 +119,7 @@ export class DisplayableEntity {
   getAnimation (
     action: string | false,
     variant = 'default'
-  ): IAnimationConfig | undefined {
+  ): ICharacterAnimationConfig | undefined {
     if (!action) return
     try {
       const animations = this.animations

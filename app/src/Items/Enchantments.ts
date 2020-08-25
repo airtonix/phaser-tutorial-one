@@ -5,7 +5,7 @@ import { Loot } from './Loot'
 
 
 Factory('enchantment', {
-    // id: 'id',
-    type: () => 'enchantment',
-    description: () => enchantments()
+  // id: 'id',
+  type: () => 'enchantment',
+  description: () => enchantments()
 })

@@ -1,8 +1,7 @@
-import { beforeMethod, afterMethod, afterInstance, AdviceRef } from 'kaop-ts'
+import { beforeMethod, afterMethod, afterInstance, Metadata } from 'kaop-ts'
 import debug from 'debug'
 
 import { APP_ID } from '~/Config/constants'
-import { get } from 'lodash'
 
 export type ConsoleLogType = typeof console.log
 
@@ -10,21 +9,26 @@ export function Logger (namespace: string): ConsoleLogType {
   return debug([APP_ID, namespace].join('.'))
 }
 
-export const LogMethodAction = (meta) => {
+export const LogMethodAction = (
+  meta: Metadata<any>
+): void => {
   if (!meta.scope.log) return
   const { method, args, result } = meta
-  meta.scope.log(meta.method.name, args, result)
+  meta.scope.log(method.name, args, result)
 }
 
 export const LogMethodProperty = (property: string): ConsoleLogType =>
-  (meta) => {
+  (
+    meta: Metadata<any>
+  ) => {
     if (!meta.scope.log) return
-    // const { method, args, result } = meta
-    meta.scope.log(meta.method.name, property, meta.scope)
+    const { method, args, result, scope } = meta
+    meta.scope.log(method.name, property, scope)
   }
 
 export const Logs = afterInstance(meta => {
-  meta.scope.log = Logger(meta.scope.constructor.name)
+  const { method } = meta
+  meta.scope.log = Logger(method.name)
 })
 
 export const LogsAll = afterInstance(meta => {
