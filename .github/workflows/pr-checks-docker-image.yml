@@ -44,7 +44,10 @@ jobs:
           tusk docker:templates
           --version=$GITHUB_SHA
 
+      - name: Run linting
+        run: >-
+          tusk ci:app:lint
+
       - name: Run tests
         run: >-
           tusk ci:app:test
-          tusk ci:app:lint
