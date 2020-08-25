@@ -6,7 +6,7 @@ options:
 
   docker_registry:
     environment: DOCKER_REPO
-    default: docker.pkg.github.com/airtonix/phaser-tutorial-one_app
+    default: docker.pkg.github.com/airtonix/phaser-tutorial-ones
 
 tasks:
 
@@ -143,9 +143,12 @@ tasks:
 
   docker:publish:
     options:
-      appname:
-        usage: the appname
+      repo:
+        usage: Docker repository to use
+        type: string
+        default: ${docker_registry}/${project_name}
       tag:
         usage: New docker tag
     run:
-      - docker tag ci_${appname} ${tag}
+      - docker tag ${repo} ${tag}
+      - docker push ${repo}:builder

@@ -10,7 +10,7 @@ on:
 
 env:
   CI_SETTINGS__TUSK_VERSION: v0.5.1
-  CI_SETTINGS__APP_DOCKER_REPO: docker.pkg.github.com/airtonix/phaser-tutorial-one_app
+  CI_SETTINGS__APP_DOCKER_REPO: docker.pkg.github.com/airtonix/phaser-tutorial-one
 
 jobs:
 
