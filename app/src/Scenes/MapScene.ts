@@ -53,8 +53,8 @@ export class MapScene extends Phaser.Scene {
 
     this.player = this.createPlayer()
 
-    // this.setLayersColliable(this.mapLayers)
-    // this.createColliders(this.player, Object.values(this.mapLayers))
+    this.setLayersColliable(this.mapLayers)
+    this.createColliders(this.player, Object.values(this.mapLayers))
 
     // this.sidekick = this.createPlayerSidekick()
     // this.createColliders(this.sidekick, Object.values(this.mapLayers))
@@ -64,10 +64,10 @@ export class MapScene extends Phaser.Scene {
     //   this.createColliders(this.player, this.containers.getChildren())
     // }
 
-    // if (Store.currentZone?.portals) {
-    //   this.portals = this.createPortals()
-    //   this.createOverlaps(this.player, this.portals.getChildren())
-    // }
+    if (Store.currentZone?.portals) {
+      this.portals = this.createPortals()
+      this.createOverlaps(this.player, this.portals.getChildren())
+    }
     // // this.initCamera()
   }
 
@@ -86,7 +86,6 @@ export class MapScene extends Phaser.Scene {
     player.setController(
       new Controllable(this, player)
     )
-    window.Player = player
     return player
   }
 
@@ -314,10 +313,11 @@ export class MapScene extends Phaser.Scene {
     layers: TileMapLayerHash
   ): void {
     Object.keys(layers)
-      .forEach(layerId => {
-        log(`setLayersCollidable: ${layerId}`)
-        const layer = layers[layerId]
-        layer.setCollisionByProperty({ collides: true })
+      .map(layerId => layers[layerId])
+      .filter(Boolean)
+      .forEach(mapLayer => {
+        log(`setLayersCollidable: ${mapLayer.layer.name}`)
+        mapLayer.setCollisionByProperty({ collides: true })
       })
   }
 
