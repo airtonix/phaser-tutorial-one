@@ -1,9 +1,11 @@
 name: Deploy
 
 on:
-  pull_request:
+  workflow_dispatch:
+  push:
     branches:
       -  develop
+      -  master
 
 env:
   CI_SETTINGS__TUSK_VERSION: v0.5.1
