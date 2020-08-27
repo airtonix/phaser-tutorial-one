@@ -6,7 +6,7 @@ on:
       -  master
   pull_request:
     branches:
-      -  master
+      -  develop
 
 env:
   CI_SETTINGS__TUSK_VERSION: v0.5.1
