@@ -26,6 +26,7 @@ jobs:
           -b ~/bin $CI_SETTINGS__TUSK_VERSION
 
       - uses: actions/checkout@v1
+      - uses: fregante/setup-git-token@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -55,6 +56,5 @@ jobs:
           tusk docker:templates
           --version=$GITHUB_SHA
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Update docker-compose files
+      - run: git add .
+      - run: git commit -am "chore: update docker-compose manifests"
