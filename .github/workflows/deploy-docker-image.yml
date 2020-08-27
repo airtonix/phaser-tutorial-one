@@ -10,35 +10,51 @@ on:
 
 env:
   CI_SETTINGS__TUSK_VERSION: v0.5.1
-  CI_SETTINGS__APP_DOCKER_REPO: airtonix/phaser-tutorial-one_app
+  CI_SETTINGS__APP_DOCKER_REPO: docker.pkg.github.com/airtonix/phaser-tutorial-one
 
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v1
       - name: Local bin path
         run: echo "::add-path::~/bin"
+
       - name: Install tusk
         run: >-
           curl -sL https://git.io/tusk | sh -s --
           -b ~/bin $CI_SETTINGS__TUSK_VERSION
+
+      - uses: actions/checkout@v1
+      - uses: fregante/setup-git-token@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build ci image
         run: >-
-          tusk ci:docker:build
-          --appname=app
-          --repo=$CI_SETTINGS__APP_DOCKER_REPO
+          tusk docker:build
+          --source=app
+          --repo=$CI_SETTINGS__APP_DOCKER_REPO/app
+
+      - name: Log into registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
       - name: Publish image
         run: >-
-          tusk ci:docker:publish
-          --appname=app
-          --tag=$CI_SETTINGS__APP_DOCKER_REPO:builder;
-          tusk ci:docker:publish
-          --appname=app
-          --tag=$CI_SETTINGS__APP_DOCKER_REPO:latest;
-          tusk ci:docker:publish
-          --appname=app
-          --tag=$CI_SETTINGS__APP_DOCKER_REPO:$GITHUB_SHA;
+          tusk docker:publish
+          --image=$CI_SETTINGS__APP_DOCKER_REPO/app
+          --tag=$CI_SETTINGS__APP_DOCKER_REPO/app:builder;
+          tusk docker:publish
+          --image=$CI_SETTINGS__APP_DOCKER_REPO/app
+          --tag=$CI_SETTINGS__APP_DOCKER_REPO/app:$GITHUB_SHA;
+          tusk docker:publish
+          --image=$CI_SETTINGS__APP_DOCKER_REPO/app
+          --tag=$CI_SETTINGS__APP_DOCKER_REPO/app:latest;
+
+      - name: Rewrite Templates
+        run: >-
+          tusk docker:templates
+          --version=$GITHUB_SHA
+
+      - run: git add .
+      - run: git commit -am "chore: update docker-compose manifests"

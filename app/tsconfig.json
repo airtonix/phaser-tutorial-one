@@ -1,34 +1,53 @@
 {
-  "compilerOptions": {
-
-    "outDir": "./dist/",
-    "sourceMap": true,
-    "module": "es6",
-    "target": "es5",
-    "esModuleInterop": true,
-    "removeComments": true,
-    "allowJs": true,
-
-
-    "typeRoots": [
-      "./node_modules/@types",
-      "./node_modules/phaser/types/phaser.d.ts",
-    ],
-
-    "baseUrl": "./src",
-    "paths": {
-      "~*": ["./*"]
-    },
-    "types": [
-        "node",
-        "Phaser"
-    ]
-  },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    ".git",
-    "node_modules"
-  ]
+	"compilerOptions": {
+		"baseUrl": ".",
+		"outDir": "./dist",
+		"module": "ES2020",
+		"target": "ES2020",
+		"lib": [
+			"ES2020",
+			"dom"
+		],
+		"sourceMap": true,
+		"allowJs": true,
+		"jsx": "preserve",
+		"moduleResolution": "node",
+		"forceConsistentCasingInFileNames": true,
+		"suppressImplicitAnyIndexErrors": true,
+		"emitDecoratorMetadata": true,
+		// code rules
+		"experimentalDecorators": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"strict": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": false,
+		"importHelpers": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": false,
+		"noEmit": true,
+		//resolution
+		"rootDir": "./src",
+		"paths": {
+			"~/*": [
+				"./src/*"
+			]
+		},
+		"typeRoots": [
+			"node_modules/@types",
+			"node_module/phaser/types"
+		],
+		"types": [
+			"node",
+			"jest",
+			"phaser"
+		]
+	},
+	"include": [
+		"src",
+	],
+	"exclude": [
+		"**/*.spec.ts",
+		"./node_modules"
+	],
 }

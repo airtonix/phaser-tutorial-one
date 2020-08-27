@@ -1,0 +1,9 @@
+.block {
+  margin: 0;
+  padding: 0;
+}
+
+.block > canvas {
+  margin: 0;
+  padding: 0;
+}

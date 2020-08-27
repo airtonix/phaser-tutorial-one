@@ -1,0 +1,6 @@
+version: "2.3"
+
+services:
+
+  app:
+    image: docker.pkg.github.com/airtonix/phaser-tutorial-one/app:${version}

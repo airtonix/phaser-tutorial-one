@@ -6,7 +6,12 @@ options:
 
   docker_registry:
     environment: DOCKER_REPO
-    default: airtonix
+    default: docker.pkg.github.com/airtonix/phaser-tutorial-ones
+
+  version:
+    environment: GIT_HASH
+    default:
+      command: git rev-parse --short HEAD
 
 tasks:
 
@@ -29,11 +34,11 @@ tasks:
   dev:test:
     run:
       - task:
-          name: docker:tusk
+          name: docker:run
           options:
             stage: local
             service: app
-            command: test:watch
+            command: tusk test:watch
 
   dev:shell:
     run:
@@ -47,22 +52,23 @@ tasks:
   #
   # CI
   #
-  ci:setup:
+  ci:app:test:
     run:
       - task:
-          name: docker:build
-          options:
-            appname: app
-            repo: airtonix/${project_name}
-
-  ci:test:
-    run:
-      - task:
-          name: docker:tusk
+          name: docker:run
           options:
             service: app
             stage: ci
-            command: test
+            command: tusk test
+
+  ci:app:lint:
+    run:
+      - task:
+          name: docker:run
+          options:
+            service: app
+            stage: ci
+            command: tusk lint
 
   #
   # Docker
@@ -71,24 +77,38 @@ tasks:
     options:
       source:
         usage: Directory to use
+        default: app
       repo:
         usage: Docker repository to use
         type: string
-        default: ${docker_registry}/${project_name}
+        default: ${docker_registry}/${project_name}/${source}
+      tag:
+        usage: if provided, image will get tagged with this
     run:
-    - command: docker pull ${repo}:builder || true
-    - command: >-
-        docker build ./${source}
-        --cache-from ${repo}:builder
-        --file ./${source}/Dockerfile
-        --tag ${repo}:builder
-    - command: docker pull ${repo}:latest || true
-    - command: >-
-        docker build ./${source}
-        --cache-from ${repo}:builder
-        --cache-from ${repo}:latest
-        --file ./${source}/Dockerfile
-        --tag ${project_name}
+      - command: docker pull ${repo}:builder || true
+      - command: >-
+          docker build
+          --cache-from ${repo}:builder
+          --file ./${source}/Dockerfile
+          --tag ${repo}:builder
+          --target install
+          ./${source}
+      - command: docker pull ${repo}:latest || true
+      - command: >-
+          docker build
+          --build-arg COMMIT=${version}
+          --cache-from ${repo}:builder
+          --cache-from ${repo}:latest
+          --file ./${source}/Dockerfile
+          --tag ${repo}
+          --target prod
+          ./${source}
+      - when:
+          command: test "${tag}"
+        command: >-
+          docker tag
+          ${repo}
+          "${repo}:${tag}"
 
   docker:run:
     options:
@@ -98,12 +118,24 @@ tasks:
         default: local
       command:
         usage: command to run
-    run: >-
-      docker-compose
-      -f docker-compose.yml
-      -f docker-compose--${stage}.yml
-      run --rm
-      ${service} ${command}
+    run:
+      - when:
+          exists:
+            - docker-compose--${stage}.yml
+        command: >-
+          docker-compose
+          -f docker-compose.yml
+          -f docker-compose--${stage}.yml
+          run --rm
+          ${service} ${command}
+      - when:
+          not-exists:
+            - docker-compose--${stage}.yml
+        command: >-
+          docker-compose
+          -f docker-compose.yml
+          run --rm
+          ${service} ${command}
 
   docker:up:
     options:
@@ -118,27 +150,47 @@ tasks:
         -f docker-compose--${stage}.yml
         up ${services}
 
-  docker:tusk:
-    options:
-      service:
-        usage: docker-compose service name
-      command:
-        usage: command to run
-      stage:
-        default: local
+  docker:templates:
     run:
+      - command: echo "inserting ${version}"
       - task:
-          name: docker:run
+          name: docker:template
           options:
-            service: ${service}
-            command: ${command}
-            stage: ${stage}
+            infile: tools/docker/docker-compose.yml
+            outfile: docker-compose.yml
+      - task:
+          name: docker:template
+          options:
+            infile: tools/docker/docker-compose--ci.yml
+            outfile: docker-compose--ci.yml
+      - task:
+          name: docker:template
+          options:
+            infile: tools/docker/docker-compose--local.yml
+            outfile: docker-compose--local.yml
+
+  docker:template:
+    options:
+      infile:
+        usage: input file
+      outfile:
+        usage: output file
+    run:
+      - >-
+        docker run --rm
+        -v "$(pwd):/tmp"
+        -e version=${version}
+        supinf/envsubst
+        /tmp/${infile} > ./${outfile}
 
   docker:publish:
     options:
-      appname:
-        usage: the appname
+      image:
+        usage: docker image to tag
+        type: string
+        default: ${docker_registry}/${project_name}
       tag:
         usage: New docker tag
     run:
-      - docker tag ci_${appname} ${tag}
+      - docker tag ${image} ${tag}
+      - docker push ${tag}
