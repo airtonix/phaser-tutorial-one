@@ -61,6 +61,7 @@ jobs:
       - name: create production build
         run: >-
           tusk ci:app:build
+          --public_url=https://airtonix.github.io/phaser-tutorial-one/
 
       - name: Deploy to GitHub Pages
         if: success()

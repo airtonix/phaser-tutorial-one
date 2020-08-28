@@ -71,13 +71,16 @@ tasks:
             command: tusk lint
 
   ci:app:build:
+    options:
+      public_url:
+        usage: base url for published site
     run:
       - task:
           name: docker:run
           options:
             service: app
             stage: ci
-            command: tusk build
+            command: tusk build --public_url=${public_url}
   #
   # Docker
   #

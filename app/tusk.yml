@@ -23,11 +23,16 @@ tasks:
         ./src/index.html
 
   build:
+    options:
+      public_url:
+        default: /
+        usage: base url for published site
     run:
       - set-environment:
           PARCEL_AUTOINSTALL: false
       - >-
         npx parcel build
+        --public-url=${public_url}
         ./src/index.html
 
   lint:
