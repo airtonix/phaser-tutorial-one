@@ -1,7 +1,6 @@
 name: PR Checks
 
 on:
-  # Run tests for any PRs.
   pull_request:
 
 env:
