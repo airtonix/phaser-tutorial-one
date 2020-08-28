@@ -3,7 +3,7 @@ version: "2.3"
 services:
 
   app:
-    image: docker.pkg.github.com/airtonix/phaser-tutorial-one/app:local
+    image: docker.pkg.github.com/airtonix/phaser-tutorial-one/app:d8c604ab25706d8f89351d0c89e335d154141530
     ports:
       - 3000:3000
       - 3030:3030
