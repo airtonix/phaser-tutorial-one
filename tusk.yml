@@ -70,6 +70,14 @@ tasks:
             stage: ci
             command: tusk lint
 
+  ci:app:build:
+    run:
+      - task:
+          name: docker:run
+          options:
+            service: app
+            stage: ci
+            command: tusk build
   #
   # Docker
   #
