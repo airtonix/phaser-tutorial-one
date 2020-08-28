@@ -1,0 +1,18 @@
+{
+  "branches": [
+    "develop",
+    "master",
+    "fix/*"
+  ],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@qiwi/semantic-release-gh-pages-plugin",
+      {
+        "msg": "updated",
+        "src": "dist"
+      }
+    ]
+  ]
+}
