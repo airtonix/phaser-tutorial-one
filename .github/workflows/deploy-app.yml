@@ -54,7 +54,7 @@ jobs:
           tusk docker:templates
           --version=$GITHUB_SHA
 
-      - run: >-
-        git add .
-      - run: >-
-        git commit -am "chore: update docker-compose manifests"
+      - name: Commit new Templates
+        run: >-
+          git add . ;
+          git commit -am "chore: update docker-compose manifests" ;
