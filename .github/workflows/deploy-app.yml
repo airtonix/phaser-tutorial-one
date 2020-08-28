@@ -60,15 +60,13 @@ jobs:
 
       - name: create production build
         run: >-
-          tusk docker:build
-          --source=app
-          --repo=$CI_SETTINGS__APP_DOCKER_REPO/app
+          tusk ci:app:build
 
       - name: Deploy to GitHub Pages
         if: success()
-        uses: crazy-max/ghaction-github-pages@v2
+        uses: crazy-max/ghaction-github-pages@d3b77e6
         with:
           target_branch: gh-pages
-          build_dir: public
+          build_dir: app/dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
