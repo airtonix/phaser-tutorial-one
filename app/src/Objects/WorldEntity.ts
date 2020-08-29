@@ -34,9 +34,6 @@ export class WorldEntity extends Phaser.GameObjects.Container {
       this.animations
     )
 
-    this.scene.events.on('update', () => {
-      this.renderer.animateAction(this.action)
-    })
     this.scene.add.existing(this)
   }
 
