@@ -99,9 +99,11 @@ export class DisplayableEntity {
   }
 
   animate (animation: ICharacterAnimationConfig | undefined): void{
-    if(!animation) return
+    if (!animation) return
+    if (!this.sprite || !this.sprite.anims) return
 
-    if(this.sprite.anims && this.sprite.anims.currentAnim?.key === animation.anim?.key) return
+    if(this.sprite.anims.currentAnim?.key === animation.anim?.key) return
+
     log('animate', animation)
 
     const { flip, anim } = animation
