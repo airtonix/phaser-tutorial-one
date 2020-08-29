@@ -131,7 +131,7 @@ export class PreloaderScene extends Phaser.Scene {
       this.scene.start(MenuScene.key)
     }
 
-    update () {
+    update (): void {
       this.bar.update()
     }
 }
