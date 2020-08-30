@@ -64,6 +64,6 @@ declare module 'flat' {
     maxDepth?: number,
     transformKey?: (key: string) => string,
   }
-  export function unflatten (input: Composed, options?: IUnflattenOptions): Composed {}
-  export default function flatten (input: Composed, options?: IUnflattenOptions): Composed {}
+  export function unflatten (input: Composed, options?: IUnflattenOptions): Composed
+  export default function flatten (input: Composed, options?: IUnflattenOptions): Composed
 }

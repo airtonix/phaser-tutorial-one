@@ -1,6 +1,7 @@
+import { parse } from 'path'
+
 import flatten, { unflatten } from 'flat'
 import { merge, memoize } from 'lodash'
-import { parse } from 'path'
 
 export type IConfigItem =
   string |
