@@ -5,6 +5,8 @@ import axios, {
   AxiosError
 } from 'axios'
 
+import { getPathFromLocation } from '~/Core/loader'
+
 interface INetworkRequestIntercepter {
   success: (x: AxiosRequestConfig) => AxiosRequestConfig | Promise<AxiosRequestConfig>,
   error: (error: any) => any
@@ -39,6 +41,7 @@ export class NetworkClient {
 
   configure = (options = {}): void => {
     this.client.defaults = {
+      baseURL: getPathFromLocation(window.location.pathname),
       ...this.client.defaults,
       ...options
     }
