@@ -2,6 +2,8 @@ import Phaser from 'phaser'
 import PhaserNavMeshPlugin from 'phaser-navmesh'
 import { getPathFromLocation } from '~/Core/loader'
 
+import { getPathFromLocation } from '~/Core/loader'
+
 export const PARENT_DIV_TAG = 'phaser-game'
 
 export default {

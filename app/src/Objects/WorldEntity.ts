@@ -1,7 +1,7 @@
-import { DisplayableEntity, IAnimations } from '~/Mixins/Displayable'
+import { DisplayableEntity, ICharacterAnimationMap } from '~/Mixins/Displayable'
 import { Orientation } from '~/Config/constants'
 import { Controllable } from '~/Mixins/Controllable'
-import { Logs, LogsAll, logsBefore, logsPropertyBefore } from '~/Core/Logger'
+import { Logs } from '~/Core/Logger'
 
 @Logs
 export class WorldEntity extends Phaser.GameObjects.Container {
@@ -11,7 +11,7 @@ export class WorldEntity extends Phaser.GameObjects.Container {
   footprintWidth = 12
   footprintHeight = 8
   orientation: Orientation = Orientation.Right
-  animations: IAnimations
+  animations: ICharacterAnimationMap
   action = 'idle'
   actions: string[]
   renderer: DisplayableEntity
@@ -34,9 +34,6 @@ export class WorldEntity extends Phaser.GameObjects.Container {
       this.animations
     )
 
-    this.scene.events.on('update', () => {
-      this.renderer.animateAction(this.action)
-    })
     this.scene.add.existing(this)
   }
 

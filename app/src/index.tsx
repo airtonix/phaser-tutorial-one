@@ -1,13 +1,19 @@
-import 'reflect-metadata'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import './index.css'
-import { App } from './App'
-import registerServiceWorker from './registerServiceWorker'
+function mount () {
+  const element = document.querySelector('[data-app]') as HTMLElement
+  if (!element) return
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root') as HTMLElement
-)
-registerServiceWorker()
+  Promise.all([
+    import('./App'),
+    import('./registerServiceWorker')
+  ])
+    .then(([{ App }]) => {
+      const props = element.dataset || {}
+      const component = React.createElement(App, props)
+      ReactDOM.render(component, element)
+    })
+}
+
+mount()

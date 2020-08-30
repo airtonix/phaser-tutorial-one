@@ -1,7 +1,7 @@
 import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
 import { WorldEntity } from '~/Objects/WorldEntity'
 import { Orientation, IAnimationSheetConfig } from '~/Config/constants'
-import { Logger } from '~/Core/Logger'
+import { Logger, Logs } from '~/Core/Logger'
 
 const log = Logger(module.id)
 
@@ -20,6 +20,7 @@ export interface ICharacterAnimationMap {
   [action: string]: ICharacterActionAnimationMap
 }
 
+@Logs
 export class DisplayableEntity {
   sprite: Phaser.GameObjects.Sprite
   emote: Phaser.GameObjects.Sprite
@@ -42,6 +43,12 @@ export class DisplayableEntity {
     ])
 
     this.scene.add.existing(this.sprite)
+
+    if (this.entity.hasOwnProperty('action')) {
+      this.scene.events.on('update', () => {
+        this.animateAction(this.entity.action)
+      })
+    }
   }
 
   /**
@@ -99,9 +106,11 @@ export class DisplayableEntity {
   }
 
   animate (animation: ICharacterAnimationConfig | undefined): void{
-    if(!animation) return
+    if (!animation) return
+    if (!this.sprite || !this.sprite.anims) return
 
-    if(this.sprite.anims && this.sprite.anims.currentAnim?.key === animation.anim?.key) return
+    if(this.sprite.anims.currentAnim?.key === animation.anim?.key) return
+
     log('animate', animation)
 
     const { flip, anim } = animation
@@ -139,6 +148,8 @@ export class DisplayableEntity {
   animateAction (
     action: string
   ): void {
+    // const orientations = this.entity?.movement?.isMovingTo || []
+    // this.log(orientations.join(''))
     const animation = this.getAnimation(action, this.orientation)
     this.animate(animation)
   }
