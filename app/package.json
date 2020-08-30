@@ -33,6 +33,7 @@
     "dreamjs": "^0.2.0",
     "eslint": "^7.3.0",
     "eslint-plugin-import": "^2.22.0",
+    "flat": "^5.0.2",
     "guid-typescript": "^1.0.9",
     "images": "^3.2.2",
     "jest": "^26.2.2",

@@ -1,8 +1,7 @@
 import 'reflect-metadata'
 import React from 'react'
 
-import '~/Store'
-
+import { Store } from '~/Store'
 import { Game } from '~/Components/Game'
 
 import classes from './App.module.css'
