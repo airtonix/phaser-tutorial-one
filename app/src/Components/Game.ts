@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Phaser from 'phaser'
 
 import { PARENT_DIV_TAG } from '~/Config/phaser.config'
 import { PreloaderScene } from '~/Scenes/PreloaderScene'

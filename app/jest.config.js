@@ -20,7 +20,7 @@ module.exports = {
     }
   },
   testMatch: [
-    '**/src/**/*.(test|spec).ts'
+    '**/src/**/*.(test|spec).(ts|tsx)'
   ],
   moduleNameMapper: {
     '^~/(.*)': '<rootDir>/src/$1'
