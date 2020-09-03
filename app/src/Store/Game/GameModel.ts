@@ -11,7 +11,7 @@ import { ZoneReference } from '../Zone/ZoneReference'
 import { UnknownZone } from '../Zone/Exceptions'
 import { Zone, ZoneTypes } from '../Zone/ZoneModel'
 import { Player } from '../Player/PlayerModel'
-import { NoPlayerError, NoCharacterError } from '../Player/Exceptions'
+import { NoCharacterError } from '../Player/Exceptions'
 
 import { TiledTileMaps } from '~/Config/constants'
 
