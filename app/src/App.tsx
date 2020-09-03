@@ -1,17 +1,18 @@
 import 'reflect-metadata'
 import React from 'react'
+import { Provider } from 'mobx-react'
 
 import { Store } from '~/Store'
 import { Game } from '~/Components/Game'
 
 import classes from './App.module.css'
 
-export class App extends React.Component {
-  render (): React.ReactNode {
-    return (
+export function App () : React.ReactNode {
+  return (
+    <Provider store={Store}>
       <div className={classes.App}>
         <Game />
       </div>
-    )
-  }
+    </Provider>
+  )
 }

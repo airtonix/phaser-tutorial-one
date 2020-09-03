@@ -15,7 +15,7 @@ import { Container } from '../Entity/ContainerEntityModel'
 import { Logger } from '~/Core/Logger'
 import { Map } from '~/Store/Map/MapModel'
 import { Entity } from '~/Store/Entity/EntityModel'
-import { TiledTileMapConfig } from '~/Config/constants'
+import { ITiledTileMapConfig } from '~/Config/constants'
 
 
 const log = Logger('ZoneModel')
@@ -44,7 +44,7 @@ export class Zone extends ExtendedModel(Entity, {
       .some((portal: Portal) => portal.name === 'PlayerStart')
   }
 
-  addMapFromLevelData (levelData: TiledTileMapConfig): void {
+  addMapFromLevelData (levelData: ITiledTileMapConfig): void {
     const {
       tileset,
       key,
