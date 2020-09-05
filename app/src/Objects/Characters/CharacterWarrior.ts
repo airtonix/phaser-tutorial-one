@@ -19,10 +19,14 @@ export class Warrior extends Character {
     },
     moving: {
       default: { anim: Animations.WarriorMove },
-      down: {anim: Animations.WarriorMove },
-      up: {anim: Animations.WarriorMove },
-      left: {flip: true, anim: Animations.WarriorMove },
-      right: {flip: false, anim: Animations.WarriorMove },
+      LeftDown: {flip: true, anim: Animations.WarriorMove },
+      Left: {flip: true, anim: Animations.WarriorMove },
+      LeftUp: {flip: true, anim: Animations.WarriorMove },
+      Up: {anim: Animations.WarriorMove },
+      RightUp: {flip: false, anim: Animations.WarriorMove },
+      Right: {flip: false, anim: Animations.WarriorMove },
+      RightDown: {flip: false, anim: Animations.WarriorMove },
+      Down: {anim: Animations.WarriorMove },
     }
   }
 

@@ -10,8 +10,9 @@ export class WorldEntity extends Phaser.GameObjects.Container {
   spriteHeight = 16
   footprintWidth = 12
   footprintHeight = 8
-  orientation: Orientation = Orientation.Right
   animations: ICharacterAnimationMap
+  // orientation: Orientation = Orientation.Right
+  orientation: string
   action = 'idle'
   actions: string[]
   renderer: DisplayableEntity
@@ -30,7 +31,6 @@ export class WorldEntity extends Phaser.GameObjects.Container {
       this.scene,
       this.spriteWidth,
       this.spriteHeight,
-      this.orientation,
       this.animations
     )
 
@@ -39,6 +39,10 @@ export class WorldEntity extends Phaser.GameObjects.Container {
 
   setController (controller: Controllable): void {
     this.controller = controller
+  }
+
+  setOrientation (orientation: Orientation): void {
+    this.orientation = orientation
   }
 
   setAction (action: string): void {
