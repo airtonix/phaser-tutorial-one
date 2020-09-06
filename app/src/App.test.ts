@@ -3,6 +3,12 @@ import * as ReactDOM from 'react-dom'
 
 import { App } from './App'
 
+jest.mock('./Objects/Game', () => {
+  return {
+    PhaserGame: class {}
+  }
+})
+
 describe('App', () => {
   it('renders', () => {
     const element = document.createElement('div')

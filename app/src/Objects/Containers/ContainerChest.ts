@@ -5,8 +5,7 @@ import { ICharacterAnimationMap } from '~/Mixins/Displayable'
 
 import { ContainerGameObject } from './Container'
 
-export class ContainerChest extends ContainerGameObject {
-
+export class ContainerChestGameObject extends ContainerGameObject {
   key = 'ContainerChest'
   footprintWidth = 16
   footprintHeight = 6

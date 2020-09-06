@@ -27,7 +27,7 @@ export interface IApiResonse extends Promise<AxiosResponse> { }
 export class NetworkClient {
   client: AxiosInstance
 
-  public constructor (config: INetworkClientConfig) {
+  public constructor (config: INetworkClientConfig = {}) {
     axios.defaults.xsrfCookieName = 'csrftoken'
     axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN'
 

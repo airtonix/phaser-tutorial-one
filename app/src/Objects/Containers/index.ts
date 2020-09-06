@@ -1,5 +1,5 @@
-import { ContainerChest } from './ContainerChest'
+import { ContainerChestGameObject } from './ContainerChest'
 
 export {
-  ContainerChest
+  ContainerChestGameObject
 }

@@ -9,10 +9,12 @@ module.exports = {
     'ts',
     'tsx',
     'json',
-    'js'
+    'js',
+    'css'
   ],
   transform: {
-    '^.+\\.(ts|tsx)$': 'ts-jest'
+    '^.+\\.(t|j)sx?$': 'ts-jest',
+    '\\.(css|less|sass|scss)$': '<rootDir>/tools/jest.stylemock.js'
   },
   setupFiles: [
     'jest-canvas-mock'
@@ -25,9 +27,13 @@ module.exports = {
   testMatch: [
     '**/src/**/*.(test|spec).(ts|tsx)'
   ],
+  transformIgnorePatterns: [
+    'node_modules/(?!('
+      + 'phaser3-rex-plugins'
+      // + "|other-module"
+    + ')/)',
+  ],
   moduleNameMapper: {
-    '^~/(.*)': '<rootDir>/src/$1',
-    '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
-    '\\.(gif|ttf|eot|svg|png)$': 'identity-obj-proxy'
+    '^~/(.*)': '<rootDir>/src/$1'
   }
 }
