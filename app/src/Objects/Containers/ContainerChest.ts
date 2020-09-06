@@ -1,16 +1,11 @@
-import { classes } from 'polytype'
-
 import { Animations } from '~/Config/constants'
 import { LootChestBehaviour } from '~/Behaviours/LootChestBehaviour'
-import { CanAnimate, IAnimations } from '~/Mixins/CanAnimate'
-import { DisplayableEntity } from '~/Mixins/Displayable'
-import { IsImovable } from '~/Mixins/IsImovable'
-import { ContainsItems } from '~/Mixins/ContainsItems'
 import { ILootTable } from '~/Items/Loot'
+import { ICharacterAnimationMap } from '~/Mixins/Displayable'
 
-import { Container } from './Container'
+import { ContainerGameObject } from './Container'
 
-export class ContainerChest extends Container {
+export class ContainerChest extends ContainerGameObject {
 
   key = 'ContainerChest'
   footprintWidth = 16
@@ -35,7 +30,7 @@ export class ContainerChest extends Container {
     default: LootChestBehaviour
   }
 
-  animations: IAnimations = {
+  animations: ICharacterAnimationMap = {
     default: {
       default: { anim: Animations.LootChestIdle }
     },

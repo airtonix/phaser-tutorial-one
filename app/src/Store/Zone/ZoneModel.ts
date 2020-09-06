@@ -5,17 +5,17 @@ import {
   modelAction,
 } from 'mobx-keystone'
 
-import { Portal } from '../Entity/PortalEntityModel'
+import { PortalModel } from '../Entity/PortalEntityModel'
 import { TypeOfEntity, EntityLevelDataFactory } from '../Entity/Factory'
-import { GetLevelData } from '../Map/MapApi'
-import { CreateMapModelFromLevelData } from '../Map/Factory'
-import { Item } from '../Entity/ItemEntityModel'
-import { Container } from '../Entity/ContainerEntityModel'
 
 import { Logger } from '~/Core/Logger'
-import { Map } from '~/Store/Map/MapModel'
-import { Entity } from '~/Store/Entity/EntityModel'
+import { GetLevelData } from '~/Store/Map/MapApi'
+import { CreateMapModelFromLevelData } from '~/Store/Map/Factory'
 import { ITiledTileMapConfig } from '~/Config/constants'
+import { ItemModel } from '~/Store/Entity/ItemEntityModel'
+import { ContainerModel } from '~/Store/Entity/ContainerEntityModel'
+import { MapModel } from '~/Store/Map/MapModel'
+import { EntityModel, TypeofWorldEntityModelInstance } from '~/Store/Entity/EntityModel'
 
 
 const log = Logger('ZoneModel')
@@ -30,18 +30,18 @@ export enum ZoneTypes {
 }
 
 @model(ZONE_MODEL_KEY)
-export class Zone extends ExtendedModel(Entity, {
-  map: prop<Map | undefined>(),
-  portals: prop<Portal[]>(() => []),
-  items: prop<Item[]>(() => []),
-  containers: prop<Container[]>(() => []),
+export class Zone extends ExtendedModel(EntityModel, {
+  map: prop<MapModel | undefined>(),
+  portals: prop<PortalModel[]>(() => []),
+  items: prop<ItemModel[]>(() => []),
+  containers: prop<ContainerModel[]>(() => []),
 }) {
 
   get isStart (): boolean {
     if (!this.portals || !this.portals.length) return false
 
     return this.portals
-      .some((portal: Portal) => portal.name === 'PlayerStart')
+      .some((portal: PortalModel) => portal.name === 'PlayerStart')
   }
 
   addMapFromLevelData (levelData: ITiledTileMapConfig): void {
@@ -52,7 +52,7 @@ export class Zone extends ExtendedModel(Entity, {
       url,
     } = levelData
 
-    const map = new Map({
+    const map = new MapModel({
       tileimage,
       tileset,
       key,
@@ -76,7 +76,7 @@ export class Zone extends ExtendedModel(Entity, {
 
           objects
             .forEach((entityData) => {
-              const entity: TypeOfEntity = EntityLevelDataFactory(entityData)
+              const entity: TypeofWorldEntityModelInstance = EntityLevelDataFactory(entityData)
 
               if (layer.depth) {
                 entity.setDepth(layer.depth)
@@ -97,20 +97,20 @@ export class Zone extends ExtendedModel(Entity, {
   }
 
   @modelAction
-  addMap (map: Map): void {
+  addMap (map: MapModel): void {
     this.map = map
   }
 
   @modelAction
   addEntity (entity: TypeOfEntity): void {
-    if (entity instanceof Portal) {
+    if (entity instanceof PortalModel) {
       entity.setZone(this)
       this.portals.push(entity)
     }
-    else if (entity instanceof Container) {
+    else if (entity instanceof ContainerModel) {
       this.containers.push(entity)
     }
-    else if (entity instanceof Item) {
+    else if (entity instanceof ItemModel) {
       this.items.push(entity)
     }
   }

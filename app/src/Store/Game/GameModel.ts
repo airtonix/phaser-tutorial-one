@@ -51,10 +51,13 @@ export class Game extends Model({
 
   @modelAction
   startPlayer (zone: Zone): void {
+    const character = this.player && this.player.character
+    if (!character) throw new NoCharacterError()
+
     const spawn = zone.portals.find(zone => zone.name === 'PlayerStart')
     if (!spawn) throw new NoSpawnPositionError()
-    if (!this.player?.character) throw new NoCharacterError()
-    this.player.character
+
+    character
       .teleportTo(zone, spawn)
   }
 

@@ -1,13 +1,20 @@
-import { WorldEntity } from '../WorldEntity';
+import { WorldEntityGameObject } from '../WorldEntity';
 
 import { DisplayableEntity } from '~/Mixins/Displayable';
 
-export class Container extends WorldEntity {
+export class ContainerGameObject extends WorldEntityGameObject {
   constructor (
     public scene: Phaser.Scene,
     public x: number,
     public y: number
   ) {
-    this.renderer = new DisplayableEntity(this, this.width, this.height)
+    super(scene, x, y)
+    this.renderer = new DisplayableEntity(
+      this,
+      this.scene,
+      this.width,
+      this.height,
+      this.animations
+    )
   }
 }

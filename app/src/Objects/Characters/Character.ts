@@ -1,8 +1,8 @@
-import { WorldEntity } from '../WorldEntity'
+import { WorldEntityGameObject } from '../WorldEntity'
 
 import { Moveable } from '~/Mixins/Moveable'
 
-export class Character extends WorldEntity {
+export class CharacterGameObject extends WorldEntityGameObject {
   public speed = 45
   public movement: Moveable
 

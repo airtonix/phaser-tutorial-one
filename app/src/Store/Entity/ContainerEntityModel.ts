@@ -7,8 +7,8 @@ import {
 
 import { ContainerChest } from '~/Objects/Containers'
 
-import { WorldEntity } from './EntityModel'
-import { Item } from './ItemEntityModel'
+import { WorldEntityModel } from './EntityModel'
+import { ItemModel } from './ItemEntityModel'
 
 export const CONTAINER_MODEL_KEY = 'Container'
 
@@ -23,12 +23,12 @@ export enum Sizes {
 }
 
 @model(CONTAINER_MODEL_KEY)
-export class Container extends ExtendedModel(WorldEntity, {
+export class ContainerModel extends ExtendedModel(WorldEntityModel, {
   size: prop<number>(Sizes.normal),
   icon: prop<string | undefined>(),
-  items: prop<Item[]>(() => []),
+  items: prop<ItemModel[]>(() => []),
   locked: prop<boolean>(() => false),
-  lockedBy: prop<Ref<Item> | undefined>()
+  lockedBy: prop<Ref<ItemModel> | undefined>()
 }){
   static type = 'Container'
   static GameObjectClass = ContainerChest

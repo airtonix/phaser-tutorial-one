@@ -4,7 +4,7 @@ import { Controllable } from '~/Mixins/Controllable'
 import { Logs } from '~/Core/Logger'
 
 @Logs
-export class WorldEntity extends Phaser.GameObjects.Container {
+export class WorldEntityGameObject extends Phaser.GameObjects.Container {
   key: string
   spriteWidth = 16
   spriteHeight = 16

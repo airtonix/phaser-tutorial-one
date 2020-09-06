@@ -6,7 +6,7 @@ import { Store } from '~/Store'
 import { AnimatedTile } from '~/Objects/AnimatedTile'
 import { NoZoneMapError } from '~/Store/Zone/Exceptions'
 // import { SidekickGoblin } from '~/Objects/Characters/CharacterGoblin'
-import { Character } from '~/Objects/Characters/Character'
+import { CharacterGameObject } from '~/Objects/Characters/Character'
 import { NoMapError } from '~/Store/Map/Exceptions'
 import { Controllable } from '~/Mixins/Controllable'
 
@@ -21,8 +21,8 @@ export class MapScene extends Phaser.Scene {
   isInteractive = true
   countdown = 450
 
-  player: Character
-  sidekick: Character
+  player: CharacterGameObject
+  sidekick: CharacterGameObject
 
   containers: Phaser.GameObjects.Group
   portals: Phaser.GameObjects.Group
@@ -78,7 +78,7 @@ export class MapScene extends Phaser.Scene {
     this.animatedTiles.forEach(tile => tile.update(delta))
   }
 
-  createPlayer (): Character | undefined {
+  createPlayer (): CharacterGameObject | undefined {
     const playerCharacter = Store.player?.character
     if (!playerCharacter) return
 
@@ -89,7 +89,7 @@ export class MapScene extends Phaser.Scene {
     return player
   }
 
-  createPlayerSidekick (): Character {
+  createPlayerSidekick (): CharacterGameObject {
     const sidekick = new SidekickGoblin(
       this,
       this.navMesh
@@ -322,7 +322,7 @@ export class MapScene extends Phaser.Scene {
   }
 
   createColliders (
-    actors: Character,
+    actors: CharacterGameObject,
     collidables: Phaser.GameObjects.GameObject[]
   ): void {
     log('createColliders')
@@ -334,7 +334,7 @@ export class MapScene extends Phaser.Scene {
   }
 
   createOverlaps (
-    actors: Character,
+    actors: CharacterGameObject,
     collidables: Phaser.GameObjects.GameObject[]
   ): void {
     log('createColliders')

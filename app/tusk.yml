@@ -35,6 +35,21 @@ tasks:
         --public-url=${public_url}
         ./src/index.html
 
+  prepare:
+    run:
+      - >-
+        export modules=(
+          phaser3-rex-plugins/plugins/gameobjects/shape/roundrectangle/RoundRectangle
+          phaser3-rex-plugins/templates/ui/numberbar/NumberBar
+        );
+        for module in ${modules[@]}; do
+         output=$(basename $module);
+         npx dtsmake \
+          -s ./node_modules/$module.js \
+          -e -S es6 -M "$module" \
+          --dist $output;
+        done;
+
   lint:
     run:
       - >-

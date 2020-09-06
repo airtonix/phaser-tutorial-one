@@ -1,50 +1,52 @@
 import {
   prop,
   model,
+  Ref,
   modelAction,
   getRootStore,
   ExtendedModel,
 } from 'mobx-keystone'
-import { Ref } from 'react'
 import { computed } from 'mobx'
 
-import { WorldEntity } from '../Entity/EntityModel'
+import { WorldEntityModel } from '../Entity/EntityModel'
 import { Zone } from '../Zone/ZoneModel'
 import { Game } from '../Game/GameModel'
 import { UnknownZone } from '../Zone/Exceptions'
 import { ZoneReference } from '../Zone/ZoneReference'
 import { NoGameError } from '../Game/Exceptions'
-import { Item } from '../Entity/ItemEntityModel'
+import { ItemModel } from '../Entity/ItemEntityModel'
 
-import { CharacterClass } from './CharacterClassModel'
+import { CharacterGameObject } from '~/Objects/Characters/Character'
+
+import { CharacterClassModel } from './CharacterClassModel'
 
 export const CHARACTER_MODEL_KEY = 'Character'
 
 @model(CHARACTER_MODEL_KEY)
-export class Character extends ExtendedModel(WorldEntity, {
+export class CharacterModel extends ExtendedModel(WorldEntityModel, {
   icon: prop<string>(),
   hp: prop<number>(),
   zone: prop<Ref<Zone> | undefined>(),
-  class: prop<Ref<CharacterClass> | undefined>(),
-  inventory: prop<Ref<Item>[]>(),
+  class: prop<Ref<CharacterClassModel> | undefined>(),
+  inventory: prop<Ref<ItemModel>[]>(),
 }) {
 
   @computed
-  get currentZone (): Zone {
-    return this.zone
+  get currentZone (): Zone | undefined {
+    return this.zone && this.zone.isValid
       ? this.zone.current
       : undefined
   }
 
   @computed
-  get classMeta (): CharacterClass {
+  get classMeta (): CharacterClassModel | undefined {
     return this.class
       ? this.class.current
       : undefined
   }
 
   @modelAction
-  teleportTo (zone: Zone, entity: WorldEntity): void {
+  teleportTo (zone: Zone, entity: WorldEntityModel): void {
     this.setZone(zone)
     this.setPosition(entity.x, entity.y)
     this.setDepth(entity.depth + 1)
@@ -62,6 +64,13 @@ export class Character extends ExtendedModel(WorldEntity, {
       : undefined
   }
 
+
+  public createGameObject (scene: Phaser.Scene): CharacterGameObject {
+    const gameobject = new CharacterGameObject(scene)
+    gameobject.setPosition(this.x, this.y)
+    gameobject.setDepth(this.depth + 1)
+    return gameobject
+  }
 }
 
 

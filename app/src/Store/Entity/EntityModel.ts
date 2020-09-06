@@ -9,26 +9,24 @@ import { computed } from 'mobx'
 
 import { Modifier } from '../Modifier/ModifierModel'
 
-import { NotImplementedError } from '~/Core/exceptions'
 import { IPosition } from '~/Core/distance'
-import { Character } from '~/Objects/Characters/Character'
 
 export const ENTITY_MODEL_KEY = 'Entity'
+export type TypeofEntityModelInstance = InstanceType<typeof EntityModel>
 
 @model(ENTITY_MODEL_KEY)
-export class Entity extends Model({
+export class EntityModel extends Model({
   type: prop<string>(),
   name: prop<string>(),
   modifiers: prop<Modifier[]>(() => []),
   durability: prop<number>(() => 100),
-}) {
-
-}
+}) {}
 
 export const WORLDENTITY_MODEL_KEY = 'WorldEntity'
+export type TypeofWorldEntityModelInstance = InstanceType<typeof WorldEntityModel>
 
 @model(WORLDENTITY_MODEL_KEY)
-export class WorldEntity extends ExtendedModel(Entity, {
+export class WorldEntityModel extends ExtendedModel(EntityModel, {
   x: prop<number>(() => 0),
   y: prop<number>(() => 0),
   depth: prop<number>(() => 0),
@@ -53,10 +51,6 @@ export class WorldEntity extends ExtendedModel(Entity, {
       x: this.x,
       y: this.y
     }
-  }
-
-  createGameObject (scene: Phaser.Scene) : Character {
-    throw new NotImplementedError(`createGameobject type: ${this.$modelType}`)
   }
 }
 

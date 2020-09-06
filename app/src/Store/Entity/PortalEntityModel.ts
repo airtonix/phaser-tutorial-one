@@ -13,12 +13,13 @@ import { Game } from '~/Store/Game/GameModel'
 import { PortalWorldEntity } from '~/Objects/PortalWorldEntity'
 
 import { PortalReference } from './PortalEntityReference'
-import { WorldEntity } from './EntityModel'
+import { WorldEntityModel } from './EntityModel'
 
 export const PORTALENTITY_MODEL_KEY = 'PortalEntity'
+export type PortalModelInstanceType = InstanceType<typeof PortalModel>
 
 @model(PORTALENTITY_MODEL_KEY)
-export class Portal extends ExtendedModel(WorldEntity, {
+export class PortalModel extends ExtendedModel(WorldEntityModel, {
   zone: prop<Ref<Zone>>(),
 
   /**
@@ -34,7 +35,7 @@ export class Portal extends ExtendedModel(WorldEntity, {
   /**
    * Which portal does this portal link to?
    */
-  linksTo: prop<Ref<Portal> | undefined>()
+  linksTo: prop<Ref<PortalModel> | undefined>()
 }) {
 
   static type = 'Portal'
@@ -47,12 +48,13 @@ export class Portal extends ExtendedModel(WorldEntity, {
   }
 
   @modelAction
-  setLinksTo (portal: Portal): void {
-    this.linksTo = PortalReference(portal)
+  setLinksTo (portal: PortalModel): void {
+    const reference = PortalReference(portal)
+    this.linksTo = reference
   }
 
   get fromZone (): Zone | undefined {
-    return this.zone?.current
+    return this.zone && this.zone.current
       ? this.zone.current
       : undefined
   }
@@ -71,7 +73,7 @@ export class Portal extends ExtendedModel(WorldEntity, {
     return zone
   }
 
-  getTargetPortal (): Portal | undefined {
+  getTargetPortal (): PortalModel | undefined {
     const zone = this.getTargetZone()
     if (!zone) return
 
@@ -83,16 +85,19 @@ export class Portal extends ExtendedModel(WorldEntity, {
   /**
    * Return a reference of the portal that this portal linkes to
    *
-   * @return  {Portal}  Portal Model
+   * @return  {PortalModel}  Portal Model
    */
-  get target (): Portal | undefined {
-    if (!this.linksTo || !this.linksTo.isValid) {
+  get target (): PortalModel | undefined {
+    const linksTo = this.linksTo
+    if (!linksTo || !linksTo.isValid) {
       const portal = this.getTargetPortal()
       if (!portal) return
+
       this.setLinksTo(portal)
+      return portal
     }
 
-    return this.linksTo.current
+    return linksTo.current
   }
 
   createGameObject (scene: Phaser.Scene): PortalWorldEntity {

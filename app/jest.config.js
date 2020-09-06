@@ -14,6 +14,9 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest'
   },
+  setupFiles: [
+    'jest-canvas-mock'
+  ],
   globals: {
     'ts-jest': {
       'tsConfig': TsConfigPath
@@ -23,6 +26,8 @@ module.exports = {
     '**/src/**/*.(test|spec).(ts|tsx)'
   ],
   moduleNameMapper: {
-    '^~/(.*)': '<rootDir>/src/$1'
+    '^~/(.*)': '<rootDir>/src/$1',
+    '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
+    '\\.(gif|ttf|eot|svg|png)$': 'identity-obj-proxy'
   }
 }

@@ -2,7 +2,7 @@ import { debounce, set, get } from 'lodash'
 
 import { Logs } from '../Core/Logger'
 
-import { Character } from '~/Objects/Characters/Character'
+import { CharacterGameObject } from '~/Objects/Characters/Character'
 
 
 export interface IControlKey {
@@ -30,7 +30,7 @@ export class Controllable {
 
   constructor (
     private scene: Phaser.Scene,
-    private entity: Character
+    private entity: CharacterGameObject
   ) {
     this.scene = scene
     this.init()

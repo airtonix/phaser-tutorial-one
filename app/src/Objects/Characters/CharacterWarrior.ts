@@ -1,8 +1,8 @@
 import { Animations } from '~/Config/constants'
 
-import { Character } from './Character'
+import { CharacterGameObject } from './Character'
 
-export class Warrior extends Character {
+export class WarriorGameObject extends CharacterGameObject {
   key = 'Warrior'
   speed = 55
   spriteWidth = 16
@@ -32,8 +32,8 @@ export class Warrior extends Character {
 
   constructor (
     scene: Phaser.Scene,
-    x: number,
-    y: number
+    x?: number,
+    y?: number
   ) {
     super(scene, x, y)
     this.init()

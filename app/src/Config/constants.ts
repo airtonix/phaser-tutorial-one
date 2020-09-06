@@ -50,6 +50,13 @@ export const COLOURS = {
 
 export interface IAsset {
   key: string,
+}
+
+export interface IAssetCollection {
+  [key: string]: IAsset
+}
+
+export interface IHttpAsset extends IAsset {
   url: string
 }
 
@@ -60,7 +67,7 @@ export interface ISpriteSheetFrameConfig  {
   margin?: number
 }
 
-export interface ISpriteSheetConfig extends IAsset {
+export interface ISpriteSheetConfig extends IHttpAsset {
   frameConfig: ISpriteSheetFrameConfig
 }
 
@@ -113,7 +120,7 @@ export const SpriteSheets:ISpriteSheetConfigMap = {
 }
 
 export interface IImageCollectionMap {
-  [key: string]: IAsset
+  [key: string]: IHttpAsset
 }
 
 export const Images:IImageCollectionMap = {
@@ -174,7 +181,7 @@ export const Nineslices:INinesliceMap = {
   }
 }
 
-export interface ITiledTileMapConfig extends IAsset {
+export interface ITiledTileMapConfig extends IHttpAsset {
   tileset: string,
   tileimage: string
 }

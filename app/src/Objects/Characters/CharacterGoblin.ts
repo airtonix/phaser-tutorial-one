@@ -1,14 +1,14 @@
 // import { State } from 'mistreevous'
 // import { PhaserNavmesh } from 'phaser-navmesh'
 
-import { Animations, Emotes, Orientation } from '~/Config/constants'
+import { Animations } from '~/Config/constants'
 // import { SidekickCharacterBehaviour } from '~/Behaviours/SidekickCharacterBehaviour'
 // import { getDistance, IPosition, position } from '~/Core/distance'
 // import { MapScene } from '~/Scenes/MapScene'
 
-import { Character } from './Character'
+import { CharacterGameObject } from './Character'
 
-export class Goblin extends Character {
+export class GoblinGameObject extends CharacterGameObject {
   key = 'Goblin'
   animations = {
     default: {
@@ -32,8 +32,8 @@ export class Goblin extends Character {
 
   constructor (
     scene: Phaser.Scene,
-    x: number,
-    y: number
+    x?: number,
+    y?: number
   ) {
     super(scene, x, y)
     this.init()

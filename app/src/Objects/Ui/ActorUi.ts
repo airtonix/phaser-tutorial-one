@@ -1,19 +1,21 @@
 import Phaser from 'phaser'
 
-import { Character } from '../Characters/Character'
+import { CharacterGameObject } from '../Characters/Character'
 
 import { Store } from '~/Store'
+import { NoActiveCharacterError } from '~/Store/Character/Exceptions'
 
 export interface IActorUiConfig {
   key: string,
   x: number,
-  y: number
+  y: number,
+  onClick?: CallableFunction
 }
 
 export class ActorUi extends Phaser.GameObjects.Container {
     static key = 'ActorUi'
 
-    avatar: Character
+    avatar: CharacterGameObject
     border: Phaser.GameObjects.Graphics
     bg: Phaser.GameObjects.Graphics
 
@@ -23,7 +25,6 @@ export class ActorUi extends Phaser.GameObjects.Container {
       config: IActorUiConfig
     ) {
       super(scene, config.x || 0, config.y || 0)
-      this.key = ActorUi.key
 
       this.bg = new Phaser.GameObjects.Graphics(
         scene,
@@ -51,14 +52,16 @@ export class ActorUi extends Phaser.GameObjects.Container {
       scene.add.existing(this)
     }
 
-    createAvatar (): Character {
-      const character = Store.player?.character
-      const avatar = character?.createGameObject(this.scene)
+    createAvatar (): CharacterGameObject {
+      const character = Store.player && Store.player.character
+      if (!character) throw new NoActiveCharacterError()
+
+      const avatar = character.createGameObject(this.scene)
       this.add(avatar)
       return avatar
     }
 
-    update () {
+    update (): void {
       this.avatar.update()
     }
 }

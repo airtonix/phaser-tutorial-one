@@ -18,7 +18,7 @@ export interface IMapData extends Phaser.Tilemaps.MapData {
 }
 
 @model(MAP_MODEL_KEY)
-export class Map extends Model({
+export class MapModel extends Model({
   key: prop<string>(),
   tileset: prop<string>(),
   tileimage: prop<string>(),

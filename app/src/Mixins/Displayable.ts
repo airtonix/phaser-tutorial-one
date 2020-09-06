@@ -1,5 +1,5 @@
 import { OutlinePipeline } from '~/Shaders/OutlinePipeline'
-import { WorldEntity } from '~/Objects/WorldEntity'
+import { WorldEntityGameObject } from '~/Objects/WorldEntity'
 import { Orientation, IAnimationSheetConfig } from '~/Config/constants'
 import { Logger, Logs } from '~/Core/Logger'
 
@@ -27,7 +27,7 @@ export class DisplayableEntity {
   shadow: Phaser.GameObjects.Graphics
 
   constructor (
-    public entity: WorldEntity,
+    public entity: WorldEntityGameObject,
     private scene: Phaser.Scene,
     public width: number,
     public height: number,
@@ -112,7 +112,12 @@ export class DisplayableEntity {
     if (!animation) return
     if (!this.sprite || !this.sprite.anims) return
 
-    if(this.sprite.anims.currentAnim?.key === animation.anim?.key) return
+    const currentAnimationKey = this.sprite.anims.currentAnim &&
+      this.sprite.anims.currentAnim.key
+    const nextAnimationKey = animation &&
+      animation.anim &&
+      animation.anim.key
+    if(currentAnimationKey === nextAnimationKey) return
 
     const { flip, anim } = animation
 

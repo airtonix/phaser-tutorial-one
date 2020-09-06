@@ -1,6 +1,6 @@
 import { get } from 'lodash'
 
-import { WorldEntity } from '~/Objects/WorldEntity'
+import { WorldEntityGameObject } from '~/Objects/WorldEntity'
 import { NoWorldEntityError } from '~/Objects/Exceptions'
 import { Logs } from '~/Core/Logger'
 
@@ -11,7 +11,7 @@ export class Moveable {
   isIdle = false
 
   constructor (
-    public entity: WorldEntity,
+    public entity: WorldEntityGameObject,
     private scene: Phaser.Scene,
     public speed = 45,
   ) {
