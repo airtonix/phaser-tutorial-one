@@ -18,7 +18,7 @@ export class WorldEntityGameObject extends Phaser.GameObjects.Container {
   renderer: DisplayableEntity
   controller?: ControlStrategy
 
-  init (): void {
+  public init (): void {
     this.setSize(
       this.footprintWidth,
       this.footprintHeight
