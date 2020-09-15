@@ -56,19 +56,11 @@ export class MapScene extends Phaser.Scene {
     this.setLayersColliable(this.mapLayers)
     this.createColliders(this.player, Object.values(this.mapLayers))
 
-    // this.sidekick = this.createPlayerSidekick()
-    // this.createColliders(this.sidekick, Object.values(this.mapLayers))
-
-    // if (Store.currentZone?.containers) {
-    //   this.containers = this.createContainers()
-    //   this.createColliders(this.player, this.containers.getChildren())
-    // }
-
     if (Store.currentZone?.portals) {
       this.portals = this.createPortals()
       this.createOverlaps(this.player, this.portals.getChildren())
     }
-    // // this.initCamera()
+    this.initCamera()
   }
 
   update (
@@ -82,11 +74,23 @@ export class MapScene extends Phaser.Scene {
     const playerCharacter = Store.player?.character
     if (!playerCharacter) return
 
-    const player = playerCharacter.createGameObject(this)
-    player.setController(
-      new Controllable(this, player)
+    this.player = playerCharacter.createGameObject(this)
+    this.player.setController(
+      new Controllable(this, this.player)
     )
-    return player
+
+    if (playerCharacter.hasFollowers) {
+      playerCharacter.followers
+        .forEach()
+    }
+        // this.sidekick = this.createPlayerSidekick()
+    // this.createColliders(this.sidekick, Object.values(this.mapLayers))
+
+    // if (Store.currentZone?.containers) {
+    //   this.containers = this.createContainers()
+    //   this.createColliders(this.player, this.containers.getChildren())
+    // }
+
   }
 
   createPlayerSidekick (): CharacterGameObject {
