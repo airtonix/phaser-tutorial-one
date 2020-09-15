@@ -3,7 +3,7 @@
 !.github
 !.vscode
 !tools/
-!app/
+!app/*
 !docker-compose.*
 !README.md
 !tusk.yml

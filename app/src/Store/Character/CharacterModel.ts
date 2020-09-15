@@ -27,7 +27,16 @@ export class Character extends ExtendedModel(WorldEntity, {
   zone: prop<Ref<Zone> | undefined>(),
   class: prop<Ref<CharacterClass> | undefined>(),
   inventory: prop<Ref<Item>[]>(),
+  followers: prop<Ref<Character>[]>(() => [])
 }) {
+
+  @computed
+  get hasFollowers (): Boolean {
+    const followers = this.followers && this.followers.current
+    return followers && followers.length > 0
+  }
+
+  getFollower (followerRef): CharacterClass {}
 
   @computed
   get currentZone (): Zone {
