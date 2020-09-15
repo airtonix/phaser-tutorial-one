@@ -11,7 +11,7 @@ export class CharacterGoblin extends ExtendedModel(Character, {
 }) {
 
   createGameObject (scene: Phaser.Scene): Goblin {
-    const gameobject = new Goblin(scene)
+    const gameobject = new Goblin(scene, this.x, this.y)
     gameobject.setPosition(this.x, this.y)
     gameobject.setDepth(this.depth + 1)
     return gameobject

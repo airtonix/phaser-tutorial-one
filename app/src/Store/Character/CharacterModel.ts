@@ -3,9 +3,9 @@ import {
   model,
   modelAction,
   getRootStore,
+  Ref,
   ExtendedModel,
 } from 'mobx-keystone'
-import { Ref } from 'react'
 import { computed } from 'mobx'
 
 import { WorldEntity } from '../Entity/EntityModel'
@@ -31,15 +31,15 @@ export class Character extends ExtendedModel(WorldEntity, {
 }) {
 
   @computed
-  get currentZone (): Zone {
+  get currentZone (): Zone | undefined {
     return this.zone
       ? this.zone.current
       : undefined
   }
 
   @computed
-  get classMeta (): CharacterClass {
-    return this.class
+  get classMeta (): CharacterClass | undefined {
+    return this.class && this.class
       ? this.class.current
       : undefined
   }
