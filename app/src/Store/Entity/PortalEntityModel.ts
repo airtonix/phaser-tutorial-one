@@ -6,6 +6,7 @@ import {
   modelAction,
   findParent,
 } from 'mobx-keystone'
+import { computed } from 'mobx'
 
 import { Zone } from '~/Store/Zone/ZoneModel'
 import { ZoneReference } from '~/Store/Zone/ZoneReference'
@@ -14,7 +15,6 @@ import { PortalWorldEntity } from '~/Objects/PortalWorldEntity'
 
 import { PortalReference } from './PortalEntityReference'
 import { WorldEntity } from './EntityModel'
-import { computed } from 'mobx'
 
 export const PORTALENTITY_MODEL_KEY = 'PortalEntity'
 

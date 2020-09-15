@@ -15,9 +15,9 @@ import { UnknownZone } from '../Zone/Exceptions'
 import { ZoneReference } from '../Zone/ZoneReference'
 import { NoGameError } from '../Game/Exceptions'
 import { Item } from '../Entity/ItemEntityModel'
+import { TypeOfWorldEntity } from '../Entity/Factory'
 
 import { CharacterClass } from './CharacterClassModel'
-import { TypeOfWorldEntity } from '../Entity/Factory'
 
 export const CHARACTER_MODEL_KEY = 'Character'
 
