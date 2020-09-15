@@ -60,12 +60,6 @@ export class Moveable {
     return moving && Object.keys(moving).some( key => !!moving[key] )
   }
 
-  get isMovingTo (): string[] {
-    const moving = get(this.entity, 'moving', {})
-    return Object.keys(moving)
-      .filter(key => !!moving[key])
-  }
-
   /**
    * Stop any previous movement from the last frame
    */

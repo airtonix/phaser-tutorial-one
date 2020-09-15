@@ -43,3 +43,27 @@ declare module 'phaser-navmesh' {
     ): PhaserNavmesh
   }
 }
+
+declare module 'flat' {
+  interface Composed {
+    [key: string]:
+      string |
+      string[] |
+      number |
+      number[] |
+      boolean |
+      boolean[] |
+      Composed |
+      Composed[]
+  }
+  interface IUnflattenOptions {
+    delimiter?: string,
+    safe?: boolean,
+    object?: boolean,
+    overwrite?: boolean,
+    maxDepth?: number,
+    transformKey?: (key: string) => string,
+  }
+  export function unflatten (input: Composed, options?: IUnflattenOptions): Composed
+  export default function flatten (input: Composed, options?: IUnflattenOptions): Composed
+}

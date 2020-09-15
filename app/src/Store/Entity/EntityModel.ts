@@ -55,8 +55,5 @@ export class WorldEntity extends ExtendedModel(Entity, {
     }
   }
 
-  createGameObject (scene: Phaser.Scene) : Character {
-    throw new NotImplementedError(`createGameobject type: ${this.$modelType}`)
-  }
 }
 

@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import { debounce } from 'lodash'
 
 import { Store } from '~/Store'
+import { Portal } from '~/Store/Entity/PortalEntityModel'
 
 export class PortalWorldEntity extends Phaser.GameObjects.Container {
   zone: Phaser.GameObjects.Zone
@@ -21,7 +22,7 @@ export class PortalWorldEntity extends Phaser.GameObjects.Container {
   /**
    * The datamodel
    */
-  model: PortalWorldEntity
+  model: Portal
 
   key = 'Portal'
 
@@ -87,11 +88,16 @@ export class PortalWorldEntity extends Phaser.GameObjects.Container {
   }
 
   teleportActor = debounce(() => {
+    const targetPortal = this.model.target
+    if (!targetPortal) return
+
     this.scene.cameras.main.fadeOut(300, 0, 0, 0)
     this.scene.cameras.main.once(
       Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
-      (cam, effect) => {
-        const targetPortal = this.model?.target
+      (
+        cam: Phaser.Cameras.Scene2D.Camera,
+        effect: Phaser.Cameras.Scene2D.Effects.Fade
+      ) => {
         const x = targetPortal.x + targetPortal.width / 2
         const y = targetPortal.y + targetPortal.height / 2
 

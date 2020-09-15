@@ -31,7 +31,6 @@ export class DisplayableEntity {
     private scene: Phaser.Scene,
     public width: number,
     public height: number,
-    public orientation: string = Orientation.Right,
     public animations: ICharacterAnimationMap
   ) {
     this.sprite = this.createSprite()
@@ -49,6 +48,10 @@ export class DisplayableEntity {
         this.animateAction(this.entity.action)
       })
     }
+  }
+
+  get orientation (): string {
+    return this.entity.orientation
   }
 
   /**
@@ -111,8 +114,6 @@ export class DisplayableEntity {
 
     if(this.sprite.anims.currentAnim?.key === animation.anim?.key) return
 
-    log('animate', animation)
-
     const { flip, anim } = animation
 
     if (typeof flip !== 'undefined') {
@@ -148,10 +149,8 @@ export class DisplayableEntity {
   animateAction (
     action: string
   ): void {
-    // const orientations = this.entity?.movement?.isMovingTo || []
-    // this.log(orientations.join(''))
-    const animation = this.getAnimation(action, this.orientation)
+    const orientation = this.entity.orientation
+    const animation = this.getAnimation(action, orientation)
     this.animate(animation)
   }
-
 }

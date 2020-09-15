@@ -1,0 +1,75 @@
+options:
+  port:
+    default: 1234
+    environment: PORT
+  host:
+    default: 0.0.0.0
+    environment: HOST
+
+tasks:
+
+  dev:
+    run:
+      - >-
+        npx nest start --watch
+
+  build:
+    run:
+      - >-
+        rm -rf ./dist/*
+      - >-
+        npx nest build
+
+  prod:
+    run:
+      - >-
+        node ./dist/main
+
+  lint:
+    run:
+      - >-
+        npx eslint
+        ./src
+        --ext .ts
+        --cache
+
+  lint:fix:
+    run:
+      - >-
+        npx eslint
+        ./src
+        --ext .ts
+        --cache
+        --fix
+
+  test:
+    run:
+      - >-
+        npx jest
+        --config ./jest.config.js
+        --passWithNoTests
+
+  test:e2e:
+    run:
+      - >-
+        npx jest
+        --config ./jest.e2e.config.js
+        --passWithNoTests
+
+  test:coverage:
+    run:
+      - >-
+        npx jest
+        --coverage
+        --config ./jest.config.js
+        --passWithNoTests
+
+  test:debug:
+    run:
+      - >-
+        node
+        --inspect-brk
+        -r tsconfig-paths/register
+        -r ts-node/register
+        node_modules/.bin/jest
+        --runInBand

@@ -7,6 +7,9 @@ import {
   TiledTileMaps,
   Animations,
   BitmapFonts,
+  IAnimationSheetConfig,
+  ITiledTileMapConfig,
+  IBitmapFont,
 } from '~/Config/constants'
 
 import { MenuScene } from './MenuScene'
@@ -90,7 +93,7 @@ export class PreloaderScene extends Phaser.Scene {
       this.process(
         'animations',
         Animations,
-        ({ frames, sheet, ...animation }) => this.anims.create({
+        ({ frames, sheet, ...animation }: IAnimationSheetConfig) => this.anims.create({
           ...animation,
           frames: this.anims.generateFrameNumbers(sheet, { frames })
         })
@@ -116,12 +119,12 @@ export class PreloaderScene extends Phaser.Scene {
       this.process(
         'tiledtilemaps',
         TiledTileMaps,
-        ({ key, url }) => this.load.tilemapTiledJSON(key, url)
+        ({ key, url }: ITiledTileMapConfig) => this.load.tilemapTiledJSON(key, url)
       )
       this.process(
         'fonts',
         BitmapFonts,
-        ({ key, png, fnt }) => this.load.bitmapFont(key, png, fnt)
+        ({ key, png, fnt }: IBitmapFont) => this.load.bitmapFont(key, png, fnt)
       )
     }
 
