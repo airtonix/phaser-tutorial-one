@@ -53,4 +53,3 @@ export class WorldEntityModel extends ExtendedModel(EntityModel, {
     }
   }
 }
-

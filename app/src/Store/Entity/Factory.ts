@@ -23,15 +23,19 @@ export interface ObjectLayerProperty {
   type: string
 }
 
+export const WorldEntityModelMap = {
+  [ItemModel.type]: ItemModel,
+  [PortalModel.type]: PortalModel,
+  [ContainerModel.type]: ContainerModel,
+}
+
 export function propertyArrayToObject (propertyArray: ObjectLayerProperty[] = []): ReducedAmbgiousObject {
   return propertyArray.reduce((result, item: ObjectLayerProperty) => {
     return { ...result, [item.name]: item.value }
   }, {})
 }
 
-export function EntityLevelDataFactory (
-  entity: any
-): TypeofWorldEntityModelInstance {
+export function createWorldEntityModelInstance (entity: any): TypeofWorldEntityModelInstance {
   const {
     type,
     properties,
@@ -42,17 +46,8 @@ export function EntityLevelDataFactory (
     ...data,
     ...propertyArrayToObject(properties)
   }
-
-  switch (type) {
-    case ItemModel.type:
-      return new ItemModel(transformedEntityData)
-    case PortalModel.type:
-      return new PortalModel(transformedEntityData)
-    case ContainerModel.type:
-      return new ContainerModel(transformedEntityData)
-    default:
-      throw new NoAvailableEntityConstructorError(type)
-  }
+  const WorldEntityTypeModel = WorldEntityModelMap[type]
+  return new WorldEntityTypeModel(transformedEntityData)
 }
 
 export function GetEntityTypeReference (entity: TypeOfEntity): TypeOfEntityReference {

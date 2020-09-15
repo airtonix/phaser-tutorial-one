@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path')
 
-const TsConfigPath = path.resolve(__dirname, 'tsconfig.json')
+const TsConfigPath = path.resolve(__dirname, 'tsconfig.test.json')
 
 module.exports = {
   rootDir: path.resolve(__dirname),
@@ -12,10 +12,6 @@ module.exports = {
     'js',
     'css'
   ],
-  transform: {
-    '^.+\\.(t|j)sx?$': 'ts-jest',
-    '\\.(css|less|sass|scss)$': '<rootDir>/tools/jest.stylemock.js'
-  },
   setupFiles: [
     'jest-canvas-mock'
   ],
@@ -33,6 +29,10 @@ module.exports = {
       // + "|other-module"
     + ')/)',
   ],
+  transform: {
+    '^.+\\.(t|j)sx?$': 'ts-jest',
+    '\\.(css|less|sass|scss)$': '<rootDir>/tools/jest.stylemock.js'
+  },
   moduleNameMapper: {
     '^~/(.*)': '<rootDir>/src/$1'
   }

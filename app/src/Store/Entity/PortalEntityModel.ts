@@ -6,6 +6,7 @@ import {
   modelAction,
   findParent,
 } from 'mobx-keystone'
+import { computed } from 'mobx'
 
 import { Zone } from '~/Store/Zone/ZoneModel'
 import { ZoneReference } from '~/Store/Zone/ZoneReference'
@@ -82,6 +83,7 @@ export class PortalModel extends ExtendedModel(WorldEntityModel, {
     )
     return portal
   }
+
   /**
    * Return a reference of the portal that this portal linkes to
    *

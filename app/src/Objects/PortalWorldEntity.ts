@@ -88,16 +88,19 @@ export class PortalWorldEntity extends Phaser.GameObjects.Container {
   }
 
   teleportActor = debounce(() => {
+    const targetPortal = this.model && this.model.target
+    if (!targetPortal) return
+
+    const character = Store.player && Store.player.character
+    if (!character) return
+    
     this.scene.cameras.main.fadeOut(300, 0, 0, 0)
     this.scene.cameras.main.once(
       Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
-      () => {
-        const targetPortal = this.model && this.model.target
-        if (!targetPortal) return
-
-        const character = Store.player && Store.player.character
-        if (!character) return
-
+      (
+        cam: Phaser.Cameras.Scene2D.Camera,
+        effect: Phaser.Cameras.Scene2D.Effects.Fade
+      ) => {
         const x = targetPortal.x + targetPortal.width / 2
         const y = targetPortal.y + targetPortal.height / 2
 

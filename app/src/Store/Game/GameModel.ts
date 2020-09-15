@@ -54,7 +54,7 @@ export class Game extends Model({
     const character = this.player && this.player.character
     if (!character) throw new NoCharacterError()
 
-    const spawn = zone.portals.find(zone => zone.name === 'PlayerStart')
+    const spawn = zone.getPortalByName('PlayerStart')
     if (!spawn) throw new NoSpawnPositionError()
 
     character

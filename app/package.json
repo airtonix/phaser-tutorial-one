@@ -77,8 +77,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "assetsPath": "src/Assets",
-  "devDependencies": {
-    "dtsmake": "^0.0.10"
-  }
+  "assetsPath": "src/Assets"
 }

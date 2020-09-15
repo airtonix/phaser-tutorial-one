@@ -25,11 +25,12 @@ export class ContainerChestGameObject extends ContainerGameObject {
     { from: '/loot/weapons/spears', luck: 1, depth: Infinity, stack: 1 },
     { from: '/loot/weapons/bows', luck: 1, depth: Infinity, stack: 1 }
   ]
+
   behaviours = {
     default: LootChestBehaviour
   }
 
-  animations: ICharacterAnimationMap = {
+  animations = {
     default: {
       default: { anim: Animations.LootChestIdle }
     },
@@ -47,4 +48,15 @@ export class ContainerChestGameObject extends ContainerGameObject {
       empty: { anim: Animations.LootChestCloseEmpty }
     },
   }
+
+  
+  constructor (
+    scene: Phaser.Scene,
+    x: number,
+    y: number
+  ) {
+    super(scene, x, y)
+    this.init()
+  }
+
 }

@@ -7,10 +7,10 @@ import {
   TiledTileMaps,
   Animations,
   BitmapFonts,
-  IAssetCollection,
-  IHttpAsset,
-  IBitmapFont,
   IAnimationSheetConfig,
+  ITiledTileMapConfig,
+  IBitmapFont,
+  IAssetCollection,
 } from '~/Config/constants'
 
 import { MenuScene } from './MenuScene'
@@ -116,7 +116,7 @@ export class PreloaderScene extends Phaser.Scene {
       this.process(
         'tiledtilemaps',
         TiledTileMaps,
-        ({ key, url }: IHttpAsset) => this.load.tilemapTiledJSON(key, url)
+        ({ key, url }: ITiledTileMapConfig) => this.load.tilemapTiledJSON(key, url)
       )
       this.process(
         'fonts',
