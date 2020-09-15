@@ -1,0 +1,104 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/Users/zenobiusjiricek/0x72_DungeonTilesetII_v1.3.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "/Users/zenobiusjiricek/16x16 dungeon ii wall reconfig v04 spritesheet.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Assets/Dungeon.tmx": {
+            "scale": 4,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 178.125,
+                "y": 117.375
+            }
+        },
+        "Assets/Dungeon.tmx#16x16 dungeon ii wall reconfig v04 spritesheet": {
+            "scaleInDock": 1.5
+        },
+        "Assets/Dungeon.tmx#Characters": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Assets/Dungeon.tmx#Dungeon": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1.5
+        },
+        "Assets/Dungeon.tmx#Items": {
+            "scaleInDock": 1,
+            "scaleInEditor": 2.2578
+        },
+        "Assets/Dungeon.tmx#emotes_pixel_style1": {
+            "scaleInDock": 1,
+            "scaleInEditor": 3.0689
+        },
+        "Assets/Dungeon.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "Assets/LevelOne.tmx": {
+            "scale": 4.5948,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 255.94149908592323,
+                "y": 255.9414990859232
+            }
+        },
+        "Assets/LevelThree.tmx": {
+            "scale": 2.8455,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 181.33895624670532,
+                "y": 134.5984888420313
+            }
+        },
+        "Assets/LevelTwo.tmx": {
+            "scale": 3.5423,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 170.51068514806764,
+                "y": 164.5823335121249
+            }
+        }
+    },
+    "frame.defaultDuration": 450,
+    "lastUsedTilesetExportFilter": "All Files (*)",
+    "map.lastUsedExportFilter": "JSON map files (*.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "openFiles": [
+        "Assets/Dungeon.tmx"
+    ],
+    "project": "Dungeon.tiled-project",
+    "property.type": "int",
+    "recentFiles": [
+        "Assets/Dungeon.tsx",
+        "Assets/Dungeon.tmx",
+        "/Users/zenobiusjiricek/0x72_DungeonTilesetII_v1.3.tsx",
+        "/Users/zenobiusjiricek/16x16 dungeon ii wall reconfig v04 spritesheet.tsx"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.margin": 0,
+    "tileset.spacing": 0,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
