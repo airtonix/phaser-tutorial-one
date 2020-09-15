@@ -5,6 +5,8 @@ on:
     branches:
       -  develop
       -  master
+    paths:
+      - 'app/**/*'
 
 env:
   CI_SETTINGS__TUSK_VERSION: v0.5.1
