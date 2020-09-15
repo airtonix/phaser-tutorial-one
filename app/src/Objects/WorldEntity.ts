@@ -1,6 +1,6 @@
 import { DisplayableEntity, ICharacterAnimationMap } from '~/Mixins/Displayable'
 import { Orientation } from '~/Config/constants'
-import { Controllable } from '~/Mixins/Controllable'
+import { ControlStrategy } from '~/Strategies/ControlStrategy'
 import { Logs } from '~/Core/Logger'
 
 @Logs
@@ -16,7 +16,7 @@ export class WorldEntityGameObject extends Phaser.GameObjects.Container {
   action = 'idle'
   actions: string[]
   renderer: DisplayableEntity
-  controller?: Controllable
+  controller?: ControlStrategy
 
   init (): void {
     this.setSize(
@@ -37,7 +37,7 @@ export class WorldEntityGameObject extends Phaser.GameObjects.Container {
     this.scene.add.existing(this)
   }
 
-  setController (controller: Controllable): void {
+  setController (controller: ControlStrategy): void {
     this.controller = controller
   }
 

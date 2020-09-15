@@ -15,7 +15,9 @@ import { UnknownZone } from '../Zone/Exceptions'
 import { ZoneReference } from '../Zone/ZoneReference'
 import { NoGameError } from '../Game/Exceptions'
 import { ItemModel } from '../Entity/ItemEntityModel'
+
 import { CharacterGameObject } from '~/Objects/Characters/Character'
+
 import { CharacterClassModel } from './CharacterClassModel'
 
 export const CHARACTER_MODEL_KEY = 'Character'
@@ -31,8 +33,12 @@ export class CharacterModel extends ExtendedModel(WorldEntityModel, {
 }) {
 
   @computed
-  get hasFollowers (): Boolean {
+  get hasFollowers (): boolean {
     return this.followers && this.followers.length > 0
+  }
+
+  getFollowerFromRef (followerRef: Ref<CharacterModel>): CharacterModel {
+    return followerRef && followerRef.current
   }
 
   @computed

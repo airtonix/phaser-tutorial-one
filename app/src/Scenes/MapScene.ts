@@ -8,7 +8,8 @@ import { NoZoneMapError } from '~/Store/Zone/Exceptions'
 // import { SidekickGoblin } from '~/Objects/Characters/CharacterGoblin'
 import { CharacterGameObject } from '~/Objects/Characters/Character'
 import { NoMapError } from '~/Store/Map/Exceptions'
-import { Controllable } from '~/Mixins/Controllable'
+import { PlayerControlStrategy } from '~/Strategies/PlayerControlStrategy'
+import { NavMeshController } from '~/Strategies/NavMeshControlStrategy'
 
 interface TileMapLayerHash {
   [key: string]: Phaser.Tilemaps.DynamicTilemapLayer
@@ -53,6 +54,11 @@ export class MapScene extends Phaser.Scene {
 
     this.player = this.createPlayer()
 
+    // if (Store.currentZone?.containers) {
+    //   this.containers = this.createContainers()
+    //   this.createColliders(this.player, this.containers.getChildren())
+    // }
+
     this.setLayersColliable(this.mapLayers)
     this.createColliders(this.player, Object.values(this.mapLayers))
 
@@ -76,37 +82,24 @@ export class MapScene extends Phaser.Scene {
 
     this.player = playerCharacter.createGameObject(this)
     this.player.setController(
-      new Controllable(this, this.player)
+      new PlayerControlStrategy(this, this.player)
     )
 
     if (playerCharacter.hasFollowers) {
       playerCharacter.followers
-        .forEach()
+        .map(playerCharacter.getFollowerFromRef)
+        .forEach(character => {
+          const follower = character.createGameObject(this)
+          follower.setController(
+            new NavMeshController(
+              this,
+              follower,
+              this.navMesh
+            )
+          )
+          this.createColliders(follower, Object.values(this.mapLayers))
+        })
     }
-        // this.sidekick = this.createPlayerSidekick()
-    // this.createColliders(this.sidekick, Object.values(this.mapLayers))
-
-    // if (Store.currentZone?.containers) {
-    //   this.containers = this.createContainers()
-    //   this.createColliders(this.player, this.containers.getChildren())
-    // }
-
-  }
-
-  createPlayerSidekick (): CharacterGameObject {
-    const sidekick = new SidekickGoblin(
-      this,
-      this.navMesh
-    )
-
-    const {
-      depth, x, y
-    } = this.player
-
-    sidekick.setDepth(depth + 1)
-    sidekick.setPosition(x, y)
-
-    return sidekick
   }
 
   createContainers (): Phaser.GameObjects.Group {
