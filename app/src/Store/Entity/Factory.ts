@@ -4,7 +4,7 @@ import { ReducedAmbgiousObject } from '~/Core/framework'
 
 import { Portal } from './PortalEntityModel'
 import { Item } from './ItemEntityModel'
-import { Entity } from './EntityModel'
+import { Entity, WorldEntity } from './EntityModel'
 import { Container } from './ContainerEntityModel'
 import { PortalReference } from './PortalEntityReference'
 import { ContainerReference } from './ContainerEntityReference'
@@ -12,8 +12,9 @@ import { ItemReference } from './ItemEntityReference'
 import { EntityReference } from './EntityReference'
 
 
-export type TypeOfEntity = Item | Portal | Container | Entity
-export type TypeOfEntityReference = Ref<Item> | Ref<Portal> | Ref<Container> | Ref<Entity>
+export type TypeOfEntity = InstanceType<typeof Entity>
+export type TypeOfWorldEntity = InstanceType<typeof WorldEntity>
+export type TypeOfEntityReference = Ref<Item | Portal | Container | Entity>
 export type maybeTypeOfEntity = TypeOfEntity | Phaser.Types.Tilemaps.ObjectLayerConfig | undefined
 
 export interface ObjectLayerProperty {
@@ -22,13 +23,19 @@ export interface ObjectLayerProperty {
   type: string
 }
 
+export const WorldEntityModelMap = {
+  [Item.type]: Item,
+  [Portal.type]: Portal,
+  [Container.type]: Container,
+}
+
 export function propertyArrayToObject (propertyArray: ObjectLayerProperty[] = []): ReducedAmbgiousObject {
   return propertyArray.reduce((result, item: ObjectLayerProperty) => {
     return { ...result, [item.name]: item.value }
   }, {})
 }
 
-export function EntityLevelDataFactory (entity: any): TypeOfEntity {
+export function createWorldEntityModelInstance (entity: any): TypeOfWorldEntity {
   const {
     type,
     properties,
@@ -39,17 +46,8 @@ export function EntityLevelDataFactory (entity: any): TypeOfEntity {
     ...data,
     ...propertyArrayToObject(properties)
   }
-
-  switch (type) {
-    case Item.type:
-      return new Item(transformedEntityData)
-    case Portal.type:
-      return new Portal(transformedEntityData)
-    case Container.type:
-      return new Container(transformedEntityData)
-    default:
-      return new Entity(transformedEntityData)
-  }
+  const WorldEntityTypeModel = WorldEntityModelMap[type]
+  return new WorldEntityTypeModel(transformedEntityData)
 }
 
 export function GetEntityTypeReference (entity: TypeOfEntity): TypeOfEntityReference {

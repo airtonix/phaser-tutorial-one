@@ -17,6 +17,7 @@ import { NoGameError } from '../Game/Exceptions'
 import { Item } from '../Entity/ItemEntityModel'
 
 import { CharacterClass } from './CharacterClassModel'
+import { TypeOfWorldEntity } from '../Entity/Factory'
 
 export const CHARACTER_MODEL_KEY = 'Character'
 
@@ -44,7 +45,7 @@ export class Character extends ExtendedModel(WorldEntity, {
   }
 
   @modelAction
-  teleportTo (zone: Zone, entity: WorldEntity): void {
+  teleportTo (zone: Zone, entity: TypeOfWorldEntity): void {
     this.setZone(zone)
     this.setPosition(entity.x, entity.y)
     this.setDepth(entity.depth + 1)

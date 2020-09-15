@@ -76,5 +76,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "assetsPath": "src/Assets"
+  "assetsPath": "src/Assets",
+  "devDependencies": {
+    "jest-canvas-mock": "^2.2.0"
+  }
 }
