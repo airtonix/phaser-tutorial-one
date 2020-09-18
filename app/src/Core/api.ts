@@ -18,8 +18,8 @@ interface INetworkResponseIntercepter {
 }
 
 interface INetworkClientConfig extends AxiosRequestConfig {
-  requestInterceptors: INetworkRequestIntercepter[]
-  responseInterceptors: INetworkResponseIntercepter[]
+  requestInterceptors?: INetworkRequestIntercepter[]
+  responseInterceptors?: INetworkResponseIntercepter[]
 }
 
 export interface IApiResonse extends Promise<AxiosResponse> { }
@@ -27,14 +27,18 @@ export interface IApiResonse extends Promise<AxiosResponse> { }
 export class NetworkClient {
   client: AxiosInstance
 
-  public constructor (config?: INetworkClientConfig) {
+  public constructor (config: INetworkClientConfig = {}) {
     axios.defaults.xsrfCookieName = 'csrftoken'
     axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN'
 
     this.client = axios.create()
     this.configure(config)
+    const {
+      requestInterceptors,
+      responseInterceptors
+    } = config || {}
 
-    if (config?.requestInterceptors || config?.responseInterceptors) {
+    if (requestInterceptors || responseInterceptors) {
       this.setupInterceptors(config)
     }
   }

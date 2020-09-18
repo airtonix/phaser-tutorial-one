@@ -1,4 +1,4 @@
-import { Label, Sizer, RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components'
+import { Label, RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components'
 import ButtonBehaviour from 'phaser3-rex-plugins/plugins/button'
 import { merge, get } from 'lodash'
 

@@ -1,51 +1,69 @@
 import {
   prop,
   model,
+  Ref,
   modelAction,
   getRootStore,
-  Ref,
   ExtendedModel,
 } from 'mobx-keystone'
 import { computed } from 'mobx'
 
-import { WorldEntity } from '../Entity/EntityModel'
+import { WorldEntityModel } from '../Entity/EntityModel'
 import { Zone } from '../Zone/ZoneModel'
 import { Game } from '../Game/GameModel'
 import { UnknownZone } from '../Zone/Exceptions'
 import { ZoneReference } from '../Zone/ZoneReference'
 import { NoGameError } from '../Game/Exceptions'
-import { Item } from '../Entity/ItemEntityModel'
-import { TypeOfWorldEntity } from '../Entity/Factory'
+import { ItemModel } from '../Entity/ItemEntityModel'
 
-import { CharacterClass } from './CharacterClassModel'
+import { CharacterGameObject } from '~/Objects/Characters/Character'
+
+import { CharacterClassModel } from './CharacterClassModel'
 
 export const CHARACTER_MODEL_KEY = 'Character'
 
 @model(CHARACTER_MODEL_KEY)
-export class Character extends ExtendedModel(WorldEntity, {
+export class CharacterModel extends ExtendedModel(WorldEntityModel, {
   icon: prop<string>(),
   hp: prop<number>(),
   zone: prop<Ref<Zone> | undefined>(),
-  class: prop<Ref<CharacterClass> | undefined>(),
-  inventory: prop<Ref<Item>[]>(),
+  class: prop<Ref<CharacterClassModel> | undefined>(),
+  inventory: prop<Ref<ItemModel>[]>(),
+  followers: prop<Ref<CharacterModel>[]>(() => [])
 }) {
 
   @computed
-  get currentZone (): Zone | undefined {
+  get hasFollowers (): boolean {
+    return this.followers && this.followers.length > 0
+  }
+  
+  getFollowerFromRef (followerRef: Ref<CharacterModel>): CharacterModel {
+    return followerRef && followerRef.current
+  }
+
+  getFollowers () {
+    if (!this.hasFollowers) return []
+
+    return this.followers
+      .map(ref => this.getFollowerFromRef(ref))
+  }
+
+  @computed
+  get currentZone (): Zone| undefined {
     return this.zone
       ? this.zone.current
       : undefined
   }
 
   @computed
-  get classMeta (): CharacterClass | undefined {
-    return this.class && this.class
+  get classMeta (): CharacterClassModel | undefined {
+    return this.class
       ? this.class.current
       : undefined
   }
 
   @modelAction
-  teleportTo (zone: Zone, entity: TypeOfWorldEntity): void {
+  teleportTo (zone: Zone, entity: WorldEntityModel): void {
     this.setZone(zone)
     this.setPosition(entity.x, entity.y)
     this.setDepth(entity.depth + 1)
@@ -63,6 +81,16 @@ export class Character extends ExtendedModel(WorldEntity, {
       : undefined
   }
 
+  gameobject: CharacterGameObject
+
+  public createGameObject (scene: Phaser.Scene): CharacterGameObject {
+    const gameobject = new CharacterGameObject(scene)
+    this.gameobject = gameobject
+    gameobject.model = this
+    gameobject.setPosition(this.x, this.y)
+    gameobject.setDepth(this.depth + 1)
+    return gameobject
+  }
 }
 
 

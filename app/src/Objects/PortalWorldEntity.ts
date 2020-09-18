@@ -2,7 +2,7 @@ import Phaser from 'phaser'
 import { debounce } from 'lodash'
 
 import { Store } from '~/Store'
-import { Portal } from '~/Store/Entity/PortalEntityModel'
+import { PortalModel } from '~/Store/Entity/PortalEntityModel'
 
 export class PortalWorldEntity extends Phaser.GameObjects.Container {
   zone: Phaser.GameObjects.Zone
@@ -22,7 +22,7 @@ export class PortalWorldEntity extends Phaser.GameObjects.Container {
   /**
    * The datamodel
    */
-  model: Portal
+  model: PortalModel
 
   key = 'Portal'
 
@@ -82,15 +82,18 @@ export class PortalWorldEntity extends Phaser.GameObjects.Container {
   }
 
   handleOverlap = (...actors: Phaser.GameObjects.GameObject[]): void => {
-    if (this.model?.target) {
+    if (this.model && this.model.target) {
       this.teleportActor()
     }
   }
 
   teleportActor = debounce(() => {
-    const targetPortal = this.model.target
+    const targetPortal = this.model && this.model.target
     if (!targetPortal) return
 
+    const character = Store.player && Store.player.character
+    if (!character) return
+    
     this.scene.cameras.main.fadeOut(300, 0, 0, 0)
     this.scene.cameras.main.once(
       Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
@@ -101,11 +104,10 @@ export class PortalWorldEntity extends Phaser.GameObjects.Container {
         const x = targetPortal.x + targetPortal.width / 2
         const y = targetPortal.y + targetPortal.height / 2
 
-        Store.player?.character?.setDepth(targetPortal.depth)
-        Store.player?.character?.setPosition(x, y)
-        Store.player?.character?.setZone(targetPortal.fromZone)
+        character.setDepth(targetPortal.depth)
+        character.setPosition(x, y)
+        character.setZone(targetPortal.fromZone)
       })
-
   }, 500, {
     leading: true,
     trailing: false

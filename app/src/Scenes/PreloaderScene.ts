@@ -1,4 +1,4 @@
-import { NumberBar, RoundRectangle } from 'phaser3-rex-plugins/templates/ui/ui-components';
+import { RoundRectangle, NumberBar} from 'phaser3-rex-plugins/templates/ui/ui-components'
 
 import { Logger } from '~/Core/Logger'
 import {
@@ -10,13 +10,10 @@ import {
   IAnimationSheetConfig,
   ITiledTileMapConfig,
   IBitmapFont,
+  IAssetCollection,
 } from '~/Config/constants'
 
 import { MenuScene } from './MenuScene'
-
-interface IAssetCollection {
-    [key: string]: any
-}
 
 const log = Logger(module.id)
 
@@ -46,7 +43,6 @@ export class PreloaderScene extends Phaser.Scene {
         x: this.cameras.main.width / 2,
         y: this.cameras.main.height / 2,
         width: 100,
-
         background,
         slider: {
           track,
@@ -61,6 +57,7 @@ export class PreloaderScene extends Phaser.Scene {
           },
         }
       })
+
       bar.layout()
       this.add.existing(bar)
       bar.setValue(50)

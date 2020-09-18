@@ -5,10 +5,10 @@ import {
   Ref,
 } from 'mobx-keystone'
 
-import { ContainerChest } from '~/Objects/Containers'
+import { ContainerChestGameObject } from '~/Objects/Containers'
 
-import { WorldEntity } from './EntityModel'
-import { Item } from './ItemEntityModel'
+import { WorldEntityModel } from './EntityModel'
+import { ItemModel } from './ItemEntityModel'
 
 export const CONTAINER_MODEL_KEY = 'Container'
 
@@ -23,20 +23,20 @@ export enum Sizes {
 }
 
 @model(CONTAINER_MODEL_KEY)
-export class Container extends ExtendedModel(WorldEntity, {
+export class ContainerModel extends ExtendedModel(WorldEntityModel, {
   size: prop<number>(Sizes.normal),
   icon: prop<string | undefined>(),
-  items: prop<Item[]>(() => []),
+  items: prop<ItemModel[]>(() => []),
   locked: prop<boolean>(() => false),
-  lockedBy: prop<Ref<Item> | undefined>()
+  lockedBy: prop<Ref<ItemModel> | undefined>()
 }){
   static type = 'Container'
-  static GameObjectClass = ContainerChest
+  static GameObjectClass = ContainerChestGameObject
 
   createGameObject (
     scene: Phaser.Scene
-  ) : ContainerChest {
-    const gameobject = new ContainerChest(
+  ) : ContainerChestGameObject {
+    const gameobject = new ContainerChestGameObject(
       scene,
       this.x + this.width / 2,
       this.y + this.height / 2,

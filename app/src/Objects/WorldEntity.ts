@@ -1,10 +1,12 @@
 import { DisplayableEntity, ICharacterAnimationMap } from '~/Mixins/Displayable'
 import { Orientation } from '~/Config/constants'
-import { Controllable } from '~/Mixins/Controllable'
+import { ControlStrategy } from '~/Strategies/ControlStrategy'
 import { Logs } from '~/Core/Logger'
+import { WorldEntityModel } from '~/Store/Entity/EntityModel'
+import { BehaviourStrategy } from '~/Behaviours/BehaviourStrategy'
 
 @Logs
-export class WorldEntity extends Phaser.GameObjects.Container {
+export class WorldEntityGameObject extends Phaser.GameObjects.Container {
   key: string
   spriteWidth = 16
   spriteHeight = 16
@@ -16,9 +18,11 @@ export class WorldEntity extends Phaser.GameObjects.Container {
   action = 'idle'
   actions: string[]
   renderer: DisplayableEntity
-  controller?: Controllable
+  controller?: ControlStrategy
+  behaviour?: BehaviourStrategy
+  model: WorldEntityModel
 
-  init (): void {
+  public init (): void {
     this.setSize(
       this.footprintWidth,
       this.footprintHeight
@@ -37,8 +41,12 @@ export class WorldEntity extends Phaser.GameObjects.Container {
     this.scene.add.existing(this)
   }
 
-  setController (controller: Controllable): void {
+  setControllerStrategy (controller: ControlStrategy): void {
     this.controller = controller
+  }
+
+  setBehaviourStrategy (behaviour: BehaviourStrategy): void {
+    this.behaviour = behaviour
   }
 
   setOrientation (orientation: Orientation): void {

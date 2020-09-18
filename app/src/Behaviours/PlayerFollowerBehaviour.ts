@@ -1,4 +1,4 @@
-export const SidekickCharacterBehaviour = `
+export const PlayerFollowerBehaviour = `
 root {
     selector {
         sequence while(CanSeePlayerCondition) {

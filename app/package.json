@@ -15,7 +15,7 @@
     "@babel/register": "^7.10.4",
     "@qiwi/semantic-release-gh-pages-plugin": "^4.0.3",
     "@types/debug": "^4.1.5",
-    "@types/jest": "^26.0.8",
+    "@types/jest": "^26.0.13",
     "@types/lodash": "^4.14.123",
     "@types/node": "^14.0.13",
     "@types/react": "^16.9.44",
@@ -39,6 +39,7 @@
     "guid-typescript": "^1.0.9",
     "images": "^3.2.2",
     "jest": "^26.2.2",
+    "jest-canvas-mock": "^2.2.0",
     "jest-extended": "^0.11.5",
     "kaop-ts": "^4.3.0",
     "localforage": "^1.9.0",
@@ -76,8 +77,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "assetsPath": "src/Assets",
-  "devDependencies": {
-    "jest-canvas-mock": "^2.2.0"
-  }
+  "assetsPath": "src/Assets"
 }

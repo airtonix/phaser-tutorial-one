@@ -2,31 +2,31 @@ import { Ref } from 'mobx-keystone'
 
 import { ReducedAmbgiousObject } from '~/Core/framework'
 
-import { Portal } from './PortalEntityModel'
-import { Item } from './ItemEntityModel'
-import { Entity, WorldEntity } from './EntityModel'
-import { Container } from './ContainerEntityModel'
+import { PortalModel } from './PortalEntityModel'
+import { ItemModel } from './ItemEntityModel'
+import { EntityModel, TypeofWorldEntityModelInstance } from './EntityModel'
+import { ContainerModel } from './ContainerEntityModel'
 import { PortalReference } from './PortalEntityReference'
 import { ContainerReference } from './ContainerEntityReference'
 import { ItemReference } from './ItemEntityReference'
 import { EntityReference } from './EntityReference'
+import { NoAvailableEntityConstructorError } from './Exceptions'
 
 
-export type TypeOfEntity = InstanceType<typeof Entity>
-export type TypeOfWorldEntity = InstanceType<typeof WorldEntity>
-export type TypeOfEntityReference = Ref<Item | Portal | Container | Entity>
+export type TypeOfEntity = ItemModel | PortalModel | ContainerModel | EntityModel
+export type TypeOfEntityReference = Ref<ItemModel> | Ref<PortalModel> | Ref<ContainerModel> | Ref<EntityModel>
 export type maybeTypeOfEntity = TypeOfEntity | Phaser.Types.Tilemaps.ObjectLayerConfig | undefined
 
 export interface ObjectLayerProperty {
   name: string
-  value: any
+  value: string | number | boolean
   type: string
 }
 
 export const WorldEntityModelMap = {
-  [Item.type]: Item,
-  [Portal.type]: Portal,
-  [Container.type]: Container,
+  [ItemModel.type]: ItemModel,
+  [PortalModel.type]: PortalModel,
+  [ContainerModel.type]: ContainerModel,
 }
 
 export function propertyArrayToObject (propertyArray: ObjectLayerProperty[] = []): ReducedAmbgiousObject {
@@ -35,7 +35,7 @@ export function propertyArrayToObject (propertyArray: ObjectLayerProperty[] = []
   }, {})
 }
 
-export function createWorldEntityModelInstance (entity: any): TypeOfWorldEntity {
+export function createWorldEntityModelInstance (entity: any): TypeofWorldEntityModelInstance {
   const {
     type,
     properties,
@@ -51,13 +51,13 @@ export function createWorldEntityModelInstance (entity: any): TypeOfWorldEntity 
 }
 
 export function GetEntityTypeReference (entity: TypeOfEntity): TypeOfEntityReference {
-  if (entity instanceof Portal) {
+  if (entity instanceof PortalModel) {
     return PortalReference(entity)
   }
-  else if (entity instanceof Container) {
+  else if (entity instanceof ContainerModel) {
     return ContainerReference(entity)
   }
-  else if (entity instanceof Item) {
+  else if (entity instanceof ItemModel) {
     return ItemReference(entity)
   }
   else {

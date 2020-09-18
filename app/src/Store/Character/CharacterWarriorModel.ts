@@ -1,17 +1,19 @@
 import { ExtendedModel, model, prop } from 'mobx-keystone';
 
-import { Warrior } from '~/Objects/Characters/CharacterWarrior';
+import { WarriorGameObject } from '~/Objects/Characters/CharacterWarrior';
 
-import { Character } from './CharacterModel';
+import { CharacterModel } from './CharacterModel';
 
 export const CHARACTERWARRIOR_MODEL_KEY = 'CharacterWarrior'
 
 @model(CHARACTERWARRIOR_MODEL_KEY)
-export class CharacterWarrior extends ExtendedModel(Character, {
+export class CharacterWarriorModel extends ExtendedModel(CharacterModel, {
 }) {
 
-  createGameObject (scene: Phaser.Scene): Warrior {
-    const gameobject = new Warrior(scene, this.x, this.y)
+  createGameObject (scene: Phaser.Scene): WarriorGameObject {
+    const gameobject = new WarriorGameObject(scene)
+    this.gameobject = gameobject
+    gameobject.model = this
     gameobject.setPosition(this.x, this.y)
     gameobject.setDepth(this.depth + 1)
     return gameobject

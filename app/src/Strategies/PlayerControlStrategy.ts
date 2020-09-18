@@ -2,7 +2,9 @@ import { debounce, set, get } from 'lodash'
 
 import { Logs } from '../Core/Logger'
 
-import { Character } from '~/Objects/Characters/Character'
+import { CharacterGameObject } from '~/Objects/Characters/Character'
+
+import { ControlStrategy } from './ControlStrategy'
 
 
 export interface IControlKey {
@@ -21,7 +23,7 @@ export interface IControls {
 export const EVENT_KEY_OPEN_PLAYER_INVENTORY = 'event-player-inventory-open'
 
 @Logs
-export class Controllable {
+export class PlayerControlStrategy extends ControlStrategy {
   orientation: string
   isIdle: boolean
   keys: Phaser.Types.Input.InputConfiguration
@@ -29,15 +31,19 @@ export class Controllable {
   controls: object
 
   constructor (
-    private scene: Phaser.Scene,
-    private entity: Character
+    public scene: Phaser.Scene,
+    public entity: CharacterGameObject
   ) {
-    this.scene = scene
-    this.init()
-    scene.events.on('update', this.update)
+    super(
+      scene,
+      entity
+    )
   }
 
-  init = (): void => {
+  init (): void {
+    // TODO: work out why fat arrows doesn't achieve the same
+    this.update = this.update.bind(this)
+    super.init()
     this.controls = this.scene.input.keyboard.addKeys({
       up: Phaser.Input.Keyboard.KeyCodes.W,
       left: Phaser.Input.Keyboard.KeyCodes.A,
@@ -49,8 +55,9 @@ export class Controllable {
     })
   }
 
+  update (): void {
+    super.update()
 
-  update = (): void => {
     this.setMovement()
     this.setOrientation()
 
@@ -63,6 +70,16 @@ export class Controllable {
     // }
   }
 
+  setOrientation (): void {
+    const moving = get(this.entity, 'moving', {})
+
+    const orientation = Object.keys(moving)
+      .filter(key => !!moving[key])
+      .join('')
+      
+    this.entity.orientation = orientation
+  }
+
   setMovement (): void {
     const controls = this.controls as IControls
     if (!controls) return
@@ -73,14 +90,6 @@ export class Controllable {
       Up: controls.up.isDown,
       Down: controls.down.isDown
     })
-  }
-
-  setOrientation (): void {
-    const moving = get(this.entity, 'moving', {})
-    const orientation = Object.keys(moving)
-      .filter(key => !!moving[key])
-      .join('')
-    this.entity.orientation = orientation
   }
 
   openInventory = debounce(() => {

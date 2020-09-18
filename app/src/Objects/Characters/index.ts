@@ -1,7 +1,7 @@
-import { Goblin } from './CharacterGoblin'
-import { Warrior } from './CharacterWarrior'
+import { GoblinGameObject } from './CharacterGoblin'
+import { WarriorGameObject } from './CharacterWarrior'
 
 export {
-  Warrior,
-  Goblin
+  WarriorGameObject as Warrior,
+  GoblinGameObject as Goblin
 }

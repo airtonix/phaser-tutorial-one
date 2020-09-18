@@ -4,29 +4,32 @@ import {
   Model,
 } from 'mobx-keystone'
 
-import { Character as CharacterGameObject } from '~/Objects/Characters/Character'
+import { CharacterGameObject } from '~/Objects/Characters/Character'
 
-import { CharacterGoblin } from './CharacterGoblinModel'
-import { CharacterWarrior } from './CharacterWarriorModel'
-import { Character } from './CharacterModel'
+import { CharacterGoblinModel } from './CharacterGoblinModel'
+import { CharacterWarriorModel } from './CharacterWarriorModel'
+import { CharacterModel } from './CharacterModel'
 import { CharacterClassReference } from './CharacterClassReference'
+import { NoCharacterClassError } from './Exceptions'
 
 export const CHARACTER_CLASSES = {
-  goblin: CharacterGoblin,
-  warrior: CharacterWarrior
+  goblin: CharacterGoblinModel,
+  warrior: CharacterWarriorModel
 }
-export type TypeofCharacter = CharacterGoblin | CharacterWarrior
+export type TypeofCharacter = CharacterGoblinModel | CharacterWarriorModel
 export type maybeTypeofCharacter = TypeofCharacter | undefined
 
 export const CHARACTERCLASS_MODEL_KEY = 'CharacterClass'
 @model(CHARACTERCLASS_MODEL_KEY)
-export class CharacterClass extends Model({
+export class CharacterClassModel extends Model({
   name: prop<string>()
 }) {
 
-  createCharacter (): Character {
-    const CharacterClassModel = CHARACTER_CLASSES[this.name]
-    return new CharacterClassModel({
+  createCharacter (): CharacterModel {
+    const SelectedCharacterClass = CHARACTER_CLASSES[this.name]
+    if (!SelectedCharacterClass) throw new NoCharacterClassError(this.name)
+
+    return new SelectedCharacterClass({
       type: this.name,
       class: CharacterClassReference(this)
     })

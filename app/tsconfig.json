@@ -1,9 +1,13 @@
+
 {
 	"compilerOptions": {
 		"baseUrl": ".",
 		"outDir": "./dist",
-		"target": "es5",
+		"module": "es6",
+		"target": "es2016",
 		"lib": [
+			"ES5",
+			"ES2020",
 			"dom"
 		],
 		"sourceMap": true,
@@ -17,11 +21,7 @@
 		"experimentalDecorators": true,
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
-		"strict": true,
-		"strictNullChecks": true,
-		"strictPropertyInitialization": false,
 		"importHelpers": true,
-		"noImplicitReturns": true,
 		"noUnusedLocals": false,
 		"noEmit": true,
 		//resolution
@@ -34,15 +34,11 @@
 		"typeRoots": [
 			"node_modules/@types",
 			"node_module/phaser/types"
-		],
-		"types": [
-			"node",
-			"jest",
-			"phaser"
 		]
 	},
 	"include": [
 		"src",
+		"node_modules/phaser3-rex-plugins"
 	],
 	"exclude": [
 		"**/*.spec.ts",

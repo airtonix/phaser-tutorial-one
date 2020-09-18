@@ -1,5 +1,7 @@
 import Phaser from 'phaser'
 
+import { PhaserGame } from '~/Objects/Game';
+
 export class OutlinePipeline extends Phaser.Renderer.WebGL.Pipelines.TextureTintPipeline {
     // the unique id of this pipeline
     static KEY = 'Outline';
@@ -7,7 +9,9 @@ export class OutlinePipeline extends Phaser.Renderer.WebGL.Pipelines.TextureTint
     /**
     * @param {Phaser.Game} game - the controller of the game instance
     */
-    constructor (game: Phaser.Game) {
+    constructor (
+      public game: PhaserGame
+    ) {
       super({
         game: game,
         renderer: game.renderer,

@@ -1,4 +1,4 @@
-import { WorldEntity } from '../WorldEntity';
+import { WorldEntityGameObject } from '../WorldEntity';
 
-export class Container extends WorldEntity { 
+export class ContainerGameObject extends WorldEntityGameObject { 
 }

@@ -1,13 +1,11 @@
-import { classes } from 'polytype'
-
 import { Animations } from '~/Config/constants'
 import { LootChestBehaviour } from '~/Behaviours/LootChestBehaviour'
 import { ILootTable } from '~/Items/Loot'
+import { ICharacterAnimationMap } from '~/Mixins/Displayable'
 
-import { Container } from './Container'
+import { ContainerGameObject } from './Container'
 
-export class ContainerChest extends Container {
-
+export class ContainerChestGameObject extends ContainerGameObject {
   key = 'ContainerChest'
   footprintWidth = 16
   footprintHeight = 6
