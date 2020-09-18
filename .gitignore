@@ -1,9 +1,8 @@
-*
 !.gitignore
 !.github
 !.vscode
-!tools/
-!app/*
 !docker-compose.*
 !README.md
 !tusk.yml
+
+

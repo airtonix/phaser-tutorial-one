@@ -36,9 +36,16 @@ export class CharacterModel extends ExtendedModel(WorldEntityModel, {
   get hasFollowers (): boolean {
     return this.followers && this.followers.length > 0
   }
-
+  
   getFollowerFromRef (followerRef: Ref<CharacterModel>): CharacterModel {
     return followerRef && followerRef.current
+  }
+
+  getFollowers () {
+    if (!this.hasFollowers) return []
+
+    return this.followers
+      .map(ref => this.getFollowerFromRef(ref))
   }
 
   @computed
@@ -74,9 +81,12 @@ export class CharacterModel extends ExtendedModel(WorldEntityModel, {
       : undefined
   }
 
+  gameobject: CharacterGameObject
 
   public createGameObject (scene: Phaser.Scene): CharacterGameObject {
     const gameobject = new CharacterGameObject(scene)
+    this.gameobject = gameobject
+    gameobject.model = this
     gameobject.setPosition(this.x, this.y)
     gameobject.setDepth(this.depth + 1)
     return gameobject

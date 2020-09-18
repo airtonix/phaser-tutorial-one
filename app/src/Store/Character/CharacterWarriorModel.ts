@@ -12,6 +12,8 @@ export class CharacterWarriorModel extends ExtendedModel(CharacterModel, {
 
   createGameObject (scene: Phaser.Scene): WarriorGameObject {
     const gameobject = new WarriorGameObject(scene)
+    this.gameobject = gameobject
+    gameobject.model = this
     gameobject.setPosition(this.x, this.y)
     gameobject.setDepth(this.depth + 1)
     return gameobject
