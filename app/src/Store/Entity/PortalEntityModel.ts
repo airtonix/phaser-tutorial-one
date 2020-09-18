@@ -15,6 +15,7 @@ import { PortalWorldEntity } from '~/Objects/PortalWorldEntity'
 
 import { PortalReference } from './PortalEntityReference'
 import { WorldEntityModel } from './EntityModel'
+import { WorldEntityGameObject } from '~/Objects/WorldEntity'
 
 export const PORTALENTITY_MODEL_KEY = 'PortalEntity'
 export type PortalModelInstanceType = InstanceType<typeof PortalModel>
@@ -102,13 +103,16 @@ export class PortalModel extends ExtendedModel(WorldEntityModel, {
     return linksTo.current
   }
 
+  gameobject: PortalWorldEntity
+
   createGameObject (scene: Phaser.Scene): PortalWorldEntity {
     const gameobject = new PortalWorldEntity(
       scene,
       this.x, this.y, this.width, this.height
     )
-    gameobject.setDepth(this.depth)
+    this.gameobject = gameobject
     gameobject.model = this
+    gameobject.setDepth(this.depth)
     return gameobject
   }
 

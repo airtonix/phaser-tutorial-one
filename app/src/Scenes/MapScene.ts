@@ -9,7 +9,12 @@ import { NoZoneMapError } from '~/Store/Zone/Exceptions'
 import { CharacterGameObject } from '~/Objects/Characters/Character'
 import { NoMapError } from '~/Store/Map/Exceptions'
 import { PlayerControlStrategy } from '~/Strategies/PlayerControlStrategy'
-import { NavMeshController } from '~/Strategies/NavMeshControlStrategy'
+import { NavMeshControlStrategy } from '~/Strategies/NavMeshControlStrategy'
+import { reaction } from 'mobx'
+import { ContainerModel } from '~/Store/Entity/ContainerEntityModel'
+import { PortalModel } from '~/Store/Entity/PortalEntityModel'
+import { CharacterModel } from '~/Store/Character/CharacterModel'
+import { PlayerFollowerBehaviourStrategy } from '~/Behaviours/PlayerFollowerBehaviourStrategy'
 
 interface TileMapLayerHash {
   [key: string]: Phaser.Tilemaps.DynamicTilemapLayer
@@ -50,23 +55,33 @@ export class MapScene extends Phaser.Scene {
     this.tileset = this.drawMap(this.map)
     this.mapLayers = this.createMapLayers(this.map)
     this.animatedTiles = this.animateTiles(this.map, this.tileset)
+    this.setLayersColliable(this.mapLayers)
+
     this.navMesh = this.createNavMesh()
 
-    this.player = this.createPlayer()
+    reaction(
+      () => Store.player?.character,
+      (character: CharacterModel) => this.createPlayer(character),
+      { fireImmediately: true }
+    )
 
-    // if (Store.currentZone?.containers) {
-    //   this.containers = this.createContainers()
-    //   this.createColliders(this.player, this.containers.getChildren())
-    // }
+    reaction(
+      () => Store.player?.character?.getFollowers(),
+      (followers: CharacterModel[]) => this.createFollowers(followers),
+      { fireImmediately: true }
+    )
 
-    this.setLayersColliable(this.mapLayers)
-    this.createColliders(this.player, Object.values(this.mapLayers))
+    reaction(
+      () => Store.currentZone?.containers,
+      (containers: ContainerModel[]) => this.createContainers(containers),
+      { fireImmediately: true }
+    )
 
-    if (Store.currentZone?.portals) {
-      this.portals = this.createPortals()
-      this.createOverlaps(this.player, this.portals.getChildren())
-    }
-    this.initCamera()
+    reaction(
+      () => Store.currentZone?.portals,
+      (portals: PortalModel[]) => this.createPortals(portals),
+      { fireImmediately: true }
+    )
   }
 
   update (
@@ -76,42 +91,68 @@ export class MapScene extends Phaser.Scene {
     this.animatedTiles.forEach(tile => tile.update(delta))
   }
 
-  createPlayer (): CharacterGameObject | undefined {
-    const playerCharacter = Store.player?.character
+  createPlayer (playerCharacter: CharacterModel): void {
     if (!playerCharacter) return
 
-    this.player = playerCharacter.createGameObject(this)
-    this.player.setController(
-      new PlayerControlStrategy(this, this.player)
+    const player = playerCharacter.createGameObject(this)
+    player.setControllerStrategy(
+      new PlayerControlStrategy(
+        this,
+        player
+      )
     )
 
-    if (playerCharacter.hasFollowers) {
-      playerCharacter.followers
-        .map(playerCharacter.getFollowerFromRef)
-        .forEach(character => {
-          const follower = character.createGameObject(this)
-          follower.setController(
-            new NavMeshController(
-              this,
-              follower,
-              this.navMesh
-            )
+    this.createColliders(player, Object.values(this.mapLayers))
+    this.initCamera(player)
+
+    this.player = player
+  }
+
+  createFollowers (characters: CharacterModel[]) {
+    if (!characters || characters.length <= 0) return
+
+    characters
+      // filter out models that already have gameobjects
+      .filter(character => !character.gameobject)
+      .forEach(character => {
+        const follower = character.createGameObject(this)
+        follower.setControllerStrategy(
+          new NavMeshControlStrategy(
+            this,
+            follower,
+            this.navMesh
           )
-          this.createColliders(follower, Object.values(this.mapLayers))
-        })
-    }
+        )
+        follower.setBehaviourStrategy(
+          new PlayerFollowerBehaviourStrategy(
+            follower,
+            this.player
+          )
+        )
+        this.createColliders(follower, Object.values(this.mapLayers))
+      })
   }
 
-  createContainers (): Phaser.GameObjects.Group {
-    const containers = Store.currentZone?.containers
+  createContainers (containers: ContainerModel[]): void {
+    if (!containers || containers.length <= 0) return
+
+    const containerObjects = containers
       .map((container) => container.createGameObject(this))
-    return this.physics.add.group(containers)
+      
+    this.containers = this.physics.add.group(containerObjects)
+
+    if (!this.player) return
+    this.createColliders(this.player, this.containers.getChildren())
   }
 
-  createPortals (): Phaser.GameObjects.Group {
-    const portals = Store.currentZone?.portals
+  createPortals (portals: PortalModel[]): void {
+    if (!portals || portals.length <= 0) return
+
+    const portalObjects = portals
       .map((portal) => portal.createGameObject(this))
-    return this.physics.add.group(portals)
+    this.portals = this.physics.add.group(portalObjects)
+    if (!this.player) return
+    this.createOverlaps(this.player, this.portals.getChildren())
   }
 
   createNavMesh (): PhaserNavmesh {
@@ -342,7 +383,7 @@ export class MapScene extends Phaser.Scene {
     )
   }
 
-  initCamera (): void {
+  initCamera (player): void {
     const {
       widthInPixels,
       heightInPixels
@@ -351,6 +392,6 @@ export class MapScene extends Phaser.Scene {
     const mainCamera = this.cameras.main
     mainCamera.setRoundPixels(true)
     mainCamera.setBounds(0, 0, widthInPixels, heightInPixels)
-    mainCamera.startFollow(this.player, true, 1, 1)
+    mainCamera.startFollow(player, true, 1, 1)
   }
 }
