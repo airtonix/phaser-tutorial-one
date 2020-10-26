@@ -4,8 +4,8 @@ import {
   modelAction,
   getRootStore,
   ExtendedModel,
+  Ref
 } from 'mobx-keystone'
-import { Ref } from 'react'
 import { computed } from 'mobx'
 
 import { WorldEntity } from '../Entity/EntityModel'
@@ -63,5 +63,3 @@ export class Character extends ExtendedModel(WorldEntity, {
   }
 
 }
-
-
