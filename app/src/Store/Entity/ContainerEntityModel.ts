@@ -36,11 +36,11 @@ export class Container extends ExtendedModel(WorldEntity, {
   createGameObject (
     scene: Phaser.Scene
   ) : ContainerChest {
-    const gameobject = new ContainerChest([
+    const gameobject = new ContainerChest(
       scene,
       this.x + this.width / 2,
       this.y + this.height / 2,
-    ])
+    )
     gameobject.setDepth(this.depth)
     return gameobject
   }

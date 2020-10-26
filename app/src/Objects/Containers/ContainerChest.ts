@@ -2,10 +2,6 @@ import { classes } from 'polytype'
 
 import { Animations } from '~/Config/constants'
 import { LootChestBehaviour } from '~/Behaviours/LootChestBehaviour'
-import { CanAnimate, IAnimations } from '~/Mixins/CanAnimate'
-import { DisplayableEntity } from '~/Mixins/Displayable'
-import { IsImovable } from '~/Mixins/IsImovable'
-import { ContainsItems } from '~/Mixins/ContainsItems'
 import { ILootTable } from '~/Items/Loot'
 
 import { Container } from './Container'
@@ -31,11 +27,12 @@ export class ContainerChest extends Container {
     { from: '/loot/weapons/spears', luck: 1, depth: Infinity, stack: 1 },
     { from: '/loot/weapons/bows', luck: 1, depth: Infinity, stack: 1 }
   ]
+
   behaviours = {
     default: LootChestBehaviour
   }
 
-  animations: IAnimations = {
+  animations = {
     default: {
       default: { anim: Animations.LootChestIdle }
     },
@@ -53,4 +50,15 @@ export class ContainerChest extends Container {
       empty: { anim: Animations.LootChestCloseEmpty }
     },
   }
+
+  
+  constructor (
+    scene: Phaser.Scene,
+    x: number,
+    y: number
+  ) {
+    super(scene, x, y)
+    this.init()
+  }
+
 }

@@ -6,7 +6,7 @@ import {
 } from 'mobx-keystone'
 
 import { Portal } from '../Entity/PortalEntityModel'
-import { TypeOfEntity, EntityLevelDataFactory } from '../Entity/Factory'
+import { TypeOfEntity, WorldEntityModelMap, TypeOfWorldEntity, createWorldEntityModelInstance } from '../Entity/Factory'
 import { GetLevelData } from '../Map/MapApi'
 import { CreateMapModelFromLevelData } from '../Map/Factory'
 import { Item } from '../Entity/ItemEntityModel'
@@ -15,7 +15,7 @@ import { Container } from '../Entity/ContainerEntityModel'
 import { Logger } from '~/Core/Logger'
 import { Map } from '~/Store/Map/MapModel'
 import { Entity } from '~/Store/Entity/EntityModel'
-import { TiledTileMapConfig } from '~/Config/constants'
+import { ITiledTileMapConfig } from '~/Config/constants'
 
 
 const log = Logger('ZoneModel')
@@ -44,7 +44,7 @@ export class Zone extends ExtendedModel(Entity, {
       .some((portal: Portal) => portal.name === 'PlayerStart')
   }
 
-  addMapFromLevelData (levelData: TiledTileMapConfig): void {
+  addMapFromLevelData (levelData: ITiledTileMapConfig): void {
     const {
       tileset,
       key,
@@ -75,8 +75,9 @@ export class Zone extends ExtendedModel(Entity, {
           const layer = CreateMapModelFromLevelData(data)
 
           objects
+            .filter(entityData => entityData.type in WorldEntityModelMap)
             .forEach((entityData) => {
-              const entity: TypeOfEntity = EntityLevelDataFactory(entityData)
+              const entity: TypeOfWorldEntity = createWorldEntityModelInstance(entityData)
 
               if (layer.depth) {
                 entity.setDepth(layer.depth)
@@ -94,6 +95,10 @@ export class Zone extends ExtendedModel(Entity, {
 
         this.addMap(map)
       })
+  }
+
+  getPortalByName (portalName: string): Portal | undefined {
+    return this.portals.find(zone => zone.name === portalName)
   }
 
   @modelAction

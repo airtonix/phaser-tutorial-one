@@ -3,6 +3,7 @@ import {
   model,
   modelAction,
   getRootStore,
+  Ref,
   ExtendedModel,
   Ref
 } from 'mobx-keystone'
@@ -15,6 +16,7 @@ import { UnknownZone } from '../Zone/Exceptions'
 import { ZoneReference } from '../Zone/ZoneReference'
 import { NoGameError } from '../Game/Exceptions'
 import { Item } from '../Entity/ItemEntityModel'
+import { TypeOfWorldEntity } from '../Entity/Factory'
 
 import { CharacterClass } from './CharacterClassModel'
 
@@ -30,21 +32,21 @@ export class Character extends ExtendedModel(WorldEntity, {
 }) {
 
   @computed
-  get currentZone (): Zone {
+  get currentZone (): Zone | undefined {
     return this.zone
       ? this.zone.current
       : undefined
   }
 
   @computed
-  get classMeta (): CharacterClass {
-    return this.class
+  get classMeta (): CharacterClass | undefined {
+    return this.class && this.class
       ? this.class.current
       : undefined
   }
 
   @modelAction
-  teleportTo (zone: Zone, entity: WorldEntity): void {
+  teleportTo (zone: Zone, entity: TypeOfWorldEntity): void {
     this.setZone(zone)
     this.setPosition(entity.x, entity.y)
     this.setDepth(entity.depth + 1)

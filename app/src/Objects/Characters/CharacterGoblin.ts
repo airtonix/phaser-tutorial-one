@@ -1,11 +1,10 @@
-import { State } from 'mistreevous'
-import { PhaserNavmesh } from 'phaser-navmesh'
-import { classes } from 'polytype'
+// import { State } from 'mistreevous'
+// import { PhaserNavmesh } from 'phaser-navmesh'
 
 import { Animations, Emotes, Orientation } from '~/Config/constants'
-import { SidekickCharacterBehaviour } from '~/Behaviours/SidekickCharacterBehaviour'
-import { getDistance, IPosition, position } from '~/Core/distance'
-import { MapScene } from '~/Scenes/MapScene'
+// import { SidekickCharacterBehaviour } from '~/Behaviours/SidekickCharacterBehaviour'
+// import { getDistance, IPosition, position } from '~/Core/distance'
+// import { MapScene } from '~/Scenes/MapScene'
 
 import { Character } from './Character'
 
@@ -20,10 +19,14 @@ export class Goblin extends Character {
     },
     moving: {
       default: { anim: Animations.GoblinMove },
-      down: { anim: Animations.GoblinMove },
-      up: { anim: Animations.GoblinMove },
-      left: { flip: true, anim: Animations.GoblinMove },
-      right: { flip: false, anim: Animations.GoblinMove },
+      Down: { anim: Animations.GoblinMove },
+      LeftDown: { flip: true, anim: Animations.GoblinMove },
+      Left: { flip: true, anim: Animations.GoblinMove },
+      LeftUp: { flip: true, anim: Animations.GoblinMove },
+      Up: { anim: Animations.GoblinMove },
+      RightUp: { flip: false, anim: Animations.GoblinMove },
+      Right: { flip: false, anim: Animations.GoblinMove },
+      RightDown: { flip: false, anim: Animations.GoblinMove },
     },
   }
 

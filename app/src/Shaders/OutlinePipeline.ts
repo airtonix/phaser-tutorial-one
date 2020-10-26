@@ -7,7 +7,7 @@ export class OutlinePipeline extends Phaser.Renderer.WebGL.Pipelines.TextureTint
     /**
     * @param {Phaser.Game} game - the controller of the game instance
     */
-    constructor (game) {
+    constructor (game: Phaser.Game) {
       super({
         game: game,
         renderer: game.renderer,

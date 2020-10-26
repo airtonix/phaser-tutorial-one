@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Phaser from 'phaser'
+import { observer, inject } from 'mobx-react'
 
 import { PARENT_DIV_TAG } from '~/Config/phaser.config'
 import { PreloaderScene } from '~/Scenes/PreloaderScene'
@@ -26,6 +26,8 @@ class PhaserGame extends Phaser.Game {
   }
 }
 
+@inject('store')
+@observer
 export class Game extends Component {
     game: PhaserGame
 
@@ -40,9 +42,12 @@ export class Game extends Component {
     render (): React.ReactNode {
       return (
         <div
-          className={css.block}
-          id={PARENT_DIV_TAG}
-        />
+          className={css.block}>
+          <div
+            className={css.game}
+            id={PARENT_DIV_TAG}
+          />
+        </div>
       )
     }
 }

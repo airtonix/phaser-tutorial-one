@@ -27,10 +27,14 @@ export interface IOrientation {
 }
 
 export enum Orientation {
-  Down = 'down',
+  LeftDown = 'leftdown',
   Left = 'left',
-  Right = 'right',
+  LeftUp = 'leftup',
   Up = 'up',
+  RightUp = 'rightup',
+  Right = 'right',
+  RightDown = 'rightdown',
+  Down = 'down',
 }
 
 export const COLOURS = {

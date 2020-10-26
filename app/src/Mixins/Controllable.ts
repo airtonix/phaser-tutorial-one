@@ -1,10 +1,9 @@
-import { debounce, set } from 'lodash'
+import { debounce, set, get } from 'lodash'
 
-import { Logger } from '../Core/Logger'
+import { Logs } from '../Core/Logger'
 
 import { Character } from '~/Objects/Characters/Character'
 
-const log = Logger(module.id)
 
 export interface IControlKey {
   isDown: boolean
@@ -21,6 +20,7 @@ export interface IControls {
 
 export const EVENT_KEY_OPEN_PLAYER_INVENTORY = 'event-player-inventory-open'
 
+@Logs
 export class Controllable {
   orientation: string
   isIdle: boolean
@@ -50,7 +50,20 @@ export class Controllable {
   }
 
 
-  update = (): void  => {
+  update = (): void => {
+    this.setMovement()
+    this.setOrientation()
+
+    // if (controls.use.isDown) {
+    //   this.entity.use()
+    // }
+
+    // if (controls.inventory.isDown) {
+    //   this.openInventory()
+    // }
+  }
+
+  setMovement (): void {
     const controls = this.controls as IControls
     if (!controls) return
 
@@ -60,14 +73,14 @@ export class Controllable {
       Up: controls.up.isDown,
       Down: controls.down.isDown
     })
+  }
 
-    // if (controls.use.isDown) {
-    //   this.entity.use()
-    // }
-
-    // if (controls.inventory.isDown) {
-    //   this.openInventory()
-    // }
+  setOrientation (): void {
+    const moving = get(this.entity, 'moving', {})
+    const orientation = Object.keys(moving)
+      .filter(key => !!moving[key])
+      .join('')
+    this.entity.orientation = orientation
   }
 
   openInventory = debounce(() => {

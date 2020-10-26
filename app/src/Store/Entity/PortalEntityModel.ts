@@ -6,6 +6,7 @@ import {
   modelAction,
   findParent,
 } from 'mobx-keystone'
+import { computed } from 'mobx'
 
 import { Zone } from '~/Store/Zone/ZoneModel'
 import { ZoneReference } from '~/Store/Zone/ZoneReference'
@@ -80,19 +81,15 @@ export class Portal extends ExtendedModel(WorldEntity, {
     )
     return portal
   }
+
   /**
    * Return a reference of the portal that this portal linkes to
    *
    * @return  {Portal}  Portal Model
    */
+  @computed
   get target (): Portal | undefined {
-    if (!this.linksTo || !this.linksTo.isValid) {
-      const portal = this.getTargetPortal()
-      if (!portal) return
-      this.setLinksTo(portal)
-    }
-
-    return this.linksTo.current
+    return this.getTargetPortal()
   }
 
   createGameObject (scene: Phaser.Scene): PortalWorldEntity {
