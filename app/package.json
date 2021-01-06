@@ -24,7 +24,7 @@
     "@typescript-eslint/parser": "^3.3.0",
     "@xaroth8088/random-names": "^1.1.1",
     "autoprefixer": "^9.8.6",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
     "class-transformer": "^0.3.1",
     "color": "^3.1.2",
