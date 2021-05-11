@@ -42,7 +42,7 @@
     "jest-extended": "^0.11.5",
     "kaop-ts": "^4.3.0",
     "localforage": "^1.9.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "lootr": "github:airtonix/lootr#master",
     "mistreevous": "^2.0.1",
     "mobx": "^5.9.4",
